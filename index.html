@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BA Tour</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="logo">
+          <h1>Buenos Aires Tour</h1>
+        </div>
+        <div class="menu-toggle">
+          <i class="fas fa-bars"></i>
+        </div>
+        <ul class="nav-menu">
+          <li><a href="#" class="active">Inicio</a></li>
+          <li><a href="#packages">Paquetes</a></li>
+          <li><a href="#about">Nosotros</a></li>
+          <li><a href="#contact">Contacto</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Descubre destinos increíbles</h1>
+        <p>Las mejores experiencias de viaje al mejor precio</p>
+        <a href="#packages" class="btn btn-primary">Ver paquetes</a>
+      </div>
+    </section>
+
+    <!-- Packages Section -->
+    <section id="packages" class="packages">
+      <div class="container">
+        <h2 class="section-title">Nuestros paquetes destacados</h2>
+        <div class="package-container">
+          <!-- Package 1 -->
+          <div class="package-card">
+            <div class="package-image">
+              <img src="/api/placeholder/500/300" alt="Buenos Aires" />
+            </div>
+            <div class="package-details">
+              <h3>Buenos Aires</h3>
+              <p class="location">
+                <i class="fas fa-map-marker-alt"></i> Buenos Aires
+              </p>
+              <p class="description">
+                Buenos Aires, disfruta de 7 días de aventura en la capital.
+              </p>
+              <div class="package-footer">
+                <p class="price">Desde $120,000</p>
+                <a href="#contact" class="btn btn-secondary">Consultar</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Package 2 -->
+          <div class="package-card">
+            <div class="package-image">
+              <img src="/api/placeholder/500/300" alt="Buenos Aires" />
+            </div>
+            <div class="package-details">
+              <h3>Buenos Aires</h3>
+              <p class="location">
+                <i class="fas fa-map-marker-alt"></i> Buenos Aires
+              </p>
+              <p class="description">
+                Buenos Aires, disfruta de 7 días de aventura en la capital.
+              </p>
+              <div class="package-footer">
+                <p class="price">Desde $120,000</p>
+                <a href="#contact" class="btn btn-secondary">Consultar</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Package 3 -->
+          <div class="package-card">
+            <div class="package-image">
+              <img src="/api/placeholder/500/300" alt="Buenos Aires" />
+            </div>
+            <div class="package-details">
+              <h3>Buenos Aires</h3>
+              <p class="location">
+                <i class="fas fa-map-marker-alt"></i> Buenos Aires
+              </p>
+              <p class="description">
+                Buenos Aires, disfruta de 7 días de aventura en la capital.
+              </p>
+              <div class="package-footer">
+                <p class="price">Desde $120,000</p>
+                <a href="#contact" class="btn btn-secondary">Consultar</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cta-container">
+          <a href="#contact" class="btn btn-primary">Más paquetes</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+      <div class="container">
+        <div class="about-content">
+          <div class="about-text">
+            <h2 class="section-title">Sobre Nosotros</h2>
+            <p>
+              En <strong>TurViajes</strong> nos dedicamos a crear experiencias
+              de viaje inolvidables desde hace más de 15 años. Nuestro equipo de
+              expertos selecciona cuidadosamente cada destino y alojamiento para
+              garantizar la mejor experiencia.
+            </p>
+            <p>
+              Contamos con guías locales experimentados y ofrecemos atención
+              personalizada para que tu único trabajo sea disfrutar de tu viaje.
+            </p>
+            <a href="about.html" class="btn btn-secondary">Conocer más</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+      <div class="container">
+        <h2 class="section-title">Contacto</h2>
+        <div class="contact-container">
+          <div class="contact-info">
+            <div class="info-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <p>Av. Rivadavia 1234, Ituzaingó, Buenos Aires</p>
+            </div>
+            <div class="info-item">
+              <i class="fas fa-phone"></i>
+              <p>+54 11 4567-8900</p>
+            </div>
+            <div class="info-item">
+              <i class="fas fa-envelope"></i>
+              <p>info@batour.com</p>
+            </div>
+            <div class="info-item">
+              <i class="fas fa-clock"></i>
+              <p>Lun-Vie: 9:00 - 18:00<br />Sáb: 10:00 - 14:00</p>
+            </div>
+          </div>
+          <div class="contact-form">
+            <form>
+              <div class="form-group">
+                <input type="text" placeholder="Nombre completo" required />
+              </div>
+              <div class="form-group">
+                <input type="email" placeholder="Email" required />
+              </div>
+              <div class="form-group">
+                <input type="tel" placeholder="Teléfono" />
+              </div>
+              <div class="form-group">
+                <textarea placeholder="Mensaje" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                Enviar consulta
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <h2>Buenos Aires Tour</h2>
+            <p>Tu compañero de aventuras</p>
+          </div>
+          <div class="footer-links">
+            <h3>Enlaces rápidos</h3>
+            <ul>
+              <li><a href="#">Inicio</a></li>
+              <li><a href="#packages">Paquetes</a></li>
+              <li><a href="#about">Nosotros</a></li>
+              <li><a href="#contact">Contacto</a></li>
+            </ul>
+          </div>
+          <div class="footer-social">
+            <h3>Síguenos</h3>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Buenos Aires Tour. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
+    <script src="js/functions.js"></script>
+  </body>
+</html>
