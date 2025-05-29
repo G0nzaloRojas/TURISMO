@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contacto - BA Tour</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" href="img/Logo2.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="logo">
+          <h1>Buenos Aires Tour</h1>
+        </div>
+        <div class="menu-toggle">
+          <i class="fas fa-bars"></i>
+        </div>
+        <ul class="nav-menu">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="packages.html">Paquetes</a></li>
+          <li><a href="about.html">Nosotros</a></li>
+          <li><a href="contact.html" class="active">Contacto</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="contact-hero">
+      <div class="hero-content">
+        <h1>Contáctanos</h1>
+        <p>Estamos aquí para ayudarte a planificar tu próxima aventura</p>
+      </div>
+    </section>
+
+    <!-- Contact Main Section -->
+    <section class="contact-main">
+      <div class="container">
+        <div class="contact-wrapper">
+          <!-- Contact Sidebar -->
+          <div class="contact-sidebar">
+            <h2>Información de Contacto</h2>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div class="contact-text">
+                <h4>Teléfonos</h4>
+                <p>+54 11 4567-8900</p>
+                <p>+54 11 4567-8901</p>
+                <p>WhatsApp: +54 9 11 3456-7890</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="contact-text">
+                <h4>Email</h4>
+                <p><a href="mailto:info@batour.com">info@batour.com</a></p>
+                <p><a href="mailto:ventas@batour.com">ventas@batour.com</a></p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="contact-text">
+                <h4>Oficina Principal</h4>
+                <p>Paris 532</p>
+                <p>Haedo, Buenos Aires</p>
+                <p>CP: B1706</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="contact-text">
+                <h4>Horario de Atención</h4>
+                <p>Lunes a Viernes: 9:00 - 18:00</p>
+                <p>Sábados: 10:00 - 14:00</p>
+                <p>Domingos: Cerrado</p>
+              </div>
+            </div>
+
+            <div class="social-links">
+              <h4>Síguenos en redes sociales</h4>
+              <div class="social-buttons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Form -->
+          <div class="contact-form-wrapper">
+            <h2>Envíanos un mensaje</h2>
+            <div class="success-message" id="success-message">
+              <i class="fas fa-check-circle"></i> Tu mensaje ha sido enviado
+              exitosamente. Te contactaremos pronto.
+            </div>
+            <form id="contact-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="first-name">Nombre *</label>
+                  <input
+                    type="text"
+                    id="first-name"
+                    name="first-name"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="last-name">Apellido *</label>
+                  <input type="text" id="last-name" name="last-name" required />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email">Email *</label>
+                  <input type="email" id="email" name="email" required />
+                </div>
+                <div class="form-group">
+                  <label for="phone">Teléfono</label>
+                  <input type="tel" id="phone" name="phone" />
+                </div>
+              </div>
+
+              <div class="form-group full-width">
+                <label for="destination">Destino de interés</label>
+                <select id="destination" name="destination">
+                  <option value="">Selecciona un destino</option>
+                  <option value="buenos-aires">Buenos Aires</option>
+                  <option value="bariloche">Bariloche</option>
+                  <option value="mendoza">Mendoza</option>
+                  <option value="iguazu">Cataratas del Iguazú</option>
+                  <option value="calafate">El Calafate</option>
+                  <option value="ushuaia">Ushuaia</option>
+                  <option value="otros">Otros destinos</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="travel-date">Fecha estimada de viaje</label>
+                  <input type="date" id="travel-date" name="travel-date" />
+                </div>
+                <div class="form-group">
+                  <label for="travelers">Número de viajeros</label>
+                  <input
+                    type="number"
+                    id="travelers"
+                    name="travelers"
+                    min="1"
+                    max="50"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group full-width">
+                <label for="message">Mensaje *</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="6"
+                  required
+                ></textarea>
+              </div>
+
+              <div class="form-checkbox">
+                <input type="checkbox" id="newsletter" name="newsletter" />
+                <label for="newsletter"
+                  >Quiero recibir ofertas y novedades por email</label
+                >
+              </div>
+
+              <div class="form-buttons">
+                <button type="submit" class="btn-submit">
+                  <i class="fas fa-paper-plane"></i> Enviar mensaje
+                </button>
+                <button type="reset" class="btn-reset">
+                  <i class="fas fa-redo"></i> Limpiar formulario
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="map-section">
+          <div class="map-container">
+            <div class="map-header">
+              <h3>Encuéntranos</h3>
+              <p>Visítanos en nuestra oficina principal en Ituzaingó</p>
+            </div>
+            <div class="map-frame">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.5591441865267!2d-58.60460592350203!3d-34.640579459447245!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bc951c0fe2d9f5%3A0x9f1c540898efecbe!2sUTN%20-%20Haedo%20Regional%20Faculty!5e0!3m2!1sen!2sar!4v1748544793666!5m2!1sen!2sar"
+                width="1200"
+                height="600"
+                style="border: 0"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Offices Section -->
+    <section class="offices-section">
+      <div class="container">
+        <h2 class="section-title">Nuestras Oficinas</h2>
+        <div class="offices-grid">
+          <div class="office-card">
+            <div class="office-icon">
+              <i class="fas fa-building"></i>
+            </div>
+            <h4>Oficina Principal</h4>
+            <div class="office-info">
+              <p>
+                <i class="fas fa-map-marker-alt"></i> París 532, Haedo,
+                Provincia de Buenos Aires
+              </p>
+              <p><i class="fas fa-phone"></i> +54 11 4567-8900</p>
+              <p><i class="fas fa-envelope"></i> info@batour.com</p>
+            </div>
+          </div>
+
+          <div class="office-card">
+            <div class="office-icon">
+              <i class="fas fa-city"></i>
+            </div>
+            <h4>Sucursal Microcentro</h4>
+            <div class="office-info">
+              <p><i class="fas fa-map-marker-alt"></i> Florida 567, CABA</p>
+              <p><i class="fas fa-phone"></i> +54 11 5555-1234</p>
+              <p><i class="fas fa-envelope"></i> info@batour.com</p>
+            </div>
+          </div>
+
+          <div class="office-card">
+            <div class="office-icon">
+              <i class="fas fa-plane"></i>
+            </div>
+            <h4>Aeropuerto Ezeiza</h4>
+            <div class="office-info">
+              <p><i class="fas fa-map-marker-alt"></i> Terminal A, Local 45</p>
+              <p><i class="fas fa-phone"></i> +54 11 4480-5555</p>
+              <p><i class="fas fa-envelope"></i> info@batour.com</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <div class="container">
+        <h2 class="section-title">Preguntas Frecuentes</h2>
+        <div class="faq-container">
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>¿Cómo puedo reservar un paquete turístico?</span>
+              <i class="fas fa-chevron-down faq-icon"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Puedes reservar de varias formas: a través de nuestro formulario
+                de contacto, llamando a nuestros teléfonos, visitando nuestras
+                oficinas o enviándonos un email. Nuestros asesores te guiarán en
+                todo el proceso.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>¿Qué incluyen los paquetes turísticos?</span>
+              <i class="fas fa-chevron-down faq-icon"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Cada paquete incluye diferentes servicios que se detallan en la
+                descripción. Generalmente incluyen: alojamiento, traslados,
+                excursiones guiadas, y régimen de comidas especificado. Los
+                vuelos pueden estar incluidos o cotizarse aparte según tu
+                preferencia.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>¿Cuáles son las formas de pago disponibles?</span>
+              <i class="fas fa-chevron-down faq-icon"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Aceptamos múltiples formas de pago: efectivo, transferencia
+                bancaria, tarjetas de crédito y débito. Ofrecemos planes de
+                financiación en cuotas sin interés con tarjetas seleccionadas.
+                Consulta las promociones vigentes.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>¿Puedo modificar o cancelar mi reserva?</span>
+              <i class="fas fa-chevron-down faq-icon"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Sí, puedes modificar o cancelar tu reserva según nuestras
+                políticas. Las modificaciones están sujetas a disponibilidad y
+                pueden tener costos adicionales. Las cancelaciones tienen
+                diferentes penalidades según la anticipación. Te recomendamos
+                contratar un seguro de viaje.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>¿Ofrecen paquetes personalizados?</span>
+              <i class="fas fa-chevron-down faq-icon"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                ¡Por supuesto! Podemos crear paquetes a medida según tus
+                preferencias, presupuesto y fechas. Cuéntanos qué tipo de
+                experiencia buscas y nuestros expertos diseñarán el viaje
+                perfecto para ti.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <h2>Buenos Aires Tour</h2>
+            <p>Tu compañero de aventuras</p>
+          </div>
+          <div class="footer-links">
+            <h3>Enlaces rápidos</h3>
+            <ul>
+              <li><a href="index.html">Inicio</a></li>
+              <li><a href="packages.html">Paquetes</a></li>
+              <li><a href="about.html">Nosotros</a></li>
+              <li><a href="contact.html" class="active">Contacto</a></li>
+            </ul>
+          </div>
+          <div class="footer-social">
+            <h3>Síguenos</h3>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Buenos Aires Tour. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
+    <!-- <script src="js/functions.js"></script> -->
+    <script>
+      // Toggle mobile menu
+      const menuToggle = document.querySelector(".menu-toggle");
+      const navMenu = document.querySelector(".nav-menu");
+
+      menuToggle.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
+      });
+      // FAQ Accordion
+      const faqQuestions = document.querySelectorAll(".faq-question");
+
+      faqQuestions.forEach((question) => {
+        question.addEventListener("click", () => {
+          const faqItem = question.parentElement;
+          const answer = faqItem.querySelector(".faq-answer");
+          const isActive = question.classList.contains("active");
+
+          // Close all other FAQs
+          faqQuestions.forEach((q) => {
+            q.classList.remove("active");
+            q.parentElement
+              .querySelector(".faq-answer")
+              .classList.remove("active");
+          });
+
+          // Toggle current FAQ
+          if (!isActive) {
+            question.classList.add("active");
+            answer.classList.add("active");
+          }
+        });
+      });
+
+      // Form submission
+      const contactForm = document.getElementById("contact-form");
+      const successMessage = document.getElementById("success-message");
+
+      contactForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Show success message
+        successMessage.classList.add("show");
+
+        // Reset form
+        contactForm.reset();
+
+        // Scroll to top of form
+        contactForm.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+          successMessage.classList.remove("show");
+        }, 5000);
+      });
+
+      // Set minimum date to today for travel date input
+      const travelDateInput = document.getElementById("travel-date");
+      const today = new Date().toISOString().split("T")[0];
+      travelDateInput.setAttribute("min", today);
+    </script>
+  </body>
+</html>
