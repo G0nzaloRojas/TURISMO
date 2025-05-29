@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paquetes - BA Tour</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" href="img/Logo2.ico" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="logo">
+          <h1>Buenos Aires Tour</h1>
+        </div>
+        <div class="menu-toggle">
+          <i class="fas fa-bars"></i>
+        </div>
+        <ul class="nav-menu">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="packages.html" class="active">Paquetes</a></li>
+          <li><a href="about.html">Nosotros</a></li>
+          <li><a href="contact.html">Contacto</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="packages-hero">
+      <div class="hero-content">
+        <h1>Nuestros Paquetes Turísticos</h1>
+        <p>Encuentra la aventura perfecta para tus próximas vacaciones</p>
+      </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="filters-section">
+      <div class="container">
+        <div class="filters-container">
+          <div class="filter-group">
+            <label for="destination">Destino</label>
+            <select id="destination">
+              <option value="">Todos los destinos</option>
+              <option value="buenos-aires">Buenos Aires</option>
+              <option value="bariloche">Bariloche</option>
+              <option value="mendoza">Mendoza</option>
+              <option value="iguazu">Cataratas del Iguazú</option>
+              <option value="calafate">El Calafate</option>
+              <option value="ushuaia">Ushuaia</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Rango de precio</label>
+            <div class="price-range">
+              <input type="number" id="min-price" placeholder="Mín" min="0" />
+              <span>-</span>
+              <input type="number" id="max-price" placeholder="Máx" min="0" />
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label for="hotel-stars">Categoría de hotel</label>
+            <select id="hotel-stars">
+              <option value="">Todas las categorías</option>
+              <option value="3">3 estrellas</option>
+              <option value="4">4 estrellas</option>
+              <option value="5">5 estrellas</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="meal-type">Tipo de comida</label>
+            <select id="meal-type">
+              <option value="">Todos los tipos</option>
+              <option value="desayuno">Solo desayuno</option>
+              <option value="media-pension">Media pensión</option>
+              <option value="pension-completa">Pensión completa</option>
+              <option value="todo-incluido">Todo incluido</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="duration">Duración</label>
+            <select id="duration">
+              <option value="">Cualquier duración</option>
+              <option value="3">3-5 días</option>
+              <option value="7">6-8 días</option>
+              <option value="10">9-12 días</option>
+              <option value="15">Más de 12 días</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-buttons">
+              <button class="btn-filter btn-apply" onclick="applyFilters()">
+                <i class="fas fa-search"></i> Buscar
+              </button>
+              <button class="btn-filter btn-clear" onclick="clearFilters()">
+                <i class="fas fa-times"></i> Limpiar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Packages Main Section -->
+    <section class="packages-main">
+      <div class="container">
+        <div class="results-info">
+          <p class="results-count">
+            Mostrando <span id="results-count">12</span> paquetes
+          </p>
+          <select class="sort-select" id="sort-by" onchange="sortPackages()">
+            <option value="featured">Destacados</option>
+            <option value="price-low">Precio: menor a mayor</option>
+            <option value="price-high">Precio: mayor a menor</option>
+            <option value="rating">Mejor valorados</option>
+            <option value="duration">Duración</option>
+          </select>
+        </div>
+
+        <div class="packages-grid" id="packages-grid">
+          <!-- Package 1 -->
+          <div
+            class="package-card-extended"
+            data-destination="buenos-aires"
+            data-price="120000"
+            data-stars="4"
+            data-meal="media-pension"
+            data-duration="7"
+          >
+            <div class="package-image">
+              <img src="/api/placeholder/400/250" alt="Buenos Aires Clásico" />
+              <span class="package-badge">Más vendido</span>
+            </div>
+            <div class="package-info">
+              <div class="package-header">
+                <div class="package-title">
+                  <h3>Buenos Aires Clásico</h3>
+                  <p class="location">
+                    <i class="fas fa-map-marker-alt"></i> Buenos Aires
+                  </p>
+                </div>
+                <div class="package-rating">
+                  <span class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                  </span>
+                  <span class="rating-number">(4.2)</span>
+                </div>
+              </div>
+              <p class="description">
+                Descubre la magia de Buenos Aires con visitas a sus barrios más
+                emblemáticos, shows de tango y la mejor gastronomía porteña.
+              </p>
+              <div class="package-features">
+                <div class="feature">
+                  <i class="fas fa-calendar"></i>
+                  <span>7 días / 6 noches</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-hotel"></i>
+                  <span>Hotel 4 estrellas</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-utensils"></i>
+                  <span>Media pensión</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-plane"></i>
+                  <span>Vuelos incluidos</span>
+                </div>
+              </div>
+              <div class="package-price-section">
+                <div class="price-details">
+                  <span class="old-price">$150,000</span>
+                  <span class="current-price">$120,000</span>
+                  <span class="price-note">Por persona</span>
+                </div>
+                <a href="contact.html" class="btn btn-secondary"
+                  >Ver detalles</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Package 2 -->
+          <div
+            class="package-card-extended"
+            data-destination="bariloche"
+            data-price="185000"
+            data-stars="5"
+            data-meal="todo-incluido"
+            data-duration="7"
+          >
+            <div class="package-image">
+              <img src="/api/placeholder/400/250" alt="Bariloche Premium" />
+              <span class="package-badge">Recomendado</span>
+            </div>
+            <div class="package-info">
+              <div class="package-header">
+                <div class="package-title">
+                  <h3>Bariloche Premium</h3>
+                  <p class="location">
+                    <i class="fas fa-map-marker-alt"></i> San Carlos de
+                    Bariloche
+                  </p>
+                </div>
+                <div class="package-rating">
+                  <span class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </span>
+                  <span class="rating-number">(4.8)</span>
+                </div>
+              </div>
+              <p class="description">
+                Vive la experiencia completa en la Patagonia con excursiones
+                exclusivas, ski en Cerro Catedral y gastronomía de montaña.
+              </p>
+              <div class="package-features">
+                <div class="feature">
+                  <i class="fas fa-calendar"></i>
+                  <span>8 días / 7 noches</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-hotel"></i>
+                  <span>Hotel 5 estrellas</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-utensils"></i>
+                  <span>Todo incluido</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-skiing"></i>
+                  <span>Actividades incluidas</span>
+                </div>
+              </div>
+              <div class="package-price-section">
+                <div class="price-details">
+                  <span class="current-price">$185,000</span>
+                  <span class="price-note">Por persona</span>
+                </div>
+                <a href="contact.html" class="btn btn-secondary"
+                  >Ver detalles</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Package 3 -->
+          <div
+            class="package-card-extended"
+            data-destination="iguazu"
+            data-price="156000"
+            data-stars="4"
+            data-meal="pension-completa"
+            data-duration="3"
+          >
+            <div class="package-image">
+              <img src="/api/placeholder/400/250" alt="Cataratas del Iguazú" />
+            </div>
+            <div class="package-info">
+              <div class="package-header">
+                <div class="package-title">
+                  <h3>Cataratas Majestuosas</h3>
+                  <p class="location">
+                    <i class="fas fa-map-marker-alt"></i> Puerto Iguazú
+                  </p>
+                </div>
+                <div class="package-rating">
+                  <span class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                  </span>
+                  <span class="rating-number">(4.6)</span>
+                </div>
+              </div>
+              <p class="description">
+                Maravíllate con las Cataratas del Iguazú, una de las siete
+                maravillas naturales del mundo. Incluye visita a ambos lados.
+              </p>
+              <div class="package-features">
+                <div class="feature">
+                  <i class="fas fa-calendar"></i>
+                  <span>4 días / 3 noches</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-hotel"></i>
+                  <span>Hotel 4 estrellas</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-utensils"></i>
+                  <span>Pensión completa</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-camera"></i>
+                  <span>Tours guiados</span>
+                </div>
+              </div>
+              <div class="package-price-section">
+                <div class="price-details">
+                  <span class="old-price">$180,000</span>
+                  <span class="current-price">$156,000</span>
+                  <span class="price-note">Por persona</span>
+                </div>
+                <a href="contact.html" class="btn btn-secondary"
+                  >Ver detalles</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Package 4 -->
+          <div
+            class="package-card-extended"
+            data-destination="mendoza"
+            data-price="142000"
+            data-stars="4"
+            data-meal="media-pension"
+            data-duration="7"
+          >
+            <div class="package-image">
+              <img src="/api/placeholder/400/250" alt="Mendoza Viñedos" />
+            </div>
+            <div class="package-info">
+              <div class="package-header">
+                <div class="package-title">
+                  <h3>Mendoza y sus Viñedos</h3>
+                  <p class="location">
+                    <i class="fas fa-map-marker-alt"></i> Mendoza
+                  </p>
+                </div>
+                <div class="package-rating">
+                  <span class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                  </span>
+                  <span class="rating-number">(4.3)</span>
+                </div>
+              </div>
+              <p class="description">
+                Tour enológico por las mejores bodegas de Mendoza, degustación
+                de vinos premium y vista del Aconcagua.
+              </p>
+              <div class="package-features">
+                <div class="feature">
+                  <i class="fas fa-calendar"></i>
+                  <span>6 días / 5 noches</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-hotel"></i>
+                  <span>Hotel 4 estrellas</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-wine-glass-alt"></i>
+                  <span>Catas incluidas</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-mountain"></i>
+                  <span>Excursiones</span>
+                </div>
+              </div>
+              <div class="package-price-section">
+                <div class="price-details">
+                  <span class="current-price">$142,000</span>
+                  <span class="price-note">Por persona</span>
+                </div>
+                <a href="contact.html" class="btn btn-secondary"
+                  >Ver detalles</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Package 5 -->
+          <div
+            class="package-card-extended"
+            data-destination="calafate"
+            data-price="225000"
+            data-stars="5"
+            data-meal="pension-completa"
+            data-duration="10"
+          >
+            <div class="package-image">
+              <img src="/api/placeholder/400/250" alt="El Calafate Glaciares" />
+              <span class="package-badge">Aventura</span>
+            </div>
+            <div class="package-info">
+              <div class="package-header">
+                <div class="package-title">
+                  <h3>Glaciares Patagónicos</h3>
+                  <p class="location">
+                    <i class="fas fa-map-marker-alt"></i> El Calafate
+                  </p>
+                </div>
+                <div class="package-rating">
+                  <span class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </span>
+                  <span class="rating-number">(4.9)</span>
+                </div>
+              </div>
+              <p class="description">
+                Expedición única al Glaciar Perito Moreno, navegación por el
+                Lago Argentino y trekking sobre hielo.
+              </p>
+              <div class="package-features">
+                <div class="feature">
+                  <i class="fas fa-calendar"></i>
+                  <span>10 días / 9 noches</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-hotel"></i>
+                  <span>Hotel 5 estrellas</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-utensils"></i>
+                  <span>Pensión completa</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-hiking"></i>
+                  <span>Trekking incluido</span>
+                </div>
+              </div>
+              <div class="package-price-section">
+                <div class="price-details">
+                  <span class="current-price">$225,000</span>
+                  <span class="price-note">Por persona</span>
+                </div>
+                <a href="contact.html" class="btn btn-secondary"
+                  >Ver detalles</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Package 6 -->
+          <div
+            class="package-card-extended"
+            data-destination="ushuaia"
+            data-price="198000"
+            data-stars="4"
+            data-meal="todo-incluido"
+            data-duration="7"
+          >
+            <div class="package-image">
+              <img src="/api/placeholder/400/250" alt="Ushuaia Fin del Mundo" />
+            </div>
+            <div class="package-info">
+              <div class="package-header">
+                <div class="package-title">
+                  <h3>Ushuaia Fin del Mundo</h3>
+                  <p class="location">
+                    <i class="fas fa-map-marker-alt"></i> Ushuaia
+                  </p>
+                </div>
+                <div class="package-rating">
+                  <span class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                  </span>
+                  <span class="rating-number">(4.7)</span>
+                </div>
+              </div>
+              <p class="description">
+                Aventura en el fin del mundo: navegación por el Canal Beagle,
+                Parque Nacional Tierra del Fuego y pingüinera.
+              </p>
+              <div class="package-features">
+                <div class="feature">
+                  <i class="fas fa-calendar"></i>
+                  <span>7 días / 6 noches</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-hotel"></i>
+                  <span>Hotel 4 estrellas</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-ship"></i>
+                  <span>Navegación incluida</span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-paw"></i>
+                  <span>Avistaje fauna</span>
+                </div>
+              </div>
+              <div class="package-price-section">
+                <div class="price-details">
+                  <span class="current-price">$198,000</span>
+                  <span class="price-note">Por persona</span>
+                </div>
+                <a href="contact.html" class="btn btn-secondary"
+                  >Ver detalles</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- More packages can be added here -->
+        </div>
+
+        <!-- No results message (hidden by default) -->
+        <div class="no-results" id="no-results" style="display: none">
+          <i class="fas fa-search"></i>
+          <h3>No encontramos paquetes con esos criterios</h3>
+          <p>Intenta ajustar los filtros para ver más opciones</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <h2>Buenos Aires Tour</h2>
+            <p>Tu compañero de aventuras</p>
+          </div>
+          <div class="footer-links">
+            <h3>Enlaces rápidos</h3>
+            <ul>
+              <li><a href="index.html">Inicio</a></li>
+              <li><a href="packages.html" class="active">Paquetes</a></li>
+              <li><a href="about.html">Nosotros</a></li>
+              <li><a href="contact.html">Contacto</a></li>
+            </ul>
+          </div>
+          <div class="footer-social">
+            <h3>Síguenos</h3>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Buenos Aires Tour. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
+    <script src="js/functions.js"></script>
+  </body>
+</html>
