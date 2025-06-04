@@ -1229,23 +1229,6 @@ a {
   transform: translateY(-2px);
 }
 
-.btn-reset {
-  background-color: transparent;
-  color: var(--text-color);
-  padding: 15px 40px;
-  border: 2px solid var(--border-color);
-  border-radius: 30px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-reset:hover {
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-}
-
 /* Sección del Mapa */
 .map-section {
   margin-top: 80px;

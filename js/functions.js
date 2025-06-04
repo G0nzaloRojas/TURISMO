@@ -1,5 +1,9 @@
-document.querySelector(".menu-toggle").addEventListener("click", function () {
-  document.querySelector(".nav-menu").classList.toggle("active");
+// Toggle mobile menu
+const menuToggle = document.querySelector(".menu-toggle");
+const navMenu = document.querySelector(".nav-menu");
+
+menuToggle.addEventListener("click", () => {
+  navMenu.classList.toggle("active");
 });
 
 // Smooth scrolling for anchor links
@@ -15,14 +19,6 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 });
 
 //Packages
-
-// Toggle mobile menu
-const menuToggle = document.querySelector(".menu-toggle");
-const navMenu = document.querySelector(".nav-menu");
-
-menuToggle.addEventListener("click", () => {
-  navMenu.classList.toggle("active");
-});
 
 // Filter functionality
 function applyFilters() {
