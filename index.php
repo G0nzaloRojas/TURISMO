@@ -1,3 +1,4 @@
+<?php session_start();?>
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -24,10 +25,24 @@
           <i class="fas fa-bars"></i>
         </div>
         <ul class="nav-menu">
-          <li><a href="index.html" class="active">Inicio</a></li>
-          <li><a href="packages.html">Paquetes</a></li>
+          <li><a href="index.php" class="active">Inicio</a></li>
+          <li><a href="form_alquiler.php" class="active">Alquiler</a></li>
+          <li><a href="form_hotel.php" class="active">Hotel</a></li>
+          <li><a href="formulario_busqueda.html" class="active">Formulario</a></li>
+          <?php if (isset($_SESSION['id_cargo'])): ?>
+            <li><a href="packages.php">Paquetes</a></li>
+          <?php else: ?>
+            <li><a href="form_login.php">Paquetes</a></li>
+          <?php endif; ?>
           <li><a href="about.html">Nosotros</a></li>
           <li><a href="contact.html">Contacto</a></li>
+          <?php if (isset($_SESSION['id_cargo'])): ?>
+            <li><a href="cerrar.php" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+          <?php else: ?>
+            <li><a href="form_register.php">Registrarse</a></li>
+            <li><a href="form_login.php">Iniciar Sesión</a></li>
+          <?php endif; ?>
+          
         </ul>
       </div>
     </nav>
@@ -37,7 +52,8 @@
       <div class="hero-content">
         <h1>Descubre destinos increíbles</h1>
         <p>Las mejores experiencias de viaje al mejor precio</p>
-        <a href="#packages" class="btn btn-primary">Ver paquetes</a>
+        
+        <a href="#packages" class="btn btn-primary">Crea Tu Paquete Personalizado</a>
       </div>
     </section>
 
@@ -61,7 +77,7 @@
               </p>
               <div class="package-footer">
                 <p class="price">Desde $120,000</p>
-                <a href="packages.html" class="btn btn-secondary">Consultar</a>
+                <a href="packages.php" class="btn btn-secondary">Consultar</a>
               </div>
             </div>
           </div>
@@ -81,7 +97,7 @@
               </p>
               <div class="package-footer">
                 <p class="price">Desde $120,000</p>
-                <a href="packages.html" class="btn btn-secondary">Consultar</a>
+                <a href="packages.php" class="btn btn-secondary">Consultar</a>
               </div>
             </div>
           </div>
@@ -101,13 +117,24 @@
               </p>
               <div class="package-footer">
                 <p class="price">Desde $120,000</p>
-                <a href="packages.html" class="btn btn-secondary">Consultar</a>
+                <?php if (isset($_SESSION['id_cargo'])): ?>
+              <a href="packages.php" class="btn btn-primary">Consultar</a>
+            <?php else: ?>
+              <a href="form_login.php" class="btn btn-primary">Iniciá sesión para Consultar paquetes</a>
+            <?php endif; ?>
               </div>
             </div>
           </div>
         </div>
+        
+
         <div class="cta-container">
-          <a href="packages.html" class="btn btn-primary">Más paquetes</a>
+           <!-- Botón Ver Paquetes -->
+            <?php if (isset($_SESSION['id_cargo'])): ?>
+              <a href="packages.php" class="btn btn-primary">Más paquetes</a>
+            <?php else: ?>
+              <a href="form_login.php" class="btn btn-primary">Iniciá sesión para ver los paquetes</a>
+            <?php endif; ?>
         </div>
       </div>
     </section>
@@ -157,10 +184,20 @@
           <div class="footer-links">
             <h3>Enlaces rápidos</h3>
             <ul>
-              <li><a href="index.html" class="active">Inicio</a></li>
-              <li><a href="packages.html">Paquetes</a></li>
+              <li><a href="index.php" class="active">Inicio</a></li>
+              <?php if (isset($_SESSION['id_cargo'])): ?>
+                <li><a href="packages.php">Paquetes</a></li>
+              <?php else: ?>
+                <li><a href="form_login.php">Paquetes</a></li>
+              <?php endif; ?>
               <li><a href="about.html">Nosotros</a></li>
               <li><a href="contact.html">Contacto</a></li>
+              <?php if (isset($_SESSION['id_cargo'])): ?>
+                <li><a href="cerrar.php" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+              <?php else: ?>
+                <li><a href="form_register.php">Registrarse</a></li>
+                <li><a href="form_login.php">Iniciar Sesión</a></li>
+              <?php endif; ?>
             </ul>
           </div>
           <div class="footer-social">

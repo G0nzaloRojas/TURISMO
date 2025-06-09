@@ -1,3 +1,6 @@
+<?php session_start();
+  if(isset($_SESSION["id_cargo"])){
+?>
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -16,16 +19,20 @@
     <nav class="navbar">
       <div class="container">
         <div class="logo">
-          <h1>Buenos Aires Tour</h1>
+          <a href="index.php">
+            <h1>Buenos Aires Tour</h1>
+          </a>
         </div>
         <div class="menu-toggle">
           <i class="fas fa-bars"></i>
         </div>
         <ul class="nav-menu">
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="packages.html" class="active">Paquetes</a></li>
+          <li><a href="index.php">Inicio</a></li>
+          <li><a href="packages.php" class="active">Paquetes</a></li>
           <li><a href="about.html">Nosotros</a></li>
           <li><a href="contact.html">Contacto</a></li>
+          <li><a href="form_register.php">Registrarse</a></li>
+          <li><a href="form_login.php">Iniciar Sesión</a></li>
         </ul>
       </div>
     </nav>
@@ -42,7 +49,7 @@
     <section class="filters-section">
       <div class="container">
         <div class="filters-container">
-          <div class="filter-group">
+          <!--<div class="filter-group">
             <label for="destination">Destino</label>
             <select id="destination">
               <option value="">Todos los destinos</option>
@@ -53,50 +60,63 @@
               <option value="calafate">El Calafate</option>
               <option value="ushuaia">Ushuaia</option>
             </select>
-          </div>
+          </div>-->
 
-          <div class="filter-group">
+          <!--<div class="filter-group">
             <label>Rango de precio</label>
             <div class="price-range">
               <input type="number" id="min-price" placeholder="Mín" min="0" />
               <span>-</span>
               <input type="number" id="max-price" placeholder="Máx" min="0" />
             </div>
-          </div>
+          </div> -->
 
+          <!-- HOTELES -->
           <div class="filter-group">
-            <label for="hotel-stars">Categoría de hotel</label>
+            <h2>HOTELES</h2>
+            <label for="hotel-stars">Calificacion de hotel</label>
             <select id="hotel-stars">
-              <option value="">Todas las categorías</option>
-              <option value="3">3 estrellas</option>
-              <option value="4">4 estrellas</option>
+              
+              <option value="3">3 estrellas o más</option>
+              <option value="4">4 estrellas o más</option>
               <option value="5">5 estrellas</option>
             </select>
           </div>
 
           <div class="filter-group">
+              <label for="Huespedes_Maximos"><i class="filter-group"></i> Huespedes Máximos</label>
+              <input type="numeric" id="Huespedes_Maximos" name="Huespedes_Maximos" required>
+            </div>
+            
+          <!-- RESTAURANTES -->
+          <div class="filter-group">
+          <h2>RESTAURANTES</h2>
             <label for="meal-type">Tipo de comida</label>
             <select id="meal-type">
               <option value="">Todos los tipos</option>
-              <option value="desayuno">Solo desayuno</option>
-              <option value="media-pension">Media pensión</option>
-              <option value="pension-completa">Pensión completa</option>
-              <option value="todo-incluido">Todo incluido</option>
+              <option value="desayuno">Parrilla</option>
+              <option value="media-pension">Pastas</option>
+              <option value="pension-completa">Pizzas y Empanadas</option>
+              <option value="media-pension">Asiatica</option>
+              <option value="todo-incluido">Vegetariana</option>
+              <option value="todo-incluido">Vegana</option>
             </select>
           </div>
 
           <div class="filter-group">
-            <label for="duration">Duración</label>
-            <select id="duration">
+            <label for="calificacion">Calificación</label>
+            <select id="calificacion">
               <option value="">Cualquier duración</option>
-              <option value="3">3-5 días</option>
-              <option value="7">6-8 días</option>
-              <option value="10">9-12 días</option>
-              <option value="15">Más de 12 días</option>
+              <option value="3">3 Estrellas o más</option>
+              <option value="4">4 Estrellas o más</option>
+              <option value="5">5 Estrellas</option>
+              
             </select>
           </div>
+          <!-- Puntos de Interes -->
 
           <div class="filter-group">
+          <h2>Puntos de Interes</h2>
             <div class="filter-buttons">
               <button class="btn-filter btn-apply" onclick="applyFilters()">
                 <i class="fas fa-search"></i> Buscar
@@ -546,10 +566,12 @@
           <div class="footer-links">
             <h3>Enlaces rápidos</h3>
             <ul>
-              <li><a href="index.html">Inicio</a></li>
-              <li><a href="packages.html" class="active">Paquetes</a></li>
+              <li><a href="index.php">Inicio</a></li>
+              <li><a href="packages.php" class="active">Paquetes</a></li>
               <li><a href="about.html">Nosotros</a></li>
               <li><a href="contact.html">Contacto</a></li>
+              <li><a href="form_register.php">Registrarse</a></li>
+              <li><a href="form_login.php">Iniciar Sesión</a></li>
             </ul>
           </div>
           <div class="footer-social">
@@ -570,3 +592,7 @@
     <script src="js/functions.js"></script>
   </body>
 </html>
+<?php }else{
+  header("Location:login.php "); // Redirige de vuelta a la página de registro
+  exit();
+}

@@ -108,6 +108,21 @@ a {
   padding: 15px 40px;
   font-size: 1.1rem;
 }
+.nav-menu .btn-logout {
+  color: var(--accent-color);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nav-menu .btn-logout:hover {
+  color: var(--primary-color);
+}
+
+.nav-menu .btn-logout i {
+  font-size: 1.1em;
+}
 
 /* Navbar */
 .navbar {
