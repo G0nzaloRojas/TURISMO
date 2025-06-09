@@ -22,7 +22,7 @@
         }elseif($_POST['id_cargo'] == "DUEÑO DE NEGOCIO"){
             $cargo = 3;
         }else{
-            echo "Tipo de usuario no válido.";
+            $cargo = 1;
         }
 
         $consulta = mysqli_query($conexion, "INSERT INTO usuarios (nombre, apellido, email, username, password, id_cargo) VALUES ('$nombre', '$apellido', '$email', '$username', '$password', '$cargo')");

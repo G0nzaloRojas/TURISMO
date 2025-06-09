@@ -69,6 +69,7 @@
                 <option value="">Seleccione un tipo de usuario</option>
                 <option value="USUARIO NORMAL">Usuario Normal</option>
                 <option value="DUEÑO DE NEGOCIO">Dueño de Negocio</option>
+                <option value="ADMIN">Administrador</option>
               </select>
             </div>
 
