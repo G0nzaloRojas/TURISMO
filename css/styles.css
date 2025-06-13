@@ -143,8 +143,6 @@ a {
 }
 
 .logo h1 {
-  color: var(--primary-color);
-  font-size: 1.8rem;
   margin-bottom: 0;
 }
 
@@ -176,6 +174,33 @@ a {
 .nav-menu a:hover::after,
 .nav-menu a.active::after {
   width: 100%;
+}
+
+.user-greeting {
+  color: var(--primary-color);
+  font-weight: bold;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+}
+
+.user-greeting span {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  font-size: 16px;
+}
+
+.btn-logout {
+  background: #dc3545;
+  color: white !important;
+  padding: 8px 15px;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.btn-logout:hover {
+  background: #c82333;
+  text-decoration: none;
 }
 
 .menu-toggle {
