@@ -18,9 +18,9 @@
     <!-- Navbar -->
     <nav class="navbar">
       <div class="container">
-        <div class="logo">
+       <div class="logo">
           <a href="index.php">
-            <h1>Buenos Aires Tour</h1>
+            <img src="img/LOGO_BA.png" alt="Logo BA Tour" height="65" />
           </a>
         </div>
         <div class="menu-toggle">
@@ -28,11 +28,29 @@
         </div>
         <ul class="nav-menu">
           <li><a href="index.php">Inicio</a></li>
-          <li><a href="packages.php" class="active">Paquetes</a></li>
-          <li><a href="about.html">Nosotros</a></li>
-          <li><a href="contact.html">Contacto</a></li>
-          <li><a href="form_register.php">Registrarse</a></li>
-          <li><a href="form_login.php">Iniciar Sesión</a></li>
+          <?php if (isset($_SESSION['id_cargo'])): ?>
+        <li><a href="packages.php" class="active">Paquetes</a></li>
+      <?php else: ?>
+        <li><a href="form_login.php">Paquetes</a></li>
+      <?php endif; ?>
+      
+      <li><a href="about.php">Nosotros</a></li>
+      <li><a href="contact.php">Contacto</a></li>
+      
+      <?php if (isset($_SESSION['id_cargo'])): ?>
+        <!-- Saludo personalizado -->
+        
+        <li><a href="logout.php">
+          <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+        </a></li>
+        <li class="user-greeting">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#618c78"><path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q53 0 100-15.5t86-44.5q-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160Zm0-360q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm0-60Zm0 360Z"/></svg>
+          <span>Hola, <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
+        </li>
+      <?php else: ?>
+        <li><a href="form_register.php">Registrarse</a></li>
+        <li><a href="form_login.php">Iniciar Sesión</a></li>
+      <?php endif; ?>
         </ul>
       </div>
     </nav>
@@ -42,91 +60,6 @@
       <div class="hero-content">
         <h1>Nuestros Paquetes Turísticos</h1>
         <p>Encuentra la aventura perfecta para tus próximas vacaciones</p>
-      </div>
-    </section>
-
-    <!-- Filters Section -->
-    <section class="filters-section">
-      <div class="container">
-        <div class="filters-container">
-          <!--<div class="filter-group">
-            <label for="destination">Destino</label>
-            <select id="destination">
-              <option value="">Todos los destinos</option>
-              <option value="buenos-aires">Buenos Aires</option>
-              <option value="bariloche">Bariloche</option>
-              <option value="mendoza">Mendoza</option>
-              <option value="iguazu">Cataratas del Iguazú</option>
-              <option value="calafate">El Calafate</option>
-              <option value="ushuaia">Ushuaia</option>
-            </select>
-          </div>-->
-
-          <!--<div class="filter-group">
-            <label>Rango de precio</label>
-            <div class="price-range">
-              <input type="number" id="min-price" placeholder="Mín" min="0" />
-              <span>-</span>
-              <input type="number" id="max-price" placeholder="Máx" min="0" />
-            </div>
-          </div> -->
-
-          <!-- HOTELES -->
-          <div class="filter-group">
-            <h2>HOTELES</h2>
-            <label for="hotel-stars">Calificacion de hotel</label>
-            <select id="hotel-stars">
-              
-              <option value="3">3 estrellas o más</option>
-              <option value="4">4 estrellas o más</option>
-              <option value="5">5 estrellas</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-              <label for="Huespedes_Maximos"><i class="filter-group"></i> Huespedes Máximos</label>
-              <input type="numeric" id="Huespedes_Maximos" name="Huespedes_Maximos" required>
-            </div>
-            
-          <!-- RESTAURANTES -->
-          <div class="filter-group">
-          <h2>RESTAURANTES</h2>
-            <label for="meal-type">Tipo de comida</label>
-            <select id="meal-type">
-              <option value="">Todos los tipos</option>
-              <option value="desayuno">Parrilla</option>
-              <option value="media-pension">Pastas</option>
-              <option value="pension-completa">Pizzas y Empanadas</option>
-              <option value="media-pension">Asiatica</option>
-              <option value="todo-incluido">Vegetariana</option>
-              <option value="todo-incluido">Vegana</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label for="calificacion">Calificación</label>
-            <select id="calificacion">
-              <option value="">Cualquier duración</option>
-              <option value="3">3 Estrellas o más</option>
-              <option value="4">4 Estrellas o más</option>
-              <option value="5">5 Estrellas</option>
-              
-            </select>
-          </div>
-          <!-- Puntos de Interes -->
-
-          <div class="filter-group">
-          <h2>Puntos de Interes</h2>
-            <div class="filter-buttons">
-              <button class="btn-filter btn-apply" onclick="applyFilters()">
-                <i class="fas fa-search"></i> Buscar
-              </button>
-              <button class="btn-filter btn-clear" onclick="clearFilters()">
-                <i class="fas fa-times"></i> Limpiar
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 
