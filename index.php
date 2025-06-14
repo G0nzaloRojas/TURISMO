@@ -59,7 +59,6 @@
       <div class="hero-content">
         <h1>Descubre destinos increíbles</h1>
         <p>Las mejores experiencias de viaje al mejor precio</p>
-        
         <a href="formulario_busqueda.html" class="btn btn-primary">Crea Tu Paquete Personalizado</a>
       </div>
     </section>
@@ -192,14 +191,14 @@
           <div class="footer-links">
             <h3>Enlaces rápidos</h3>
             <ul>
-              <li><a href="index.php" class="active">Inicio</a></li>
+              <li><a href="index.php" class="active" onclick="scrollToTop(event)">Inicio</a></li>
               <?php if (isset($_SESSION['id_cargo'])): ?>
                 <li><a href="packages.php">Paquetes</a></li>
               <?php else: ?>
                 <li><a href="form_login.php">Paquetes</a></li>
               <?php endif; ?>
-              <li><a href="about.html">Nosotros</a></li>
-              <li><a href="contact.html">Contacto</a></li>
+              <li><a href="about.php">Nosotros</a></li>
+              <li><a href="contact.php">Contacto</a></li>
               <?php if (isset($_SESSION['id_cargo'])): ?>
                 <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
               <?php else: ?>
@@ -223,5 +222,14 @@
       </div>
     </footer>
     <script src="js/functions.js"></script>
+    <script>
+      function scrollToTop(event) {
+          event.preventDefault(); // Evita que la página salte
+          window.scrollTo({
+              top: 0,
+              behavior: 'smooth'
+          });
+      }
+    </script>
   </body>
 </html>

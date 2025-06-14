@@ -17,8 +17,8 @@
   <body>
     <!-- Navbar -->
     <nav class="navbar">
-      <div class="container">
-       <div class="logo">
+  <div class="container">
+    <div class="logo">
           <a href="index.php">
             <img src="img/LOGO_BA.png" alt="Logo BA Tour" height="65" />
           </a>
@@ -26,9 +26,10 @@
         <div class="menu-toggle">
           <i class="fas fa-bars"></i>
         </div>
-        <ul class="nav-menu">
-          <li><a href="index.php">Inicio</a></li>
-          <?php if (isset($_SESSION['id_cargo'])): ?>
+    <ul class="nav-menu">
+      <li><a href="index.php" >Inicio</a></li>
+      
+      <?php if (isset($_SESSION['id_cargo'])): ?>
         <li><a href="packages.php" class="active">Paquetes</a></li>
       <?php else: ?>
         <li><a href="form_login.php">Paquetes</a></li>
@@ -36,10 +37,10 @@
       
       <li><a href="about.php">Nosotros</a></li>
       <li><a href="contact.php">Contacto</a></li>
-      
       <?php if (isset($_SESSION['id_cargo'])): ?>
-        <!-- Saludo personalizado -->
-        
+        <?php if($_SESSION['id_cargo'] == 1 || $_SESSION['id_cargo'] == 3): ?>
+          <li><a href="admin_dashboard.php">Mis Negocios</a></li>
+        <?php endif; ?>
         <li><a href="logout.php">
           <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
         </a></li>
@@ -48,12 +49,11 @@
           <span>Hola, <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
         </li>
       <?php else: ?>
-        <li><a href="form_register.php">Registrarse</a></li>
         <li><a href="form_login.php">Iniciar Sesión</a></li>
       <?php endif; ?>
-        </ul>
-      </div>
-    </nav>
+    </ul>
+  </div>
+</nav>
 
     <!-- Hero Section -->
     <section class="packages-hero">
@@ -489,6 +489,7 @@
     </section>
 
     <!-- Footer -->
+    <!-- Footer -->
     <footer class="footer">
       <div class="container">
         <div class="footer-content">
@@ -500,11 +501,18 @@
             <h3>Enlaces rápidos</h3>
             <ul>
               <li><a href="index.php">Inicio</a></li>
-              <li><a href="packages.php" class="active">Paquetes</a></li>
-              <li><a href="about.html">Nosotros</a></li>
-              <li><a href="contact.html">Contacto</a></li>
-              <li><a href="form_register.php">Registrarse</a></li>
-              <li><a href="form_login.php">Iniciar Sesión</a></li>
+              <?php if (isset($_SESSION['id_cargo'])): ?>
+                <li><a href="packages.php" class="active" onclick="scrollToTop(event)">Paquetes</a></li>
+              <?php else: ?>
+                <li><a href="form_login.php">Paquetes</a></li>
+              <?php endif; ?>
+              <li><a href="about.php">Nosotros</a></li>
+              <li><a href="contact.php">Contacto</a></li>
+              <?php if (isset($_SESSION['id_cargo'])): ?>
+                <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+              <?php else: ?>
+                <li><a href="form_login.php">Iniciar Sesión</a></li>
+              <?php endif; ?>
             </ul>
           </div>
           <div class="footer-social">
@@ -523,8 +531,18 @@
       </div>
     </footer>
     <script src="js/functions.js"></script>
+    <script>
+      function scrollToTop(event) {
+          event.preventDefault(); // Evita que la página salte
+          window.scrollTo({
+              top: 0,
+              behavior: 'smooth'
+          });
+      }
+    </script>
   </body>
 </html>
+
 <?php }else{
   header("Location:login.php "); // Redirige de vuelta a la página de registro
   exit();

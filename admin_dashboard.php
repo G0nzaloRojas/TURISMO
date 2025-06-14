@@ -138,6 +138,10 @@ $user_role = $_SESSION['id_cargo'];
                             <option value="" selected disabled>Seleccionar tipo</option>
                             <option value="Parrilla">Parrilla</option>
                             <option value="Asiatica">Asiatica</option>
+                            <option value="pizas y empanadas">Pizas y empanadas</option>
+                            <option value="pastas">Pastas</option>
+                            <option value="vegetariana">Vegetariana</option>
+                            <option value="vegana">Vegana</option>
                         </select>
                     </div>
                     <div class="form-row">

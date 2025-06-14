@@ -7,6 +7,12 @@ if (!isset($_SESSION['id_cargo']) || ($_SESSION['id_cargo'] != 1 && $_SESSION['i
     exit();
 }
 
+// Verificar que existe el id del usuario en la sesión
+if (!isset($_SESSION['id'])) {
+    echo json_encode(['success' => false, 'message' => 'Sesión inválida - ID de usuario no encontrado']);
+    exit();
+}
+
 include("../conexion.php");
 
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
@@ -47,27 +53,36 @@ function getBusinesses() {
     $category = $_GET['category'] ?? 'restaurantes';
     $data = [];
     
+    // Determinar si aplicar filtro por usuario
+    $whereClause = '';
+    if ($_SESSION['id_cargo'] == 3) {
+        // Usuario regular: solo sus propios negocios
+        $id_usuario = intval($_SESSION['id']);
+        $whereClause = " WHERE ID_USUARIO = $id_usuario";
+    }
+    // Si es admin (id_cargo = 1): no se aplica filtro, ve todos los negocios
+    
     switch($category) {
         case 'restaurantes':
             $query = "SELECT r.*, tc.DESCRIPCION as TIPO_COMIDA 
                      FROM restaurantes r 
-                     LEFT JOIN `tipo de comida` tc ON r.ID_COMIDA = tc.ID 
-                     ORDER BY r.NOMBRE";
+                     LEFT JOIN `tipo de comida` tc ON r.ID_COMIDA = tc.ID" . 
+                     $whereClause . " ORDER BY r.NOMBRE";
             break;
             
         case 'hoteles':
-            $query = "SELECT * FROM hoteles ORDER BY NOMBRE";
+            $query = "SELECT * FROM hoteles" . $whereClause . " ORDER BY NOMBRE";
             break;
             
         case 'alquiler':
-            $query = "SELECT * FROM alquiler ORDER BY NOMBRE";
+            $query = "SELECT * FROM alquiler" . $whereClause . " ORDER BY NOMBRE";
             break;
             
         case 'puntos_interes':
             $query = "SELECT pi.*, a.DESCRIPCION as ACTIVIDAD 
                      FROM `puntos de interes` pi 
-                     LEFT JOIN actividad a ON pi.ID_ACTIVIDAD = a.ID 
-                     ORDER BY pi.NOMBRE";
+                     LEFT JOIN actividad a ON pi.ID_ACTIVIDAD = a.ID" . 
+                     $whereClause . " ORDER BY pi.NOMBRE";
             break;
             
         default:
@@ -122,6 +137,7 @@ function createBusiness() {
 function createRestaurante() {
     global $conexion;
     
+    $id_usuario = intval($_SESSION['id']); // Obtener ID del usuario de la sesión
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
@@ -129,8 +145,8 @@ function createRestaurante() {
     $precio_minimo = !empty($_POST['precio_minimo']) ? intval($_POST['precio_minimo']) : 'NULL';
     $precio_maximo = !empty($_POST['precio_maximo']) ? intval($_POST['precio_maximo']) : 'NULL';
     
-    $query = "INSERT INTO restaurantes (NOMBRE, UBICACION, DESCRIPCION, ID_COMIDA, `PRECIO MINIMO`, `PRECIO MAXIMO`) 
-              VALUES ('$nombre', '$ubicacion', '$descripcion', $id_comida, $precio_minimo, $precio_maximo)";
+    $query = "INSERT INTO restaurantes (NOMBRE, UBICACION, DESCRIPCION, ID_COMIDA, `PRECIO MINIMO`, `PRECIO MAXIMO`, ID_USUARIO) 
+              VALUES ('$nombre', '$ubicacion', '$descripcion', $id_comida, $precio_minimo, $precio_maximo, $id_usuario)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Restaurante creado correctamente', 'id' => mysqli_insert_id($conexion)]);
@@ -142,6 +158,7 @@ function createRestaurante() {
 function createHotel() {
     global $conexion;
     
+    $id_usuario = intval($_SESSION['id']); // Obtener ID del usuario de la sesión
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $precio_minimo = !empty($_POST['precio_minimo']) ? intval($_POST['precio_minimo']) : 0;
@@ -151,8 +168,8 @@ function createHotel() {
     $pileta = mysqli_real_escape_string($conexion, $_POST['pileta'] ?? 'no');
     $desayuno = mysqli_real_escape_string($conexion, $_POST['desayuno'] ?? 'no');
     
-    $query = "INSERT INTO hoteles (NOMBRE, UBICACION, PRECIO_MINIMO, PRECIO_MAXIMO, CALIFICACION, HUESPEDES, PILETA, DESAYUNO) 
-              VALUES ('$nombre', '$ubicacion', $precio_minimo, $precio_maximo, $calificacion, $huespedes, '$pileta', '$desayuno')";
+    $query = "INSERT INTO hoteles (NOMBRE, UBICACION, PRECIO_MINIMO, PRECIO_MAXIMO, CALIFICACION, HUESPEDES, PILETA, DESAYUNO, ID_USUARIO) 
+              VALUES ('$nombre', '$ubicacion', $precio_minimo, $precio_maximo, $calificacion, $huespedes, '$pileta', '$desayuno', $id_usuario)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Hotel creado correctamente', 'id' => mysqli_insert_id($conexion)]);
@@ -164,6 +181,7 @@ function createHotel() {
 function createAlquiler() {
     global $conexion;
     
+    $id_usuario = intval($_SESSION['id']); // Obtener ID del usuario de la sesión
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
@@ -175,8 +193,8 @@ function createAlquiler() {
     $camas_simples = !empty($_POST['camas_simples']) ? intval($_POST['camas_simples']) : 0;
     $metros = !empty($_POST['metros']) ? intval($_POST['metros']) : 0;
     
-    $query = "INSERT INTO alquiler (NOMBRE, UBICACION, PRECIO_SEMANA, CALIFICACION, BANIOS, DORMITORIOS, CAMAS_DOBLES, CAMAS_SIMPLES, METROS, DESCRIPCION) 
-              VALUES ('$nombre', '$ubicacion', $precio_semana, $calificacion, $banios, $dormitorios, $camas_dobles, $camas_simples, $metros, '$descripcion')";
+    $query = "INSERT INTO alquiler (NOMBRE, UBICACION, PRECIO_SEMANA, CALIFICACION, BANIOS, DORMITORIOS, CAMAS_DOBLES, CAMAS_SIMPLES, METROS, DESCRIPCION, ID_USUARIO) 
+              VALUES ('$nombre', '$ubicacion', $precio_semana, $calificacion, $banios, $dormitorios, $camas_dobles, $camas_simples, $metros, '$descripcion', $id_usuario)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Alquiler creado correctamente', 'id' => mysqli_insert_id($conexion)]);
@@ -188,6 +206,7 @@ function createAlquiler() {
 function createPuntoInteres() {
     global $conexion;
     
+    $id_usuario = intval($_SESSION['id']); // Obtener ID del usuario de la sesión
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
@@ -195,8 +214,8 @@ function createPuntoInteres() {
     $precio = !empty($_POST['precio']) ? intval($_POST['precio']) : 0;
     $calificacion = !empty($_POST['calificacion']) ? floatval($_POST['calificacion']) : 'NULL';
     
-    $query = "INSERT INTO `puntos de interes` (NOMBRE, UBICACION, DESCRIPCION, ID_ACTIVIDAD, PRECIO, CALIFICACION) 
-              VALUES ('$nombre', '$ubicacion', '$descripcion', $id_actividad, $precio, $calificacion)";
+    $query = "INSERT INTO `puntos de interes` (NOMBRE, UBICACION, DESCRIPCION, ID_ACTIVIDAD, PRECIO, CALIFICACION, ID_USUARIO) 
+              VALUES ('$nombre', '$ubicacion', '$descripcion', $id_actividad, $precio, $calificacion, $id_usuario)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Punto de interés creado correctamente', 'id' => mysqli_insert_id($conexion)]);
@@ -214,6 +233,37 @@ function updateBusiness() {
     if ($id <= 0) {
         echo json_encode(['success' => false, 'message' => 'ID no válido']);
         return;
+    }
+    
+    // Verificar permisos: usuarios regulares solo pueden editar sus propios negocios
+    if ($_SESSION['id_cargo'] == 3) {
+        $table = '';
+        switch($category) {
+            case 'restaurantes':
+                $table = 'restaurantes';
+                break;
+            case 'hoteles':
+                $table = 'hoteles';
+                break;
+            case 'alquiler':
+                $table = 'alquiler';
+                break;
+            case 'puntos_interes':
+                $table = '`puntos de interes`';
+                break;
+            default:
+                echo json_encode(['success' => false, 'message' => 'Categoría no válida']);
+                return;
+        }
+        
+        $id_usuario = intval($_SESSION['id']);
+        $checkQuery = "SELECT ID FROM $table WHERE ID = $id AND ID_USUARIO = $id_usuario";
+        $checkResult = mysqli_query($conexion, $checkQuery);
+        
+        if (!$checkResult || mysqli_num_rows($checkResult) == 0) {
+            echo json_encode(['success' => false, 'message' => 'No tienes permisos para editar este negocio']);
+            return;
+        }
     }
     
     // Validar campos requeridos comunes
@@ -405,6 +455,18 @@ function deleteBusiness() {
             return;
     }
     
+    // Verificar permisos: usuarios regulares solo pueden eliminar sus propios negocios
+    if ($_SESSION['id_cargo'] == 3) {
+        $id_usuario = intval($_SESSION['id']);
+        $checkQuery = "SELECT ID FROM $table WHERE ID = $id AND ID_USUARIO = $id_usuario";
+        $checkResult = mysqli_query($conexion, $checkQuery);
+        
+        if (!$checkResult || mysqli_num_rows($checkResult) == 0) {
+            echo json_encode(['success' => false, 'message' => 'No tienes permisos para eliminar este negocio']);
+            return;
+        }
+    }
+    
     $query = "DELETE FROM $table WHERE ID = $id";
     
     if (mysqli_query($conexion, $query)) {
@@ -457,29 +519,38 @@ function getTotalCount() {
     
     $total = 0;
     
+    // Determinar si aplicar filtro por usuario
+    $whereClause = '';
+    if ($_SESSION['id_cargo'] == 3) {
+        // Usuario regular: solo contar sus propios negocios
+        $id_usuario = intval($_SESSION['id']);
+        $whereClause = " WHERE ID_USUARIO = $id_usuario";
+    }
+    // Si es admin (id_cargo = 1): cuenta todos los negocios
+    
     // Contar restaurantes
-    $result = mysqli_query($conexion, "SELECT COUNT(*) as count FROM restaurantes");
+    $result = mysqli_query($conexion, "SELECT COUNT(*) as count FROM restaurantes" . $whereClause);
     if ($result) {
         $row = mysqli_fetch_assoc($result);
         $total += $row['count'];
     }
     
     // Contar hoteles
-    $result = mysqli_query($conexion, "SELECT COUNT(*) as count FROM hoteles");
+    $result = mysqli_query($conexion, "SELECT COUNT(*) as count FROM hoteles" . $whereClause);
     if ($result) {
         $row = mysqli_fetch_assoc($result);
         $total += $row['count'];
     }
     
     // Contar alquileres
-    $result = mysqli_query($conexion, "SELECT COUNT(*) as count FROM alquiler");
+    $result = mysqli_query($conexion, "SELECT COUNT(*) as count FROM alquiler" . $whereClause);
     if ($result) {
         $row = mysqli_fetch_assoc($result);
         $total += $row['count'];
     }
     
     // Contar puntos de interés
-    $result = mysqli_query($conexion, "SELECT COUNT(*) as count FROM `puntos de interes`");
+    $result = mysqli_query($conexion, "SELECT COUNT(*) as count FROM `puntos de interes`" . $whereClause);
     if ($result) {
         $row = mysqli_fetch_assoc($result);
         $total += $row['count'];

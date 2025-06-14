@@ -26,8 +26,8 @@
           <i class="fas fa-bars"></i>
         </div>
     <ul class="nav-menu">
-      <li><a href="index.php">Inicio</a></li>
-
+      <li><a href="index.php" >Inicio</a></li>
+      
       <?php if (isset($_SESSION['id_cargo'])): ?>
         <li><a href="packages.php">Paquetes</a></li>
       <?php else: ?>
@@ -35,11 +35,11 @@
       <?php endif; ?>
       
       <li><a href="about.php">Nosotros</a></li>
-      <li><a href="contact.php"  class="active">Contacto</a></li>
-      
+      <li><a href="contact.php" class="active">Contacto</a></li>
       <?php if (isset($_SESSION['id_cargo'])): ?>
-        <!-- Saludo personalizado -->
-        
+        <?php if($_SESSION['id_cargo'] == 1 || $_SESSION['id_cargo'] == 3): ?>
+          <li><a href="admin_dashboard.php">Mis Negocios</a></li>
+        <?php endif; ?>
         <li><a href="logout.php">
           <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
         </a></li>
@@ -377,6 +377,7 @@
     </section>
 
     <!-- Footer -->
+    <!-- Footer -->
     <footer class="footer">
       <div class="container">
         <div class="footer-content">
@@ -387,12 +388,19 @@
           <div class="footer-links">
             <h3>Enlaces rápidos</h3>
             <ul>
-              <li><a href="index.php">Inicio</a></li>
-              <li><a href="packages.php">Paquetes</a></li>
-              <li><a href="about.html">Nosotros</a></li>
-              <li><a href="contact.html" class="active">Contacto</a></li>
-              <li><a href="form_register.php">Registrarse</a></li>
-              <li><a href="form_login.php">Iniciar Sesión</a></li>
+              <li><a href="index.php" >Inicio</a></li>
+              <?php if (isset($_SESSION['id_cargo'])): ?>
+                <li><a href="packages.php">Paquetes</a></li>
+              <?php else: ?>
+                <li><a href="form_login.php">Paquetes</a></li>
+              <?php endif; ?>
+              <li><a href="about.php">Nosotros</a></li>
+              <li><a href="contact.php" class="active" onclick="scrollToTop(event)">Contacto</a></li>
+              <?php if (isset($_SESSION['id_cargo'])): ?>
+                <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+              <?php else: ?>
+                <li><a href="form_login.php">Iniciar Sesión</a></li>
+              <?php endif; ?>
             </ul>
           </div>
           <div class="footer-social">
@@ -470,6 +478,14 @@
       const travelDateInput = document.getElementById("travel-date");
       const today = new Date().toISOString().split("T")[0];
       travelDateInput.setAttribute("min", today);
+
+      function scrollToTop(event) {
+          event.preventDefault(); // Evita que la página salte
+          window.scrollTo({
+              top: 0,
+              behavior: 'smooth'
+          });
+      }
     </script>
   </body>
 </html>
