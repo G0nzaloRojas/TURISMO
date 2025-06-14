@@ -27,7 +27,7 @@ $password=md5($_POST['password']);
 
 include("conexion.php");
 
-$consulta=mysqli_query($conexion, "SELECT nombre, apellido, email, id_cargo FROM usuarios WHERE username='$username' AND password='$password'");
+$consulta=mysqli_query($conexion, "SELECT nombre, apellido, email, id_cargo, id FROM usuarios WHERE username='$username' AND password='$password'");
 
 $resultado=mysqli_num_rows($consulta);
 
@@ -38,6 +38,7 @@ if($resultado!=0){
 	$_SESSION['nombre']=$respuesta['nombre'];
 	$_SESSION['apellido']=$respuesta['apellido'];
 	$_SESSION['id_cargo']=$respuesta['id_cargo'];
+	$_SESSION['id']=$respuesta['id'];
 	header("Location: index.php");
 	exit(); // Importante: detener la ejecución
 
