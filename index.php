@@ -161,7 +161,7 @@
               Contamos con guías locales experimentados y ofrecemos atención
               personalizada para que tu único trabajo sea disfrutar de tu viaje.
             </p>
-            <a href="about.html" class="btn btn-secondary">Conocer más</a>
+            <a href="about.php" class="btn btn-secondary">Conocer más</a>
           </div>
         </div>
       </div>
@@ -174,7 +174,7 @@
           <div class="about-text">
         <h2 class="section-title">Contacto</h2>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis optio, enim tempora eum magni perspiciatis. Veritatis consequuntur totam provident impedit, repudiandae labore culpa soluta at, nulla eaque iusto praesentium sint.</p>
-        <a href="contact.html" class="btn btn-primary">Contactar</a>
+        <a href="contact.php" class="btn btn-primary">Contactar</a>
       </div>
         </div>
       </div>

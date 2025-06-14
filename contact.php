@@ -14,7 +14,6 @@
   </head>
   <body>
     <!-- Navbar -->
-        <!-- Navbar -->
     <nav class="navbar">
   <div class="container">
     <div class="logo">
@@ -132,11 +131,19 @@
           <!-- Contact Form -->
           <div class="contact-form-wrapper">
             <h2>Envíanos un mensaje</h2>
-            <div class="success-message" id="success-message">
-              <i class="fas fa-check-circle"></i> Tu mensaje ha sido enviado
-              exitosamente. Te contactaremos pronto.
-            </div>
-            <form id="contact-form">
+            
+            <!-- Mensajes de éxito y error -->
+            <?php if (isset($_GET['exito']) && $_GET['exito'] == 1): ?>
+              <div class="success-message show" id="success-message">
+                <i class="fas fa-check-circle"></i> Tu mensaje ha sido enviado exitosamente. Te contactaremos pronto.
+              </div>
+            <?php elseif (isset($_GET['error']) && $_GET['error'] == 1): ?>
+              <div class="error-message show" id="error-message">
+                <i class="fas fa-exclamation-triangle"></i> Hubo un problema al enviar el mensaje. Por favor, intentá de nuevo más tarde.
+              </div>
+            <?php endif; ?>
+
+            <form id="contact-form" action="backend/contactoBG.php" method="POST">
               <div class="form-row">
                 <div class="form-group">
                   <label for="first-name">Nombre *</label>
@@ -226,7 +233,7 @@
           <div class="map-container">
             <div class="map-header">
               <h3>Encuéntranos</h3>
-              <p>Visítanos en nuestra oficina principal en Ituzaingó</p>
+              <p>Visítanos en nuestra oficina principal en Haedo</p>
             </div>
             <div class="map-frame">
               <iframe
@@ -377,7 +384,6 @@
     </section>
 
     <!-- Footer -->
-    <!-- Footer -->
     <footer class="footer">
       <div class="container">
         <div class="footer-content">
@@ -418,7 +424,7 @@
         </div>
       </div>
     </footer>
-    <!-- <script src="js/functions.js"></script> -->
+
     <script>
       // Toggle mobile menu
       const menuToggle = document.querySelector(".menu-toggle");
@@ -427,6 +433,7 @@
       menuToggle.addEventListener("click", () => {
         navMenu.classList.toggle("active");
       });
+
       // FAQ Accordion
       const faqQuestions = document.querySelectorAll(".faq-question");
 
@@ -452,40 +459,64 @@
         });
       });
 
-      // Form submission
-      const contactForm = document.getElementById("contact-form");
-      const successMessage = document.getElementById("success-message");
-
-      contactForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        // Show success message
-        successMessage.classList.add("show");
-
-        // Reset form
-        contactForm.reset();
-
-        // Scroll to top of form
-        contactForm.scrollIntoView({ behavior: "smooth", block: "start" });
-
-        // Hide success message after 5 seconds
-        setTimeout(() => {
-          successMessage.classList.remove("show");
-        }, 5000);
-      });
-
       // Set minimum date to today for travel date input
       const travelDateInput = document.getElementById("travel-date");
       const today = new Date().toISOString().split("T")[0];
       travelDateInput.setAttribute("min", today);
 
       function scrollToTop(event) {
-          event.preventDefault(); // Evita que la página salte
+          event.preventDefault();
           window.scrollTo({
               top: 0,
               behavior: 'smooth'
           });
       }
+
+      // Auto-hide success/error messages after 5 seconds
+      setTimeout(() => {
+        const successMessage = document.getElementById("success-message");
+        const errorMessage = document.getElementById("error-message");
+        
+        if (successMessage && successMessage.classList.contains("show")) {
+          successMessage.classList.remove("show");
+        }
+        if (errorMessage && errorMessage.classList.contains("show")) {
+          errorMessage.classList.remove("show");
+        }
+      }, 5000);
     </script>
+
+    <style>
+      /* Estilos para los mensajes de éxito y error */
+      .success-message, .error-message {
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        font-weight: 500;
+      }
+
+      .success-message {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+
+      .error-message {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+
+      .success-message.show, .error-message.show {
+        display: flex;
+      }
+
+      .success-message i, .error-message i {
+        font-size: 1.2em;
+      }
+    </style>
   </body>
 </html>
