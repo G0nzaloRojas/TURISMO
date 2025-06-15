@@ -138,7 +138,7 @@
 
     <!-- Formulario de Búsqueda -->
     <div class="search-form">
-        <form id="searchForm">
+        <form id="searchForm" method="post" action="armar_paquetes.php">
             <!-- Selección de Tipo de Hospedamiento -->
             <div class="form-section">
                 <h2><i class="fas fa-bed"></i> Tipo de Hospedamiento</h2>
