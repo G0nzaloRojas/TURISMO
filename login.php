@@ -43,8 +43,8 @@ if($resultado!=0){
 	exit(); // Importante: detener la ejecución
 
 }else{
-	echo "<div class='error-message'>No es un usuario registrado</div>";
-	include ("form_register.php");
+	echo "<div class='error-message'>Debes Iniciar Sesión</div>";
+	include ("form_login.php");
 }
 ?>
 

@@ -27,10 +27,10 @@
           <i class="fas fa-bars"></i>
         </div>
     <ul class="nav-menu">
-      <li><a href="index.php" >Inicio</a></li>
+      <li><a href="index.php" class="active">Inicio</a></li>
       
       <?php if (isset($_SESSION['id_cargo'])): ?>
-        <li><a href="packages.php" class="active">Paquetes</a></li>
+        <li><a href="packages.php">Paquetes</a></li>
       <?php else: ?>
         <li><a href="form_login.php">Paquetes</a></li>
       <?php endif; ?>
@@ -62,7 +62,102 @@
         <p>Encuentra la aventura perfecta para tus próximas vacaciones</p>
       </div>
     </section>
+    
+    <?php
+                include ("conexion.php");
+                $consulta1 = mysqli_query($conexion, "SELECT * FROM hoteles
+                ORDER BY (RAND())
+                LIMIT 3;");
 
+                $consulta2 = mysqli_query($conexion, "SELECT * FROM restaurantes
+                ORDER BY (RAND())
+                LIMIT 3;");
+
+                $consulta3 = mysqli_query($conexion, "SELECT * FROM `puntos de interes`
+                ORDER BY (RAND())
+                LIMIT 3;");
+
+                //$hotel = mysqli_fetch_assoc($consulta1);
+                //$res mysqli_fetch_assoc($consulta2);
+                //$punto_interes = mysqli_fetch_assoc($consulta3);
+
+                // Guardar resultados en un array
+                $hotel = [];
+
+                if (mysqli_num_rows($consulta1) > 0) {
+                    while ($fila =mysqli_fetch_assoc($consulta1)) {
+                        $hotel[] = $fila;
+                    }
+                    
+                }else{
+                    echo "<div class='error-message'>No se encontraron resultados</div>";
+                }
+
+
+                // Guardar resultados en un array
+                $restaurantes = [];
+
+                if (mysqli_num_rows($consulta2) > 0) {
+                    while ($fila2 =mysqli_fetch_assoc($consulta2)) {
+                        $restaurantes[] = $fila2;
+                    }
+                    
+                }else{
+                    echo "<div class='error-message'>No se encontraron resultados</div>";
+                }
+
+                // Guardar resultados en un array
+                $punto_interes = [];
+
+                if (mysqli_num_rows($consulta3) > 0) {
+                    while ($fila3 =mysqli_fetch_assoc($consulta3)) {
+                      $punto_interes[] = $fila3;
+                    }
+                    
+                }else{
+                    echo "<div class='error-message'>No se encontraron resultados</div>";
+                }
+
+
+
+                for($i=0; $i<=$fila2; $i++)
+                {
+                    if($restaurantes[$i]['ID_COMIDA']==1){
+                    $tipo_Comida="Parrilla";
+                  }elseif($restaurantes[$i]['ID_COMIDA']==2){
+                    $tipo_Comida="Asiática";
+                  }elseif($restaurantes[$i]['ID_COMIDA']==3){
+                    $tipo_Comida="Pizzas y Empanadas";
+                  }elseif($restaurantes[$i]['ID_COMIDA']==4){
+                    $tipo_Comida="Pastas";
+                  }elseif($restaurantes[$i]['ID_COMIDA']==5){
+                    $tipo_Comida="Vegetariana";
+                  }else{
+                    $tipo_Comida="Vegana";
+                  }
+                }
+                  /*if($punto_interes['PRECIO']==0)
+                    $precio ="Gratuito";
+
+                    if($punto_interes['ID_ACTIVIDAD']==1){
+                      $actividad="Cultural";
+                    }elseif($punto_interes['ID_ACTIVIDAD']==2){
+                      $actividad="Entretenimiento";
+                    }elseif($punto_interes['ID_ACTIVIDAD']==3){
+                      $actividad="Naturaleza";
+                    }elseif($punto_interes['ID_ACTIVIDAD']==4){
+                      $actividad="Vida Nocturna";
+                    }elseif($punto_interes['ID_ACTIVIDAD']==5){
+                      $actividad="Shopping";
+                    }elseif($punto_interes['ID_ACTIVIDAD']==6){
+                      $actividad="Monumento";
+                    }else{
+                      $actividad="Religioso";
+                    }*/
+                
+                
+             
+    ?>
     <!-- Packages Main Section -->
     <section class="packages-main">
       <div class="container">
@@ -84,50 +179,53 @@
           <div
             class="package-card-extended"
             data-destination="buenos-aires"
-            data-price="120000"
+            data-price="120"
             data-stars="4"
             data-meal="media-pension"
             data-duration="7"
           >
             <div class="package-image">
-              <img src="/api/placeholder/400/250" alt="Buenos Aires Clásico" />
+              <img src="imagenes/Hoteles/Faena Hotel Buenos Aires_1.png" alt="<?= $hotel[0]['NOMBRE']?>" />
               <span class="package-badge">Más vendido</span>
             </div>
             <div class="package-info">
               <div class="package-header">
                 <div class="package-title">
-                  <h3>Buenos Aires Clásico</h3>
+                  <h3><?= $hotel[0]['NOMBRE']?></h3>
                   <p class="location">
-                    <i class="fas fa-map-marker-alt"></i> Buenos Aires
+                    <i class="fas fa-map-marker-alt"></i> <?= $hotel[0]['UBICACION']?>
                   </p>
                 </div>
                 <div class="package-rating">
                   <span class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
+                  <?php $calificacion = intval($hotel[0]['CALIFICACION']);
+                    for ($i = 1; $i <= 5; $i++) {
+                        if ($i <= $calificacion) {
+                            echo '<i class="fas fa-star"></i>';
+                        } else {
+                            echo '<i class="far fa-star"></i>';
+                        }
+                    }
+                  ?>
                   </span>
-                  <span class="rating-number">(4.2)</span>
+                  <span class="rating-number">(<?= $hotel[0]['CALIFICACION']?>)</span>
                 </div>
               </div>
               <p class="description">
-                Descubre la magia de Buenos Aires con visitas a sus barrios más
-                emblemáticos, shows de tango y la mejor gastronomía porteña.
+              <i class="fas fa-map-marker-alt"></i> <?= $hotel[0]['UBICACION']?>
               </p>
               <div class="package-features">
                 <div class="feature">
                   <i class="fas fa-calendar"></i>
-                  <span>7 días / 6 noches</span>
+                  <span>Piscina: <?= $hotel[0]['PILETA']?></span>
                 </div>
                 <div class="feature">
                   <i class="fas fa-hotel"></i>
-                  <span>Hotel 4 estrellas</span>
+                  <span>Hotel <?= $hotel[0]['CALIFICACION']?> estrellas</span>
                 </div>
                 <div class="feature">
                   <i class="fas fa-utensils"></i>
-                  <span>Media pensión</span>
+                  <span>Desayuno: <?= $hotel[0]['DESAYUNO']?></span>
                 </div>
                 <div class="feature">
                   <i class="fas fa-plane"></i>
@@ -136,12 +234,12 @@
               </div>
               <div class="package-price-section">
                 <div class="price-details">
-                  <span class="old-price">$150,000</span>
-                  <span class="current-price">$120,000</span>
+                  <!--<span class="old-price">Hasta $<?= $hotel[0]['PRECIO_MAXIMO']?></span>-->
+                  <span class="current-price">Desde $<?= $hotel[0]['PRECIO_MINIMO']?></span>
                   <span class="price-note">Por persona</span>
                 </div>
-                <a href="contact.html" class="btn btn-secondary"
-                  >Ver detalles</a
+                <a href="formulario_busqueda.php" class="btn btn-secondary"
+                  >Crea tu paquete</a
                 >
               </div>
             </div>
@@ -157,58 +255,54 @@
             data-duration="7"
           >
             <div class="package-image">
-              <img src="/api/placeholder/400/250" alt="Bariloche Premium" />
+              <img src="imagenes\Restaurantes\Don Julio_3.png" alt="<?= $restaurantes[0]['NOMBRE']?>" />
               <span class="package-badge">Recomendado</span>
             </div>
             <div class="package-info">
               <div class="package-header">
                 <div class="package-title">
-                  <h3>Bariloche Premium</h3>
+                  <h3><?= $restaurantes[0]['NOMBRE']?></h3>
                   <p class="location">
-                    <i class="fas fa-map-marker-alt"></i> San Carlos de
-                    Bariloche
+                    <i class="fas fa-map-marker-alt"></i> <?= $restaurantes[0]['UBICACION']?>
                   </p>
                 </div>
                 <div class="package-rating">
                   <span class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
+                  <?php $calificacion = intval($restaurantes[0]['CALIFICACION']);
+                    for ($i = 1; $i <= 5; $i++) {
+                        if ($i <= $calificacion) {
+                            echo '<i class="fas fa-star"></i>';
+                        } else {
+                            echo '<i class="far fa-star"></i>';
+                        }
+                    }
+                  ?>
                   </span>
-                  <span class="rating-number">(4.8)</span>
+                  <span class="rating-number">(<?= $restaurantes[0]['CALIFICACION']?>)</span>
                 </div>
               </div>
               <p class="description">
-                Vive la experiencia completa en la Patagonia con excursiones
-                exclusivas, ski en Cerro Catedral y gastronomía de montaña.
+              <?= $restaurantes[0]['DESCRIPCION']?>
               </p>
               <div class="package-features">
                 <div class="feature">
                   <i class="fas fa-calendar"></i>
-                  <span>8 días / 7 noches</span>
+                  <span><?= $tipo_Comida?></span>
                 </div>
                 <div class="feature">
                   <i class="fas fa-hotel"></i>
-                  <span>Hotel 5 estrellas</span>
+                  <span><?= $restaurantes[0]['CALIFICACION']?> estrellas</span>
                 </div>
-                <div class="feature">
-                  <i class="fas fa-utensils"></i>
-                  <span>Todo incluido</span>
-                </div>
-                <div class="feature">
-                  <i class="fas fa-skiing"></i>
-                  <span>Actividades incluidas</span>
-                </div>
+                
               </div>
               <div class="package-price-section">
                 <div class="price-details">
-                  <span class="current-price">$185,000</span>
+                  <!--<span class="old-price">Hasta $<?= $restaurantes[0]['PRECIO_MAXIMO']?></span>-->
+                  <span class="current-price">Desde $<?= $restaurantes[0]['PRECIO_MINIMO']?></span>
                   <span class="price-note">Por persona</span>
                 </div>
-                <a href="contact.html" class="btn btn-secondary"
-                  >Ver detalles</a
+                <a href="formulario_busqueda.php" class="btn btn-secondary"
+                  >Crea tu paquete</a
                 >
               </div>
             </div>
@@ -223,129 +317,61 @@
             data-meal="pension-completa"
             data-duration="3"
           >
-            <div class="package-image">
-              <img src="/api/placeholder/400/250" alt="Cataratas del Iguazú" />
+          <div class="package-image">
+              <img src="imagenes\Punto de Interes\Casa rosada_1.png" alt="<?= $punto_interes[0]['NOMBRE']?>" />
+              <span class="package-badge">Recomendado</span>
             </div>
             <div class="package-info">
               <div class="package-header">
                 <div class="package-title">
-                  <h3>Cataratas Majestuosas</h3>
+                  <h3><?= $punto_interes[0]['NOMBRE']?></h3>
                   <p class="location">
-                    <i class="fas fa-map-marker-alt"></i> Puerto Iguazú
+                    <i class="fas fa-map-marker-alt"></i> <?= $punto_interes[0]['UBICACION']?>
                   </p>
                 </div>
                 <div class="package-rating">
                   <span class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
+                  <?php $calificacion = intval($punto_interes[0]['CALIFICACION']);
+                    for ($i = 1; $i <= 5; $i++) {
+                        if ($i <= $calificacion) {
+                            echo '<i class="fas fa-star"></i>';
+                        } else {
+                            echo '<i class="far fa-star"></i>';
+                        }
+                    }
+                  ?>
                   </span>
-                  <span class="rating-number">(4.6)</span>
+                  <span class="rating-number">(<?= $punto_interes[0]['CALIFICACION']?>)</span>
                 </div>
               </div>
               <p class="description">
-                Maravíllate con las Cataratas del Iguazú, una de las siete
-                maravillas naturales del mundo. Incluye visita a ambos lados.
+              <?= $punto_interes[0]['DESCRIPCION']?>
               </p>
               <div class="package-features">
                 <div class="feature">
                   <i class="fas fa-calendar"></i>
-                  <span>4 días / 3 noches</span>
+                  <span>Centro Turístico</span>
                 </div>
                 <div class="feature">
                   <i class="fas fa-hotel"></i>
-                  <span>Hotel 4 estrellas</span>
+                  <span><?= $punto_interes[1]['CALIFICACION']?> estrellas</span>
                 </div>
-                <div class="feature">
-                  <i class="fas fa-utensils"></i>
-                  <span>Pensión completa</span>
-                </div>
-                <div class="feature">
-                  <i class="fas fa-camera"></i>
-                  <span>Tours guiados</span>
-                </div>
+                
               </div>
               <div class="package-price-section">
                 <div class="price-details">
-                  <span class="old-price">$180,000</span>
-                  <span class="current-price">$156,000</span>
-                  <span class="price-note">Por persona</span>
+                  <span class="current-price">$Gratuito</span>
                 </div>
-                <a href="contact.html" class="btn btn-secondary"
-                  >Ver detalles</a
+                <a href="formulario_busqueda.php" class="btn btn-secondary"
+                  >Crea tu paquete</a
                 >
               </div>
             </div>
           </div>
+
+          
 
           <!-- Package 4 -->
-          <div
-            class="package-card-extended"
-            data-destination="mendoza"
-            data-price="142000"
-            data-stars="4"
-            data-meal="media-pension"
-            data-duration="7"
-          >
-            <div class="package-image">
-              <img src="/api/placeholder/400/250" alt="Mendoza Viñedos" />
-            </div>
-            <div class="package-info">
-              <div class="package-header">
-                <div class="package-title">
-                  <h3>Mendoza y sus Viñedos</h3>
-                  <p class="location">
-                    <i class="fas fa-map-marker-alt"></i> Mendoza
-                  </p>
-                </div>
-                <div class="package-rating">
-                  <span class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
-                  </span>
-                  <span class="rating-number">(4.3)</span>
-                </div>
-              </div>
-              <p class="description">
-                Tour enológico por las mejores bodegas de Mendoza, degustación
-                de vinos premium y vista del Aconcagua.
-              </p>
-              <div class="package-features">
-                <div class="feature">
-                  <i class="fas fa-calendar"></i>
-                  <span>6 días / 5 noches</span>
-                </div>
-                <div class="feature">
-                  <i class="fas fa-hotel"></i>
-                  <span>Hotel 4 estrellas</span>
-                </div>
-                <div class="feature">
-                  <i class="fas fa-wine-glass-alt"></i>
-                  <span>Catas incluidas</span>
-                </div>
-                <div class="feature">
-                  <i class="fas fa-mountain"></i>
-                  <span>Excursiones</span>
-                </div>
-              </div>
-              <div class="package-price-section">
-                <div class="price-details">
-                  <span class="current-price">$142,000</span>
-                  <span class="price-note">Por persona</span>
-                </div>
-                <a href="contact.html" class="btn btn-secondary"
-                  >Ver detalles</a
-                >
-              </div>
-            </div>
-          </div>
-
-          <!-- Package 5 -->
           <div
             class="package-card-extended"
             data-destination="calafate"
@@ -354,58 +380,125 @@
             data-meal="pension-completa"
             data-duration="10"
           >
-            <div class="package-image">
-              <img src="/api/placeholder/400/250" alt="El Calafate Glaciares" />
-              <span class="package-badge">Aventura</span>
+          <div class="package-image">
+              <img src="imagenes/Hoteles/Palacio Duhau - Park Hyatt_1.png" alt="<?= $hotel[1]['NOMBRE']?>" />
+              <span class="package-badge">Más vendido</span>
             </div>
             <div class="package-info">
               <div class="package-header">
                 <div class="package-title">
-                  <h3>Glaciares Patagónicos</h3>
+                  <h3><?= $hotel[1]['NOMBRE']?></h3>
                   <p class="location">
-                    <i class="fas fa-map-marker-alt"></i> El Calafate
+                    <i class="fas fa-map-marker-alt"></i> <?= $hotel[1]['UBICACION']?>
                   </p>
                 </div>
                 <div class="package-rating">
                   <span class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
+                  <?php $calificacion = intval($hotel[1]['CALIFICACION']);
+                    for ($i = 1; $i <= 5; $i++) {
+                        if ($i <= $calificacion) {
+                            echo '<i class="fas fa-star"></i>';
+                        } else {
+                            echo '<i class="far fa-star"></i>';
+                        }
+                    }
+                  ?>
                   </span>
-                  <span class="rating-number">(4.9)</span>
+                  <span class="rating-number">(<?= $hotel[1]['CALIFICACION']?>)</span>
                 </div>
               </div>
               <p class="description">
-                Expedición única al Glaciar Perito Moreno, navegación por el
-                Lago Argentino y trekking sobre hielo.
+              <i class="fas fa-map-marker-alt"></i> <?= $hotel[1]['UBICACION']?>
               </p>
               <div class="package-features">
                 <div class="feature">
                   <i class="fas fa-calendar"></i>
-                  <span>10 días / 9 noches</span>
+                  <span>Piscina: <?= $hotel[1]['PILETA']?></span>
                 </div>
                 <div class="feature">
                   <i class="fas fa-hotel"></i>
-                  <span>Hotel 5 estrellas</span>
+                  <span>Hotel <?= $hotel[1]['CALIFICACION']?> estrellas</span>
                 </div>
                 <div class="feature">
                   <i class="fas fa-utensils"></i>
-                  <span>Pensión completa</span>
+                  <span>Desayuno: <?= $hotel[1]['DESAYUNO']?></span>
                 </div>
                 <div class="feature">
-                  <i class="fas fa-hiking"></i>
-                  <span>Trekking incluido</span>
+                  <i class="fas fa-plane"></i>
+                  <span>Vuelos incluidos</span>
                 </div>
               </div>
               <div class="package-price-section">
                 <div class="price-details">
-                  <span class="current-price">$225,000</span>
+                  <!--<span class="old-price">Hasta $<?= $hotel[1]['PRECIO_MAXIMO']?></span>-->
+                  <span class="current-price">Desde $<?= $hotel[1]['PRECIO_MINIMO']?></span>
                   <span class="price-note">Por persona</span>
                 </div>
-                <a href="contact.html" class="btn btn-secondary"
-                  >Ver detalles</a
+                <a href="formulario_busqueda.php" class="btn btn-secondary"
+                  >Crea tu paquete</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Package 5 -->
+          <div
+            class="package-card-extended"
+            data-destination="mendoza"
+            data-price="142000"
+            data-stars="4"
+            data-meal="media-pension"
+            data-duration="7"
+          >
+          <div class="package-image">
+              <img src="imagenes\Restaurantes\Puerto Cristal_1.png" alt="<?= $restaurantes[1]['NOMBRE']?>" />
+              <span class="package-badge">Recomendado</span>
+            </div>
+            <div class="package-info">
+              <div class="package-header">
+                <div class="package-title">
+                  <h3><?= $restaurantes[1]['NOMBRE']?></h3>
+                  <p class="location">
+                    <i class="fas fa-map-marker-alt"></i> <?= $restaurantes[1]['UBICACION']?>
+                  </p>
+                </div>
+                <div class="package-rating">
+                  <span class="stars">
+                  <?php $calificacion = intval($restaurantes[1]['CALIFICACION']);
+                    for ($i = 1; $i <= 5; $i++) {
+                        if ($i <= $calificacion) {
+                            echo '<i class="fas fa-star"></i>';
+                        } else {
+                            echo '<i class="far fa-star"></i>';
+                        }
+                    }
+                  ?>
+                  </span>
+                  <span class="rating-number">(<?= $restaurantes[1]['CALIFICACION']?>)</span>
+                </div>
+              </div>
+              <p class="description">
+              <?= $restaurantes[1]['DESCRIPCION']?>
+              </p>
+              <div class="package-features">
+                <div class="feature">
+                  <i class="fas fa-calendar"></i>
+                  <span><?= $tipo_Comida?></span>
+                </div>
+                <div class="feature">
+                  <i class="fas fa-hotel"></i>
+                  <span><?= $restaurantes[1]['CALIFICACION']?> estrellas</span>
+                </div>
+                
+              </div>
+              <div class="package-price-section">
+                <div class="price-details">
+                  <!--<span class="old-price">Hasta $<?= $restaurantes[1]['PRECIO_MAXIMO']?></span>-->
+                  <span class="current-price">Desde $<?= $restaurantes[1]['PRECIO_MINIMO']?></span>
+                  <span class="price-note">Por persona</span>
+                </div>
+                <a href="formulario_busqueda.php" class="btn btn-secondary"
+                  >Crea tu paquete</a
                 >
               </div>
             </div>
@@ -420,63 +513,61 @@
             data-meal="todo-incluido"
             data-duration="7"
           >
-            <div class="package-image">
-              <img src="/api/placeholder/400/250" alt="Ushuaia Fin del Mundo" />
+          <div class="package-image">
+              <img src="imagenes\Punto de Interes\Jardin Japones_2.png" alt="<?= $punto_interes[1]['NOMBRE']?>" />
+              <span class="package-badge">Recomendado</span>
             </div>
             <div class="package-info">
               <div class="package-header">
                 <div class="package-title">
-                  <h3>Ushuaia Fin del Mundo</h3>
+                  <h3><?= $punto_interes[1]['NOMBRE']?></h3>
                   <p class="location">
-                    <i class="fas fa-map-marker-alt"></i> Ushuaia
+                    <i class="fas fa-map-marker-alt"></i> <?= $punto_interes[1]['UBICACION']?>
                   </p>
                 </div>
                 <div class="package-rating">
                   <span class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
+                  <?php $calificacion = intval($punto_interes[1]['CALIFICACION']);
+                    for ($i = 1; $i <= 5; $i++) {
+                        if ($i <= $calificacion) {
+                            echo '<i class="fas fa-star"></i>';
+                        } else {
+                            echo '<i class="far fa-star"></i>';
+                        }
+                    }
+                  ?>
                   </span>
-                  <span class="rating-number">(4.7)</span>
+                  <span class="rating-number">(<?= $punto_interes[1]['CALIFICACION']?>)</span>
                 </div>
               </div>
               <p class="description">
-                Aventura en el fin del mundo: navegación por el Canal Beagle,
-                Parque Nacional Tierra del Fuego y pingüinera.
+              <?= $punto_interes[1]['DESCRIPCION']?>
               </p>
               <div class="package-features">
                 <div class="feature">
                   <i class="fas fa-calendar"></i>
-                  <span>7 días / 6 noches</span>
+                  <span>Centro Turístico</span>
                 </div>
                 <div class="feature">
                   <i class="fas fa-hotel"></i>
-                  <span>Hotel 4 estrellas</span>
+                  <span><?= $punto_interes[1]['CALIFICACION']?> estrellas</span>
                 </div>
-                <div class="feature">
-                  <i class="fas fa-ship"></i>
-                  <span>Navegación incluida</span>
-                </div>
-                <div class="feature">
-                  <i class="fas fa-paw"></i>
-                  <span>Avistaje fauna</span>
-                </div>
+                
               </div>
               <div class="package-price-section">
                 <div class="price-details">
-                  <span class="current-price">$198,000</span>
-                  <span class="price-note">Por persona</span>
+                  
+                  <span class="current-price">$Gratuito</span>
+                  
                 </div>
-                <a href="contact.html" class="btn btn-secondary"
-                  >Ver detalles</a
+                <a href="formulario_busqueda.php" class="btn btn-secondary"
+                  >Crea tu paquete</a
                 >
               </div>
             </div>
           </div>
 
-          <!-- More packages can be added here -->
+         
         </div>
 
         <!-- No results message (hidden by default) -->
@@ -488,7 +579,7 @@
       </div>
     </section>
 
-    <!-- Footer -->
+    
     <!-- Footer -->
     <footer class="footer">
       <div class="container">

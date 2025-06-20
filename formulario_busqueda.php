@@ -1,3 +1,6 @@
+<?php session_start();
+  if(isset($_SESSION["id_cargo"])){
+?>
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -142,7 +145,7 @@
     <!-- Formulario de Búsqueda -->
     <div class="search-form">
       <form id="searchForm" method="post" action="armar_paquetes.php">
-        <!-- Selección de Tipo de Hospedamiento -->
+        <!-- Selección de Tipo de Hospedaje -->
         <div class="form-section">
           <h2><i class="fas fa-bed"></i> Tipo de Hospedaje</h2>
           <div class="form-row">
@@ -152,12 +155,12 @@
               >
               <select
                 id="accommodation-type"
-                name="accommodation-type"
+                name="accommodation-type" required
                 onchange="toggleAccommodationForm()"
               >
                 <option value="">Seleccionar tipo</option>
                 <option value="hotel">Hotel</option>
-                <option value="rental">Alquiler</option>
+                <option value="alquiler">Alquiler</option>
               </select>
             </div>
           </div>
@@ -169,7 +172,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="hotel-rating">Calificación</label>
-              <select id="hotel-rating" name="hotel-rating">
+              <select id="hotel-rating" name="hotel-rating" >
                 <option value="">Seleccionar calificación</option>
                 <option value="3">3 estrellas</option>
                 <option value="4">4 estrellas</option>
@@ -182,16 +185,27 @@
               <input
                 type="number"
                 id="max-guests"
-                name="max-guests"
+                name="max-guests" 
                 min="1"
                 max="6"
                 placeholder="Número de huéspedes"
               />
             </div>
+            <div class="form-group">
+              <label for="dias_hotel">Días de estadía</label>
+              <input
+                type="number"
+                id="dias_hotel"
+                name="dias_hotel" 
+                min="1"
+                max="30"
+                placeholder="Cantidad de días"
+              />
+            </div>
 
             <div class="form-group">
               <label for="pileta">Incluye Pileta</label>
-              <select id="pileta" name="pileta">
+              <select id="pileta" name="pileta" >
                 <option value="">Seleccionar pileta</option>
                 <option value="si">Sí</option>
                 <option value="no">No</option>
@@ -200,7 +214,7 @@
 
             <div class="form-group">
               <label for="desayuno">Incluye Desayuno</label>
-              <select id="desayuno" name="desayuno">
+              <select id="desayuno" name="desayuno" >
                 <option value="">Seleccionar Desayuno</option>
                 <option value="si">Sí</option>
                 <option value="no">No</option>
@@ -215,7 +229,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="rental-rating">Calificacion</label>
-              <select id="rental-rating" name="rental-rating">
+              <select id="rental-rating" name="rental-rating" >
                 <option value="">Seleccionar Calificacion (puntaje)</option>
                 <option value="7">7 o más</option>
                 <option value="8">8 o más</option>
@@ -223,16 +237,41 @@
               </select>
             </div>
           </div>
+          
           <div class="form-row">
             <div class="form-group">
-              <label for="bedrooms">Cantidad de dormitorios</label>
+              <label for="double_bed">Cantidad de camas dobles</label>
               <input
                 type="number"
-                id="bedrooms"
-                name="bedrooms"
+                id="double_bed"
+                name="double_bed" 
+                min="1"
+                max="4"
+                placeholder="Número de camas dobles"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+              <label for="semanas_alquiler">Semanas de estadía</label>
+              <input
+                type="number"
+                id="semanas_alquiler"
+                name="semanas_alquiler" 
                 min="1"
                 max="5"
-                placeholder="Número de dormitorios"
+                placeholder="Cantidad de Semanas"
+              />
+            </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="single_bed">Cantidad de camas simples</label>
+              <input
+                type="number"
+                id="single_bed"
+                name="single_bed" 
+                min="1"
+                max="6"
+                placeholder="Número de camas simples"
               />
             </div>
             <div class="form-group">
@@ -240,9 +279,9 @@
               <input
                 type="number"
                 id="bathrooms"
-                name="bathrooms"
+                name="bathrooms" 
                 min="1"
-                max="4"
+                max="3"
                 placeholder="Número de baños"
               />
             </div>
@@ -250,7 +289,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="metros2_minimos">Metros Cuadrados Mínimos</label>
-              <select id="metros2_minimos" name="metros2_minimos">
+              <select id="metros2_minimos" name="metros2_minimos" >
                 <option value="">Seleccionar Metros Cuadrados Mínimos</option>
                 <option value="20">20 m2 o más</option>
                 <option value="40">40 m2 o más</option>
@@ -267,19 +306,20 @@
           <div class="form-row">
             <div class="form-group">
               <label for="food-type">Tipo de comida</label>
-              <select id="food-type" name="food-type">
+              <select id="food-type" name="food-type" >
                 <option value="">Seleccione un tipo de Comida</option>
-                <option value="parrilla">Parrilla</option>
-                <option value="asiatica">Asiatica</option>
-                <option value="pizas y empanadas">Pizas y empanadas</option>
-                <option value="pastas">Pastas</option>
-                <option value="vegetariana">Vegetariana</option>
-                <option value="vegana">Vegana</option>
+                <option value= 1 >Parrilla</option>
+                <option value= 2 >Asiatica</option>
+                <option value= 3 >Pizzas y empanadas</option>
+                <option value= 4 >Pastas</option>
+                <option value= 5 >Vegetariana</option>
+                <option value= 6 >Vegana</option>
+                <option value= 7 >Todos</option>
               </select>
             </div>
             <div class="form-group">
               <label for="restaurant-rating">Calificación</label>
-              <select id="restaurant-rating" name="restaurant-rating">
+              <select id="restaurant-rating" name="restaurant-rating" >
                 <option value="">Seleccionar calificación</option>
                 <option value="3">3 estrellas</option>
                 <option value="4">4 estrellas</option>
@@ -295,14 +335,15 @@
           <div class="form-row">
             <div class="form-group">
               <label for="activity-type">Tipo de actividad</label>
-              <select id="activity-type" name="activity-type">
+              <select id="activity-type" name="activity-type" >
                 <option value="">Seleccionar tipo de actividad</option>
-                <option value="cultural">Cultural</option>
-                <option value="deportiva">Deportiva</option>
-                <option value="naturaleza">Naturaleza</option>
-                <option value="entretenimiento">Entretenimiento</option>
-                <option value="shopping">Shopping</option>
-                <option value="nocturna">Vida Nocturna</option>
+                <option value=1>Cultural</option>
+                <option value=2>Entretenimiento</option>
+                <option value=3>Naturaleza</option>
+                <option value=4>Vida Nocturna</option>
+                <option value=5>Shopping</option>
+                <option value=6>Monumento</option>
+                <option value=7>Centros Religioso</option>
               </select>
             </div>
           </div>
@@ -368,10 +409,14 @@
         // Mostrar el formulario correspondiente
         if (accommodationType === "hotel") {
           hotelForm.style.display = "block";
-        } else if (accommodationType === "rental") {
+        } else if (accommodationType === "alquiler") {
           rentalForm.style.display = "block";
         }
       }
     </script>
   </body>
 </html>
+<?php }else{
+  header("Location:login.php "); // Redirige de vuelta a la página de registro
+  exit();
+}

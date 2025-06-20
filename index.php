@@ -8,6 +8,7 @@
         <link rel="icon" type="image/png" href="Imagenes/Logo2.png">    
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" href="img/Logo2.ico" type="image/x-icon">
+    
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -59,7 +60,7 @@
       <div class="hero-content">
         <h1>Descubre destinos increíbles</h1>
         <p>Las mejores experiencias de viaje al mejor precio</p>
-        <a href="formulario_busqueda.html" class="btn btn-primary">Crea Tu Paquete Personalizado</a>
+        <a href="formulario_busqueda.php" class="btn btn-primary">Crea Tu Paquete Personalizado</a>
       </div>
     </section>
 
