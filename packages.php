@@ -27,12 +27,12 @@
           <i class="fas fa-bars"></i>
         </div>
     <ul class="nav-menu">
-      <li><a href="index.php" class="active">Inicio</a></li>
+      <li><a href="index.php" >Inicio</a></li>
       
       <?php if (isset($_SESSION['id_cargo'])): ?>
-        <li><a href="packages.php">Paquetes</a></li>
+        <li><a href="packages.php" class="active">Afiliados</a></li>
       <?php else: ?>
-        <li><a href="form_login.php">Paquetes</a></li>
+        <li><a href="form_login.php">Afiliados</a></li>
       <?php endif; ?>
       
       <li><a href="about.php">Nosotros</a></li>

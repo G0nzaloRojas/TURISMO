@@ -34,7 +34,7 @@ $user_role = $_SESSION['id_cargo'];
 
             <button class="new-business-btn" onclick="openBusinessModal()">
                 <i class="fas fa-plus"></i>
-                Nuevo Negocio
+                <span id="addButtonText">Nuevo Negocio</span>
             </button>
 
             <div class="projects-section">
@@ -56,11 +56,17 @@ $user_role = $_SESSION['id_cargo'];
                         <div class="project-icon"></div>
                         Puntos de Interés
                     </li>
+                    <?php if ($user_role == 1): // Solo mostrar para administradores ?>
+                    <li class="project-item" data-project="usuarios">
+                        <div class="project-icon"></div>
+                        Usuarios
+                    </li>
+                    <?php endif; ?>
                 </ul>
             </div>
 
             <div class="stats-footer">
-                <span id="businessCount">0</span> Negocios Registrados
+                <span id="businessCount">0</span> <span id="countLabel">Negocios Registrados</span>
             </div>
         </aside>
 
@@ -79,10 +85,10 @@ $user_role = $_SESSION['id_cargo'];
 
             <!-- Task Input Section -->
             <section class="task-input-section">
-                <input type="text" class="task-input" placeholder="Buscar negocio..." id="searchInput">
+                <input type="text" class="task-input" placeholder="Buscar..." id="searchInput">
                 <br>
                 <button class="add-task-btn" onclick="openBusinessModal()">
-                    <i class="fas fa-plus"></i> Agregar Negocio
+                    <i class="fas fa-plus"></i> <span id="addButtonText2">Agregar Negocio</span>
                 </button>
             </section>
 
@@ -111,23 +117,32 @@ $user_role = $_SESSION['id_cargo'];
                 <span class="close" onclick="closeBusinessModal()">&times;</span>
             </div>
             <div id="modalMessage"></div>
-            <form id="businessForm">
+            <form id="businessForm" enctype="multipart/form-data">
                 <input type="hidden" id="businessId">
                 <input type="hidden" id="businessCategory">
                 
                 <div class="form-group">
                     <label class="form-label" for="businessName">Nombre del Negocio *</label>
-                    <input type="text" class="form-input" id="businessName" required>
+                    <input type="text" class="form-input" id="businessName" >
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label" for="businessLocation">Ubicación *</label>
-                    <input type="text" class="form-input" id="businessLocation" required>
+                    <input type="text" class="form-input" id="businessLocation" >
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label" for="businessDescription">Descripción *</label>
-                    <textarea class="form-textarea" id="businessDescription" placeholder="Describe tu negocio..." required></textarea>
+                    <textarea class="form-textarea" id="businessDescription" placeholder="Describe tu negocio..." ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="businessPhoto">Foto del Negocio</label>
+                    <input type="file" class="form-input" id="businessPhoto" accept="image/*">
+                    <div id="currentPhoto" style="margin-top: 10px; display: none;">
+                        <p>Foto actual:</p>
+                        <img id="currentPhotoImg" src="" alt="Foto actual" style="max-width: 200px; max-height: 150px;">
+                    </div>
                 </div>
 
                 <!-- Campos específicos por categoría -->
@@ -258,6 +273,34 @@ $user_role = $_SESSION['id_cargo'];
                     </div>
                 </div>
 
+                <!-- Campos para usuarios -->
+                <div id="usuarioFields" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label" for="usuarioNombre">Nombre *</label>
+                        <input type="text" class="form-input" id="usuarioNombre" >
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="usuarioApellido">Apellido *</label>
+                        <input type="text" class="form-input" id="usuarioApellido" >
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="usuarioEmail">Email *</label>
+                        <input type="email" class="form-input" id="usuarioEmail" >
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="usuarioPassword">Contraseña *</label>
+                        <input type="password" class="form-input" id="usuarioPassword" >
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="usuarioCargo">Cargo *</label>
+                        <select class="form-select" id="usuarioCargo" >
+                            <option value="">Seleccionar cargo</option>
+                            <option value="1">Administrador</option>
+                            <option value="3">Dueño de Negocio</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="form-actions">
                     <button type="button" class="btn-cancel" onclick="closeBusinessModal()">Cancelar</button>
                     <button type="submit" class="btn-save">Guardar</button>
@@ -265,6 +308,10 @@ $user_role = $_SESSION['id_cargo'];
             </form>
         </div>
     </div>
+    <script>
+        // Pasar datos de PHP a JavaScript
+        window.userRole = <?php echo $user_role; ?>;
+    </script>
     <script src="js/dashboard.js"></script>
 </body>
 </html>

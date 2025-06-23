@@ -23,13 +23,25 @@ try {
             getBusinesses();
             break;
         case 'create':
-            createBusiness();
+            if ($_POST['category'] === 'usuarios') {
+                createUser();
+            } else {
+                createBusiness();
+            }
             break;
         case 'update':
-            updateBusiness();
+            if ($_POST['category'] === 'usuarios') {
+                updateUser();
+            } else {
+                updateBusiness();
+            }
             break;
         case 'delete':
-            deleteBusiness();
+            if ($_POST['category'] === 'usuarios') {
+                deleteUser();
+            } else {
+                deleteBusiness();
+            }
             break;
         case 'getTiposComida':
             getTiposComida();
@@ -39,6 +51,9 @@ try {
             break;
         case 'getTotalCount':
             getTotalCount();
+            break;
+        case 'getUsers':
+            getUsers();
             break;
         default:
             echo json_encode(['success' => false, 'message' => 'Acción no válida']);
@@ -58,9 +73,8 @@ function getBusinesses() {
     if ($_SESSION['id_cargo'] == 3) {
         // Usuario regular: solo sus propios negocios
         $id_usuario = intval($_SESSION['id']);
-        $whereClause = " WHERE ID_USUARIO = $id_usuario";
+        $whereClause = " WHERE id_usuario = $id_usuario";
     }
-    // Si es admin (id_cargo = 1): no se aplica filtro, ve todos los negocios
     
     switch($category) {
         case 'restaurantes':
@@ -107,8 +121,15 @@ function createBusiness() {
     
     $category = $_POST['category'];
     
-    // Validar campos requeridos comunes
-    $requiredFields = ['nombre', 'ubicacion', 'descripcion'];
+    // Validar campos requeridos según la categoría
+    if ($category === 'hoteles') {
+        // Hoteles solo requieren nombre y ubicación (no tienen descripción)
+        $requiredFields = ['nombre', 'ubicacion'];
+    } else {
+        // Otras categorías requieren nombre, ubicación y descripción
+        $requiredFields = ['nombre', 'ubicacion', 'descripcion'];
+    }
+    
     $missing = validateRequired($requiredFields, $_POST);
     
     if (!empty($missing)) {
@@ -137,7 +158,7 @@ function createBusiness() {
 function createRestaurante() {
     global $conexion;
     
-    $id_usuario = intval($_SESSION['id']); // Obtener ID del usuario de la sesión
+    $id_usuario = intval($_SESSION['id']);
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
@@ -145,8 +166,22 @@ function createRestaurante() {
     $precio_minimo = !empty($_POST['precio_minimo']) ? intval($_POST['precio_minimo']) : 'NULL';
     $precio_maximo = !empty($_POST['precio_maximo']) ? intval($_POST['precio_maximo']) : 'NULL';
     
-    $query = "INSERT INTO restaurantes (NOMBRE, UBICACION, DESCRIPCION, ID_COMIDA, `PRECIO MINIMO`, `PRECIO MAXIMO`, ID_USUARIO) 
-              VALUES ('$nombre', '$ubicacion', '$descripcion', $id_comida, $precio_minimo, $precio_maximo, $id_usuario)";
+    // Manejar foto
+    $foto = null;
+    if (isset($_FILES['foto'])) {
+        try {
+            $foto = handleFileUpload($_FILES['foto']);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            return;
+        }
+    }
+    
+    $fotoField = $foto ? "'$foto'" : 'NULL';
+    
+    // CORREGIDO: Usar nombres correctos de columnas y agregar CALIFICACION
+    $query = "INSERT INTO restaurantes (NOMBRE, UBICACION, DESCRIPCION, ID_COMIDA, PRECIO_MINIMO, PRECIO_MAXIMO, id_usuario, FOTO, CALIFICACION) 
+              VALUES ('$nombre', '$ubicacion', '$descripcion', $id_comida, $precio_minimo, $precio_maximo, $id_usuario, $fotoField, 5)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Restaurante creado correctamente', 'id' => mysqli_insert_id($conexion)]);
@@ -158,7 +193,7 @@ function createRestaurante() {
 function createHotel() {
     global $conexion;
     
-    $id_usuario = intval($_SESSION['id']); // Obtener ID del usuario de la sesión
+    $id_usuario = intval($_SESSION['id']);
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $precio_minimo = !empty($_POST['precio_minimo']) ? intval($_POST['precio_minimo']) : 0;
@@ -168,8 +203,22 @@ function createHotel() {
     $pileta = mysqli_real_escape_string($conexion, $_POST['pileta'] ?? 'no');
     $desayuno = mysqli_real_escape_string($conexion, $_POST['desayuno'] ?? 'no');
     
-    $query = "INSERT INTO hoteles (NOMBRE, UBICACION, PRECIO_MINIMO, PRECIO_MAXIMO, CALIFICACION, HUESPEDES, PILETA, DESAYUNO, ID_USUARIO) 
-              VALUES ('$nombre', '$ubicacion', $precio_minimo, $precio_maximo, $calificacion, $huespedes, '$pileta', '$desayuno', $id_usuario)";
+    // Manejar foto
+    $foto = null;
+    if (isset($_FILES['foto'])) {
+        try {
+            $foto = handleFileUpload($_FILES['foto']);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            return;
+        }
+    }
+    
+    $fotoField = $foto ? "'$foto'" : 'NULL';
+    
+    // CORREGIDO: Hoteles no tienen DESCRIPCION en la BD, solo los campos que existen
+    $query = "INSERT INTO hoteles (NOMBRE, UBICACION, PRECIO_MINIMO, PRECIO_MAXIMO, CALIFICACION, HUESPEDES, PILETA, DESAYUNO, id_usuario, FOTO) 
+              VALUES ('$nombre', '$ubicacion', $precio_minimo, $precio_maximo, $calificacion, $huespedes, '$pileta', '$desayuno', $id_usuario, $fotoField)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Hotel creado correctamente', 'id' => mysqli_insert_id($conexion)]);
@@ -181,7 +230,7 @@ function createHotel() {
 function createAlquiler() {
     global $conexion;
     
-    $id_usuario = intval($_SESSION['id']); // Obtener ID del usuario de la sesión
+    $id_usuario = intval($_SESSION['id']);
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
@@ -193,8 +242,21 @@ function createAlquiler() {
     $camas_simples = !empty($_POST['camas_simples']) ? intval($_POST['camas_simples']) : 0;
     $metros = !empty($_POST['metros']) ? intval($_POST['metros']) : 0;
     
-    $query = "INSERT INTO alquiler (NOMBRE, UBICACION, PRECIO_SEMANA, CALIFICACION, BANIOS, DORMITORIOS, CAMAS_DOBLES, CAMAS_SIMPLES, METROS, DESCRIPCION, ID_USUARIO) 
-              VALUES ('$nombre', '$ubicacion', $precio_semana, $calificacion, $banios, $dormitorios, $camas_dobles, $camas_simples, $metros, '$descripcion', $id_usuario)";
+    // Manejar foto
+    $foto = null;
+    if (isset($_FILES['foto'])) {
+        try {
+            $foto = handleFileUpload($_FILES['foto']);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            return;
+        }
+    }
+    
+    $fotoField = $foto ? "'$foto'" : 'NULL';
+    
+    $query = "INSERT INTO alquiler (NOMBRE, UBICACION, PRECIO_SEMANA, CALIFICACION, BANIOS, DORMITORIOS, CAMAS_DOBLES, CAMAS_SIMPLES, METROS, DESCRIPCION, id_usuario, FOTO) 
+              VALUES ('$nombre', '$ubicacion', $precio_semana, $calificacion, $banios, $dormitorios, $camas_dobles, $camas_simples, $metros, '$descripcion', $id_usuario, $fotoField)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Alquiler creado correctamente', 'id' => mysqli_insert_id($conexion)]);
@@ -203,10 +265,11 @@ function createAlquiler() {
     }
 }
 
+
 function createPuntoInteres() {
     global $conexion;
     
-    $id_usuario = intval($_SESSION['id']); // Obtener ID del usuario de la sesión
+    $id_usuario = intval($_SESSION['id']);
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
@@ -214,8 +277,21 @@ function createPuntoInteres() {
     $precio = !empty($_POST['precio']) ? intval($_POST['precio']) : 0;
     $calificacion = !empty($_POST['calificacion']) ? floatval($_POST['calificacion']) : 'NULL';
     
-    $query = "INSERT INTO `puntos de interes` (NOMBRE, UBICACION, DESCRIPCION, ID_ACTIVIDAD, PRECIO, CALIFICACION, ID_USUARIO) 
-              VALUES ('$nombre', '$ubicacion', '$descripcion', $id_actividad, $precio, $calificacion, $id_usuario)";
+    // Manejar foto
+    $foto = null;
+    if (isset($_FILES['foto'])) {
+        try {
+            $foto = handleFileUpload($_FILES['foto']);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            return;
+        }
+    }
+    
+    $fotoField = $foto ? "'$foto'" : 'NULL';
+    
+    $query = "INSERT INTO `puntos de interes` (NOMBRE, UBICACION, DESCRIPCION, ID_ACTIVIDAD, PRECIO, CALIFICACION, id_usuario, FOTO) 
+              VALUES ('$nombre', '$ubicacion', '$descripcion', $id_actividad, $precio, $calificacion, $id_usuario, $fotoField)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Punto de interés creado correctamente', 'id' => mysqli_insert_id($conexion)]);
@@ -257,7 +333,7 @@ function updateBusiness() {
         }
         
         $id_usuario = intval($_SESSION['id']);
-        $checkQuery = "SELECT ID FROM $table WHERE ID = $id AND ID_USUARIO = $id_usuario";
+        $checkQuery = "SELECT ID FROM $table WHERE ID = $id AND id_usuario = $id_usuario";
         $checkResult = mysqli_query($conexion, $checkQuery);
         
         if (!$checkResult || mysqli_num_rows($checkResult) == 0) {
@@ -266,8 +342,14 @@ function updateBusiness() {
         }
     }
     
-    // Validar campos requeridos comunes
-    $requiredFields = ['nombre', 'ubicacion', 'descripcion'];
+    // Validar campos requeridos según la categoría
+    if ($category === 'hoteles') {
+        // Hoteles solo requieren nombre y ubicación (no tienen descripción)
+        $requiredFields = ['nombre', 'ubicacion'];
+    } else {
+        // Otras categorías requieren nombre, ubicación y descripción
+        $requiredFields = ['nombre', 'ubicacion', 'descripcion'];
+    }
     $missing = validateRequired($requiredFields, $_POST);
     
     if (!empty($missing)) {
@@ -296,6 +378,14 @@ function updateBusiness() {
 function updateRestaurante($id) {
     global $conexion;
     
+    // Obtener foto actual
+    $currentQuery = "SELECT FOTO FROM restaurantes WHERE ID = $id";
+    $currentResult = mysqli_query($conexion, $currentQuery);
+    $currentPhoto = null;
+    if ($currentResult && $row = mysqli_fetch_assoc($currentResult)) {
+        $currentPhoto = $row['FOTO'];
+    }
+    
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
@@ -303,20 +393,35 @@ function updateRestaurante($id) {
     $precio_minimo = !empty($_POST['precio_minimo']) ? intval($_POST['precio_minimo']) : 'NULL';
     $precio_maximo = !empty($_POST['precio_maximo']) ? intval($_POST['precio_maximo']) : 'NULL';
     
+    // Manejar foto
+    $foto = $currentPhoto;
+    if (isset($_FILES['foto'])) {
+        try {
+            $foto = handleFileUpload($_FILES['foto'], $currentPhoto);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            return;
+        }
+    }
+    
+    $fotoField = $foto ? "'$foto'" : 'NULL';
+    
+    // CORREGIDO: Usar nombres correctos de columnas
     $query = "UPDATE restaurantes SET 
               NOMBRE = '$nombre', 
               UBICACION = '$ubicacion', 
               DESCRIPCION = '$descripcion', 
               ID_COMIDA = $id_comida, 
-              `PRECIO MINIMO` = $precio_minimo, 
-              `PRECIO MAXIMO` = $precio_maximo 
+              PRECIO_MINIMO = $precio_minimo, 
+              PRECIO_MAXIMO = $precio_maximo,
+              FOTO = $fotoField
               WHERE ID = $id";
     
     if (mysqli_query($conexion, $query)) {
-        if (mysqli_affected_rows($conexion) > 0) {
+        if (mysqli_affected_rows($conexion) > 0 || mysqli_errno($conexion) == 0) {
             echo json_encode(['success' => true, 'message' => 'Restaurante actualizado correctamente']);
         } else {
-            echo json_encode(['success' => false, 'message' => 'No se realizaron cambios o el restaurante no existe']);
+            echo json_encode(['success' => false, 'message' => 'No se realizaron cambios']);
         }
     } else {
         echo json_encode(['success' => false, 'message' => 'Error al actualizar restaurante: ' . mysqli_error($conexion)]);
@@ -325,6 +430,14 @@ function updateRestaurante($id) {
 
 function updateHotel($id) {
     global $conexion;
+    
+    // Obtener foto actual
+    $currentQuery = "SELECT FOTO FROM hoteles WHERE ID = $id";
+    $currentResult = mysqli_query($conexion, $currentQuery);
+    $currentPhoto = null;
+    if ($currentResult && $row = mysqli_fetch_assoc($currentResult)) {
+        $currentPhoto = $row['FOTO'];
+    }
     
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
@@ -335,6 +448,19 @@ function updateHotel($id) {
     $pileta = mysqli_real_escape_string($conexion, $_POST['pileta'] ?? 'no');
     $desayuno = mysqli_real_escape_string($conexion, $_POST['desayuno'] ?? 'no');
     
+    // Manejar foto
+    $foto = $currentPhoto;
+    if (isset($_FILES['foto'])) {
+        try {
+            $foto = handleFileUpload($_FILES['foto'], $currentPhoto);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            return;
+        }
+    }
+    
+    $fotoField = $foto ? "'$foto'" : 'NULL';
+    
     $query = "UPDATE hoteles SET 
               NOMBRE = '$nombre', 
               UBICACION = '$ubicacion', 
@@ -343,7 +469,8 @@ function updateHotel($id) {
               CALIFICACION = $calificacion, 
               HUESPEDES = $huespedes, 
               PILETA = '$pileta', 
-              DESAYUNO = '$desayuno' 
+              DESAYUNO = '$desayuno',
+              FOTO = $fotoField
               WHERE ID = $id";
     
     if (mysqli_query($conexion, $query)) {
@@ -360,6 +487,14 @@ function updateHotel($id) {
 function updateAlquiler($id) {
     global $conexion;
     
+    // Obtener foto actual
+    $currentQuery = "SELECT FOTO FROM alquiler WHERE ID = $id";
+    $currentResult = mysqli_query($conexion, $currentQuery);
+    $currentPhoto = null;
+    if ($currentResult && $row = mysqli_fetch_assoc($currentResult)) {
+        $currentPhoto = $row['FOTO'];
+    }
+    
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
@@ -371,6 +506,19 @@ function updateAlquiler($id) {
     $camas_simples = !empty($_POST['camas_simples']) ? intval($_POST['camas_simples']) : 0;
     $metros = !empty($_POST['metros']) ? intval($_POST['metros']) : 0;
     
+    // Manejar foto
+    $foto = $currentPhoto;
+    if (isset($_FILES['foto'])) {
+        try {
+            $foto = handleFileUpload($_FILES['foto'], $currentPhoto);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            return;
+        }
+    }
+    
+    $fotoField = $foto ? "'$foto'" : 'NULL';
+    
     $query = "UPDATE alquiler SET 
               NOMBRE = '$nombre', 
               UBICACION = '$ubicacion', 
@@ -381,7 +529,8 @@ function updateAlquiler($id) {
               CAMAS_DOBLES = $camas_dobles, 
               CAMAS_SIMPLES = $camas_simples, 
               METROS = $metros, 
-              DESCRIPCION = '$descripcion' 
+              DESCRIPCION = '$descripcion',
+              FOTO = $fotoField
               WHERE ID = $id";
     
     if (mysqli_query($conexion, $query)) {
@@ -398,6 +547,14 @@ function updateAlquiler($id) {
 function updatePuntoInteres($id) {
     global $conexion;
     
+    // Obtener foto actual
+    $currentQuery = "SELECT FOTO FROM `puntos de interes` WHERE ID = $id";
+    $currentResult = mysqli_query($conexion, $currentQuery);
+    $currentPhoto = null;
+    if ($currentResult && $row = mysqli_fetch_assoc($currentResult)) {
+        $currentPhoto = $row['FOTO'];
+    }
+    
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
@@ -405,13 +562,27 @@ function updatePuntoInteres($id) {
     $precio = !empty($_POST['precio']) ? intval($_POST['precio']) : 0;
     $calificacion = !empty($_POST['calificacion']) ? floatval($_POST['calificacion']) : 'NULL';
     
+    // Manejar foto
+    $foto = $currentPhoto;
+    if (isset($_FILES['foto'])) {
+        try {
+            $foto = handleFileUpload($_FILES['foto'], $currentPhoto);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            return;
+        }
+    }
+    
+    $fotoField = $foto ? "'$foto'" : 'NULL';
+    
     $query = "UPDATE `puntos de interes` SET 
               NOMBRE = '$nombre', 
               UBICACION = '$ubicacion', 
               DESCRIPCION = '$descripcion', 
               ID_ACTIVIDAD = $id_actividad, 
               PRECIO = $precio, 
-              CALIFICACION = $calificacion 
+              CALIFICACION = $calificacion,
+              FOTO = $fotoField
               WHERE ID = $id";
     
     if (mysqli_query($conexion, $query)) {
@@ -458,7 +629,7 @@ function deleteBusiness() {
     // Verificar permisos: usuarios regulares solo pueden eliminar sus propios negocios
     if ($_SESSION['id_cargo'] == 3) {
         $id_usuario = intval($_SESSION['id']);
-        $checkQuery = "SELECT ID FROM $table WHERE ID = $id AND ID_USUARIO = $id_usuario";
+        $checkQuery = "SELECT ID FROM $table WHERE ID = $id AND id_usuario = $id_usuario";
         $checkResult = mysqli_query($conexion, $checkQuery);
         
         if (!$checkResult || mysqli_num_rows($checkResult) == 0) {
@@ -524,9 +695,8 @@ function getTotalCount() {
     if ($_SESSION['id_cargo'] == 3) {
         // Usuario regular: solo contar sus propios negocios
         $id_usuario = intval($_SESSION['id']);
-        $whereClause = " WHERE ID_USUARIO = $id_usuario";
+        $whereClause = " WHERE id_usuario = $id_usuario";
     }
-    // Si es admin (id_cargo = 1): cuenta todos los negocios
     
     // Contar restaurantes
     $result = mysqli_query($conexion, "SELECT COUNT(*) as count FROM restaurantes" . $whereClause);
@@ -607,5 +777,230 @@ function logError($message, $data = null) {
         $log .= " - Data: " . json_encode($data);
     }
     error_log($log . "\n", 3, "../logs/api_errors.log");
+}
+
+function getUsers() {
+    global $conexion;
+    
+    if ($_SESSION['id_cargo'] != 1) {
+        echo json_encode(['success' => false, 'message' => 'No tienes permisos para ver usuarios']);
+        return;
+    }
+    
+    $query = "SELECT *
+              FROM usuarios 
+              ORDER BY ID";
+    
+    $result = mysqli_query($conexion, $query);
+    $data = [];
+    
+    if ($result) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $data[] = $row;
+        }
+        echo json_encode(['success' => true, 'data' => $data]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Error al obtener usuarios: ' . mysqli_error($conexion)]);
+    }
+}
+
+function createUser() {
+    global $conexion;
+    
+    if ($_SESSION['id_cargo'] != 1) {
+        echo json_encode(['success' => false, 'message' => 'No tienes permisos para crear usuarios']);
+        return;
+    }
+    
+    $requiredFields = ['nombre', 'apellido', 'email', 'password', 'id_cargo'];
+    $missing = validateRequired($requiredFields, $_POST);
+    
+    if (!empty($missing)) {
+        echo json_encode(['success' => false, 'message' => 'Campos requeridos faltantes: ' . implode(', ', $missing)]);
+        return;
+    }
+    
+    $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
+    $apellido = mysqli_real_escape_string($conexion, $_POST['apellido']);
+    $email = mysqli_real_escape_string($conexion, $_POST['email']);
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $id_cargo = intval($_POST['id_cargo']);
+    
+    $checkQuery = "SELECT ID FROM usuarios WHERE EMAIL = '$email'";
+    $checkResult = mysqli_query($conexion, $checkQuery);
+    
+    if (mysqli_num_rows($checkResult) > 0) {
+        echo json_encode(['success' => false, 'message' => 'Ya existe un usuario con ese email']);
+        return;
+    }
+    
+    if (!in_array($id_cargo, [1, 3])) {
+        echo json_encode(['success' => false, 'message' => 'Cargo no válido']);
+        return;
+    }
+    
+    // CORREGIDO: Usar los campos correctos según la estructura de la BD
+    $query = "INSERT INTO usuarios (NOMBRE, APELLIDO, EMAIL, PASSWORD, ID_CARGO, USERNAME) 
+              VALUES ('$nombre', '$apellido', '$email', '$password', $id_cargo, '$email')";
+    
+    if (mysqli_query($conexion, $query)) {
+        echo json_encode(['success' => true, 'message' => 'Usuario creado correctamente', 'id' => mysqli_insert_id($conexion)]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Error al crear usuario: ' . mysqli_error($conexion)]);
+    }
+}
+
+function updateUser() {
+    global $conexion;
+    
+    if ($_SESSION['id_cargo'] != 1) {
+        echo json_encode(['success' => false, 'message' => 'No tienes permisos para editar usuarios']);
+        return;
+    }
+    
+    $id = intval($_POST['id']);
+    
+    if ($id <= 0) {
+        echo json_encode(['success' => false, 'message' => 'ID no válido']);
+        return;
+    }
+    
+    $requiredFields = ['nombre', 'apellido', 'email', 'id_cargo'];
+    $missing = validateRequired($requiredFields, $_POST);
+    
+    if (!empty($missing)) {
+        echo json_encode(['success' => false, 'message' => 'Campos requeridos faltantes: ' . implode(', ', $missing)]);
+        return;
+    }
+    
+    $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
+    $apellido = mysqli_real_escape_string($conexion, $_POST['apellido']);
+    $email = mysqli_real_escape_string($conexion, $_POST['email']);
+    $id_cargo = intval($_POST['id_cargo']);
+    
+    $checkQuery = "SELECT ID FROM usuarios WHERE EMAIL = '$email' AND ID != $id";
+    $checkResult = mysqli_query($conexion, $checkQuery);
+    
+    if (mysqli_num_rows($checkResult) > 0) {
+        echo json_encode(['success' => false, 'message' => 'Ya existe otro usuario con ese email']);
+        return;
+    }
+    
+    if (!in_array($id_cargo, [1, 3])) {
+        echo json_encode(['success' => false, 'message' => 'Cargo no válido']);
+        return;
+    }
+    
+    $query = "UPDATE usuarios SET 
+              NOMBRE = '$nombre', 
+              APELLIDO = '$apellido', 
+              EMAIL = '$email', 
+              ID_CARGO = $id_cargo,
+              USERNAME = '$email'";
+    
+    if (!empty($_POST['password'])) {
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $query .= ", PASSWORD = '$password'";
+    }
+    
+    $query .= " WHERE ID = $id";
+    
+    if (mysqli_query($conexion, $query)) {
+        if (mysqli_affected_rows($conexion) > 0) {
+            echo json_encode(['success' => true, 'message' => 'Usuario actualizado correctamente']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'No se realizaron cambios o el usuario no existe']);
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Error al actualizar usuario: ' . mysqli_error($conexion)]);
+    }
+}
+
+function deleteUser() {
+    global $conexion;
+    
+    if ($_SESSION['id_cargo'] != 1) {
+        echo json_encode(['success' => false, 'message' => 'No tienes permisos para eliminar usuarios']);
+        return;
+    }
+    
+    $id = intval($_POST['id']);
+    
+    if ($id <= 0) {
+        echo json_encode(['success' => false, 'message' => 'ID no válido']);
+        return;
+    }
+    
+    if ($id == $_SESSION['id']) {
+        echo json_encode(['success' => false, 'message' => 'No puedes eliminar tu propia cuenta']);
+        return;
+    }
+    
+    $tables = ['restaurantes', 'hoteles', 'alquiler', '`puntos de interes`'];
+    $hasBusinesses = false;
+    
+    foreach ($tables as $table) {
+        $checkQuery = "SELECT COUNT(*) as count FROM $table WHERE id_usuario = $id";
+        $checkResult = mysqli_query($conexion, $checkQuery);
+        if ($checkResult) {
+            $row = mysqli_fetch_assoc($checkResult);
+            if ($row['count'] > 0) {
+                $hasBusinesses = true;
+                break;
+            }
+        }
+    }
+    
+    if ($hasBusinesses) {
+        echo json_encode(['success' => false, 'message' => 'No se puede eliminar el usuario porque tiene negocios asociados. Elimina primero sus negocios.']);
+        return;
+    }
+    
+    $query = "DELETE FROM usuarios WHERE ID = $id";
+    
+    if (mysqli_query($conexion, $query)) {
+        if (mysqli_affected_rows($conexion) > 0) {
+            echo json_encode(['success' => true, 'message' => 'Usuario eliminado correctamente']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'No se encontró el usuario a eliminar']);
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Error al eliminar usuario: ' . mysqli_error($conexion)]);
+    }
+}
+
+function handleFileUpload($file, $oldFileName = null) {
+    if (!isset($file) || $file['error'] !== UPLOAD_ERR_OK) {
+        return $oldFileName; // Mantener archivo anterior si no hay uno nuevo
+    }
+    
+    $uploadDir = '../uploads/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+    
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!in_array($file['type'], $allowedTypes)) {
+        throw new Exception('Tipo de archivo no permitido. Solo se permiten imágenes.');
+    }
+    
+    $maxSize = 5 * 1024 * 1024; // 5MB
+    if ($file['size'] > $maxSize) {
+        throw new Exception('El archivo es demasiado grande. Máximo 5MB.');
+    }
+    
+    $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+    $fileName = uniqid() . '.' . $extension;
+    $uploadPath = $uploadDir . $fileName;
+    
+    if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
+        // Eliminar archivo anterior si existe
+        if ($oldFileName && file_exists($uploadDir . $oldFileName)) {
+            unlink($uploadDir . $oldFileName);
+        }
+        return $fileName;
+    } else {
+        throw new Exception('Error al subir el archivo.');
+    }
 }
 ?>

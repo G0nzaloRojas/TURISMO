@@ -30,9 +30,9 @@
       <li><a href="index.php" class="active">Inicio</a></li>
       
       <?php if (isset($_SESSION['id_cargo'])): ?>
-        <li><a href="packages.php">Paquetes</a></li>
+        <li><a href="packages.php">Afiliados</a></li>
       <?php else: ?>
-        <li><a href="form_login.php">Paquetes</a></li>
+        <li><a href="form_login.php">Afiliados</a></li>
       <?php endif; ?>
       
       <li><a href="about.php">Nosotros</a></li>
@@ -64,81 +64,165 @@
       </div>
     </section>
 
+    <?php
+    // Consultas para obtener contenido dinámico
+    include ("conexion.php");
+    
+    $consulta_hoteles = mysqli_query($conexion, "SELECT * FROM hoteles ORDER BY RAND() LIMIT 2");
+    $consulta_restaurantes = mysqli_query($conexion, "SELECT * FROM restaurantes ORDER BY RAND() LIMIT 1");
+    $consulta_puntos = mysqli_query($conexion, "SELECT * FROM `puntos de interes` ORDER BY RAND() LIMIT 1");
+
+    // Guardar resultados en arrays
+    $hoteles = [];
+    $restaurantes = [];
+    $puntos_interes = [];
+
+    if (mysqli_num_rows($consulta_hoteles) > 0) {
+        while ($fila = mysqli_fetch_assoc($consulta_hoteles)) {
+            $hoteles[] = $fila;
+        }
+    }
+
+    if (mysqli_num_rows($consulta_restaurantes) > 0) {
+        while ($fila = mysqli_fetch_assoc($consulta_restaurantes)) {
+            $restaurantes[] = $fila;
+        }
+    }
+
+    if (mysqli_num_rows($consulta_puntos) > 0) {
+        while ($fila = mysqli_fetch_assoc($consulta_puntos)) {
+            $puntos_interes[] = $fila;
+        }
+    }
+
+    // Función para convertir ID_COMIDA a texto
+    function getTipoComida($id_comida) {
+        switch($id_comida) {
+            case 1: return "Parrilla";
+            case 2: return "Asiática";
+            case 3: return "Pizzas y Empanadas";
+            case 4: return "Pastas";
+            case 5: return "Vegetariana";
+            case 6: return "Vegana";
+            default: return "Varios";
+        }
+    }
+
+    // Función para convertir ID_ACTIVIDAD a texto
+    function getTipoActividad($id_actividad) {
+        switch($id_actividad) {
+            case 1: return "Cultural";
+            case 2: return "Entretenimiento";
+            case 3: return "Naturaleza";
+            case 4: return "Vida Nocturna";
+            case 5: return "Shopping";
+            case 6: return "Monumento";
+            case 7: return "Religioso";
+            default: return "Varios";
+        }
+    }
+    ?>
+
     <!-- Packages Section -->
     <section id="packages" class="packages">
       <div class="container">
-        <h2 class="section-title">Nuestros paquetes destacados</h2>
+        <h2 class="section-title">Nuestros afiliados destacados</h2>
         <div class="package-container">
-          <!-- Package 1 -->
+          
+          <?php if (!empty($hoteles)): ?>
+          <!-- Package 1 - Hotel -->
           <div class="package-card">
             <div class="package-image">
-              <img src="/api/placeholder/500/300" alt="Buenos Aires" />
+              <img src="imagenes/Hoteles/<?= $hoteles[0]['NOMBRE'] ?>_1.png" alt="<?= $hoteles[0]['NOMBRE'] ?>" onerror="this.src='/api/placeholder/500/300'" />
             </div>
             <div class="package-details">
-              <h3>Buenos Aires</h3>
+              <h3><?= $hoteles[0]['NOMBRE'] ?></h3>
               <p class="location">
-                <i class="fas fa-map-marker-alt"></i> Buenos Aires
+                <i class="fas fa-map-marker-alt"></i> <?= $hoteles[0]['UBICACION'] ?>
               </p>
               <p class="description">
-                Buenos Aires, disfruta de 7 días de aventura en la capital.
+                Hotel <?= $hoteles[0]['CALIFICACION'] ?> estrellas. 
+                <?= $hoteles[0]['PILETA'] == 'si' ? 'Con piscina.' : '' ?>
+                <?= $hoteles[0]['DESAYUNO'] == 'si' ? 'Desayuno incluido.' : '' ?>
               </p>
               <div class="package-footer">
-                <p class="price">Desde $120,000</p>
-                <a href="packages.php" class="btn btn-secondary">Consultar</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Package 2 -->
-          <div class="package-card">
-            <div class="package-image">
-              <img src="/api/placeholder/500/300" alt="Buenos Aires" />
-            </div>
-            <div class="package-details">
-              <h3>Buenos Aires</h3>
-              <p class="location">
-                <i class="fas fa-map-marker-alt"></i> Buenos Aires
-              </p>
-              <p class="description">
-                Buenos Aires, disfruta de 7 días de aventura en la capital.
-              </p>
-              <div class="package-footer">
-                <p class="price">Desde $120,000</p>
-                <a href="packages.php" class="btn btn-secondary">Consultar</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Package 3 -->
-          <div class="package-card">
-            <div class="package-image">
-              <img src="/api/placeholder/500/300" alt="Buenos Aires" />
-            </div>
-            <div class="package-details">
-              <h3>Buenos Aires</h3>
-              <p class="location">
-                <i class="fas fa-map-marker-alt"></i> Buenos Aires
-              </p>
-              <p class="description">
-                Buenos Aires, disfruta de 7 días de aventura en la capital.
-              </p>
-              <div class="package-footer">
-                <p class="price">Desde $120,000</p>
+                <p class="price">Desde $<?= number_format($hoteles[0]['PRECIO_MINIMO'], 0, ',', '.') ?></p>
                 <?php if (isset($_SESSION['id_cargo'])): ?>
-              <a href="packages.php" class="btn btn-secondary">Consultar</a>
-            <?php else: ?>
-              <a href="form_login.php" class="btn btn-primary">Iniciá sesión para Consultar paquetes</a>
-            <?php endif; ?>
+                  <a href="formulario_busqueda.php" class="btn btn-secondary">Crear Paquete</a>
+                <?php else: ?>
+                  <a href="form_login.php" class="btn btn-primary">Iniciá sesión para crear paquetes</a>
+                <?php endif; ?>
               </div>
             </div>
           </div>
+          <?php endif; ?>
+
+          <?php if (!empty($restaurantes)): ?>
+          <!-- Package 2 - Restaurante -->
+          <div class="package-card">
+            <div class="package-image">
+              <img src="imagenes/Restaurantes/<?= $restaurantes[0]['NOMBRE'] ?>_1.png" alt="<?= $restaurantes[0]['NOMBRE'] ?>" onerror="this.src='/api/placeholder/500/300'" />
+            </div>
+            <div class="package-details">
+              <h3><?= $restaurantes[0]['NOMBRE'] ?></h3>
+              <p class="location">
+                <i class="fas fa-map-marker-alt"></i> <?= $restaurantes[0]['UBICACION'] ?>
+              </p>
+              <p class="description">
+                Restaurante de <?= getTipoComida($restaurantes[0]['ID_COMIDA']) ?>. 
+                Calificación: <?= $restaurantes[0]['CALIFICACION'] ?> estrellas.
+              </p>
+              <div class="package-footer">
+                <p class="price">Desde $<?= number_format($restaurantes[0]['PRECIO_MINIMO'], 0, ',', '.') ?></p>
+                <?php if (isset($_SESSION['id_cargo'])): ?>
+                  <a href="formulario_busqueda.php" class="btn btn-secondary">Crear Paquete</a>
+                <?php else: ?>
+                  <a href="form_login.php" class="btn btn-primary">Iniciá sesión para crear paquetes</a>
+                <?php endif; ?>
+              </div>
+            </div>
+          </div>
+          <?php endif; ?>
+
+          <?php if (!empty($puntos_interes)): ?>
+          <!-- Package 3 - Punto de Interés -->
+          <div class="package-card">
+            <div class="package-image">
+              <img src="imagenes/Punto de Interes/<?= $puntos_interes[0]['NOMBRE'] ?>_1.png" alt="<?= $puntos_interes[0]['NOMBRE'] ?>" onerror="this.src='/api/placeholder/500/300'" />
+            </div>
+            <div class="package-details">
+              <h3><?= $puntos_interes[0]['NOMBRE'] ?></h3>
+              <p class="location">
+                <i class="fas fa-map-marker-alt"></i> <?= $puntos_interes[0]['UBICACION'] ?>
+              </p>
+              <p class="description">
+                <?= getTipoActividad($puntos_interes[0]['ID_ACTIVIDAD']) ?>. 
+                <?= $puntos_interes[0]['DESCRIPCION'] ?>
+              </p>
+              <div class="package-footer">
+                <p class="price">
+                  <?php if ($puntos_interes[0]['PRECIO'] == 0): ?>
+                    Gratuito
+                  <?php else: ?>
+                    $<?= number_format($puntos_interes[0]['PRECIO'], 0, ',', '.') ?>
+                  <?php endif; ?>
+                </p>
+                <?php if (isset($_SESSION['id_cargo'])): ?>
+                  <a href="formulario_busqueda.php" class="btn btn-secondary">Crear Paquete</a>
+                <?php else: ?>
+                  <a href="form_login.php" class="btn btn-primary">Iniciá sesión para crear paquetes</a>
+                <?php endif; ?>
+              </div>
+            </div>
+          </div>
+          <?php endif; ?>
         </div>
         
 
         <div class="cta-container">
            <!-- Botón Ver Paquetes -->
             <?php if (isset($_SESSION['id_cargo'])): ?>
-              <a href="packages.php" class="btn btn-primary">Más paquetes</a>
+              <a href="packages.php" class="btn btn-primary">Más afiliados</a>
             <?php else: ?>
               <a href="form_login.php" class="btn btn-primary">Iniciá sesión para ver los paquetes</a>
             <?php endif; ?>

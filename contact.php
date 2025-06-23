@@ -28,9 +28,9 @@
       <li><a href="index.php" >Inicio</a></li>
       
       <?php if (isset($_SESSION['id_cargo'])): ?>
-        <li><a href="packages.php">Paquetes</a></li>
+        <li><a href="packages.php">Afiliados</a></li>
       <?php else: ?>
-        <li><a href="form_login.php">Paquetes</a></li>
+        <li><a href="form_login.php">Afiliados</a></li>
       <?php endif; ?>
       
       <li><a href="about.php">Nosotros</a></li>
