@@ -22,12 +22,12 @@
 <body>
 
 <?php
-$username=$_POST['username'];
+$email=$_POST['email'];
 $password=md5($_POST['password']);
 
 include("conexion.php");
 
-$consulta=mysqli_query($conexion, "SELECT nombre, apellido, email, id_cargo, id FROM usuarios WHERE username='$username' AND password='$password'");
+$consulta=mysqli_query($conexion, "SELECT nombre, apellido, email, id_cargo, id FROM usuarios WHERE email='$email' AND password='$password'");
 
 $resultado=mysqli_num_rows($consulta);
 

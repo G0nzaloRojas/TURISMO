@@ -584,10 +584,11 @@ function fillFormWithBusiness(business) {
         document.getElementById("precioMaximo").value = business.PRECIO_MAXIMO;
 
       // Manejar foto actual
-      if (business.FOTO) {
+      if (business.FOTO_URL) {
         document.getElementById("currentPhoto").style.display = "block";
-        document.getElementById("currentPhotoImg").src =
-          "uploads/" + business.FOTO;
+        document.getElementById(
+          "currentPhotoImg"
+        ).src = `uploads/${currentCategory}/${business.FOTO_URL}`;
       } else {
         document.getElementById("currentPhoto").style.display = "none";
       }
@@ -610,10 +611,11 @@ function fillFormWithBusiness(business) {
         document.getElementById("desayuno").value = business.DESAYUNO;
 
       // Manejar foto actual
-      if (business.FOTO) {
+      if (business.FOTO_URL) {
         document.getElementById("currentPhoto").style.display = "block";
-        document.getElementById("currentPhotoImg").src =
-          "uploads/" + business.FOTO;
+        document.getElementById(
+          "currentPhotoImg"
+        ).src = `uploads/${currentCategory}/${business.FOTO_URL}`;
       } else {
         document.getElementById("currentPhoto").style.display = "none";
       }
@@ -637,10 +639,11 @@ function fillFormWithBusiness(business) {
         document.getElementById("metros").value = business.METROS;
 
       // Manejar foto actual - AGREGADO PARA ALQUILERES
-      if (business.FOTO) {
+      if (business.FOTO_URL) {
         document.getElementById("currentPhoto").style.display = "block";
-        document.getElementById("currentPhotoImg").src =
-          "uploads/" + business.FOTO;
+        document.getElementById(
+          "currentPhotoImg"
+        ).src = `uploads/${currentCategory}/${business.FOTO_URL}`;
       } else {
         document.getElementById("currentPhoto").style.display = "none";
       }
@@ -656,10 +659,11 @@ function fillFormWithBusiness(business) {
           business.CALIFICACION;
 
       // Manejar foto actual
-      if (business.FOTO) {
+      if (business.FOTO_URL) {
         document.getElementById("currentPhoto").style.display = "block";
-        document.getElementById("currentPhotoImg").src =
-          "uploads/" + business.FOTO;
+        document.getElementById(
+          "currentPhotoImg"
+        ).src = `uploads/${currentCategory}/${business.FOTO_URL}`;
       } else {
         document.getElementById("currentPhoto").style.display = "none";
       }

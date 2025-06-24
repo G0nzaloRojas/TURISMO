@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Verificar autenticación
 if (!isset($_SESSION['id_cargo']) || ($_SESSION['id_cargo'] != 1 && $_SESSION['id_cargo'] != 3)) {
     echo json_encode(['success' => false, 'message' => 'No autorizado']);
@@ -94,9 +97,9 @@ function getBusinesses() {
             
         case 'puntos_interes':
             $query = "SELECT pi.*, a.DESCRIPCION as ACTIVIDAD 
-                     FROM `puntos de interes` pi 
-                     LEFT JOIN actividad a ON pi.ID_ACTIVIDAD = a.ID" . 
-                     $whereClause . " ORDER BY pi.NOMBRE";
+                FROM `puntos de interes` pi 
+                LEFT JOIN actividad a ON pi.ID_ACTIVIDAD = a.ID" . 
+                $whereClause . " ORDER BY pi.NOMBRE";
             break;
             
         default:
@@ -167,25 +170,27 @@ function createRestaurante() {
     $precio_maximo = !empty($_POST['precio_maximo']) ? intval($_POST['precio_maximo']) : 'NULL';
     
     // Manejar foto
-    $foto = null;
+    $foto_url = null;
     if (isset($_FILES['foto'])) {
         try {
-            $foto = handleFileUpload($_FILES['foto']);
+            $foto_url = handleFileUploadSimple($_FILES['foto'], 'restaurantes');
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
             return;
         }
     }
     
-    $fotoField = $foto ? "'$foto'" : 'NULL';
+    $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
     
-    // CORREGIDO: Usar nombres correctos de columnas y agregar CALIFICACION
-    $query = "INSERT INTO restaurantes (NOMBRE, UBICACION, DESCRIPCION, ID_COMIDA, PRECIO_MINIMO, PRECIO_MAXIMO, id_usuario, FOTO, CALIFICACION) 
+    $query = "INSERT INTO restaurantes (NOMBRE, UBICACION, DESCRIPCION, ID_COMIDA, PRECIO_MINIMO, PRECIO_MAXIMO, id_usuario, FOTO_URL, CALIFICACION) 
               VALUES ('$nombre', '$ubicacion', '$descripcion', $id_comida, $precio_minimo, $precio_maximo, $id_usuario, $fotoField, 5)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Restaurante creado correctamente', 'id' => mysqli_insert_id($conexion)]);
     } else {
+        if ($foto_url) {
+            deleteImageSimple('restaurantes', $foto_url);
+        }
         echo json_encode(['success' => false, 'message' => 'Error al crear restaurante: ' . mysqli_error($conexion)]);
     }
 }
@@ -204,25 +209,27 @@ function createHotel() {
     $desayuno = mysqli_real_escape_string($conexion, $_POST['desayuno'] ?? 'no');
     
     // Manejar foto
-    $foto = null;
+    $foto_url = null;
     if (isset($_FILES['foto'])) {
         try {
-            $foto = handleFileUpload($_FILES['foto']);
+            $foto_url = handleFileUploadSimple($_FILES['foto'], 'hoteles');
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
             return;
         }
     }
     
-    $fotoField = $foto ? "'$foto'" : 'NULL';
+    $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
     
-    // CORREGIDO: Hoteles no tienen DESCRIPCION en la BD, solo los campos que existen
-    $query = "INSERT INTO hoteles (NOMBRE, UBICACION, PRECIO_MINIMO, PRECIO_MAXIMO, CALIFICACION, HUESPEDES, PILETA, DESAYUNO, id_usuario, FOTO) 
+    $query = "INSERT INTO hoteles (NOMBRE, UBICACION, PRECIO_MINIMO, PRECIO_MAXIMO, CALIFICACION, HUESPEDES, PILETA, DESAYUNO, id_usuario, FOTO_URL) 
               VALUES ('$nombre', '$ubicacion', $precio_minimo, $precio_maximo, $calificacion, $huespedes, '$pileta', '$desayuno', $id_usuario, $fotoField)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Hotel creado correctamente', 'id' => mysqli_insert_id($conexion)]);
     } else {
+        if ($foto_url) {
+            deleteImageSimple('hoteles', $foto_url);
+        }
         echo json_encode(['success' => false, 'message' => 'Error al crear hotel: ' . mysqli_error($conexion)]);
     }
 }
@@ -243,28 +250,30 @@ function createAlquiler() {
     $metros = !empty($_POST['metros']) ? intval($_POST['metros']) : 0;
     
     // Manejar foto
-    $foto = null;
+    $foto_url = null;
     if (isset($_FILES['foto'])) {
         try {
-            $foto = handleFileUpload($_FILES['foto']);
+            $foto_url = handleFileUploadSimple($_FILES['foto'], 'alquiler');
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
             return;
         }
     }
     
-    $fotoField = $foto ? "'$foto'" : 'NULL';
+    $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
     
-    $query = "INSERT INTO alquiler (NOMBRE, UBICACION, PRECIO_SEMANA, CALIFICACION, BANIOS, DORMITORIOS, CAMAS_DOBLES, CAMAS_SIMPLES, METROS, DESCRIPCION, id_usuario, FOTO) 
+    $query = "INSERT INTO alquiler (NOMBRE, UBICACION, PRECIO_SEMANA, CALIFICACION, BANIOS, DORMITORIOS, CAMAS_DOBLES, CAMAS_SIMPLES, METROS, DESCRIPCION, id_usuario, FOTO_URL) 
               VALUES ('$nombre', '$ubicacion', $precio_semana, $calificacion, $banios, $dormitorios, $camas_dobles, $camas_simples, $metros, '$descripcion', $id_usuario, $fotoField)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Alquiler creado correctamente', 'id' => mysqli_insert_id($conexion)]);
     } else {
+        if ($foto_url) {
+            deleteImageSimple('alquiler', $foto_url);
+        }
         echo json_encode(['success' => false, 'message' => 'Error al crear alquiler: ' . mysqli_error($conexion)]);
     }
 }
-
 
 function createPuntoInteres() {
     global $conexion;
@@ -278,27 +287,34 @@ function createPuntoInteres() {
     $calificacion = !empty($_POST['calificacion']) ? floatval($_POST['calificacion']) : 'NULL';
     
     // Manejar foto
-    $foto = null;
+    $foto_url = null;
     if (isset($_FILES['foto'])) {
         try {
-            $foto = handleFileUpload($_FILES['foto']);
+            // IMPORTANTE: usar 'puntos_interes' (con underscore) para la carpeta
+            $foto_url = handleFileUploadSimple($_FILES['foto'], 'puntos_interes');
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
             return;
         }
     }
     
-    $fotoField = $foto ? "'$foto'" : 'NULL';
+    $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
     
-    $query = "INSERT INTO `puntos de interes` (NOMBRE, UBICACION, DESCRIPCION, ID_ACTIVIDAD, PRECIO, CALIFICACION, id_usuario, FOTO) 
+    // IMPORTANTE: usar backticks para la tabla que tiene espacios
+    $query = "INSERT INTO `puntos de interes` (NOMBRE, UBICACION, DESCRIPCION, ID_ACTIVIDAD, PRECIO, CALIFICACION, id_usuario, FOTO_URL) 
               VALUES ('$nombre', '$ubicacion', '$descripcion', $id_actividad, $precio, $calificacion, $id_usuario, $fotoField)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Punto de interés creado correctamente', 'id' => mysqli_insert_id($conexion)]);
     } else {
+        if ($foto_url) {
+            deleteImageSimple('puntos_interes', $foto_url);
+        }
         echo json_encode(['success' => false, 'message' => 'Error al crear punto de interés: ' . mysqli_error($conexion)]);
     }
 }
+
+
 
 function updateBusiness() {
     global $conexion;
@@ -379,11 +395,11 @@ function updateRestaurante($id) {
     global $conexion;
     
     // Obtener foto actual
-    $currentQuery = "SELECT FOTO FROM restaurantes WHERE ID = $id";
+    $currentQuery = "SELECT FOTO_URL FROM restaurantes WHERE ID = $id";
     $currentResult = mysqli_query($conexion, $currentQuery);
     $currentPhoto = null;
     if ($currentResult && $row = mysqli_fetch_assoc($currentResult)) {
-        $currentPhoto = $row['FOTO'];
+        $currentPhoto = $row['FOTO_URL'];
     }
     
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
@@ -394,19 +410,18 @@ function updateRestaurante($id) {
     $precio_maximo = !empty($_POST['precio_maximo']) ? intval($_POST['precio_maximo']) : 'NULL';
     
     // Manejar foto
-    $foto = $currentPhoto;
+    $foto_url = $currentPhoto;
     if (isset($_FILES['foto'])) {
         try {
-            $foto = handleFileUpload($_FILES['foto'], $currentPhoto);
+            $foto_url = handleFileUploadSimple($_FILES['foto'], 'restaurantes', $currentPhoto);
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
             return;
         }
     }
     
-    $fotoField = $foto ? "'$foto'" : 'NULL';
+    $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
     
-    // CORREGIDO: Usar nombres correctos de columnas
     $query = "UPDATE restaurantes SET 
               NOMBRE = '$nombre', 
               UBICACION = '$ubicacion', 
@@ -414,15 +429,11 @@ function updateRestaurante($id) {
               ID_COMIDA = $id_comida, 
               PRECIO_MINIMO = $precio_minimo, 
               PRECIO_MAXIMO = $precio_maximo,
-              FOTO = $fotoField
+              FOTO_URL = $fotoField
               WHERE ID = $id";
     
     if (mysqli_query($conexion, $query)) {
-        if (mysqli_affected_rows($conexion) > 0 || mysqli_errno($conexion) == 0) {
-            echo json_encode(['success' => true, 'message' => 'Restaurante actualizado correctamente']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'No se realizaron cambios']);
-        }
+        echo json_encode(['success' => true, 'message' => 'Restaurante actualizado correctamente']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Error al actualizar restaurante: ' . mysqli_error($conexion)]);
     }
@@ -432,11 +443,11 @@ function updateHotel($id) {
     global $conexion;
     
     // Obtener foto actual
-    $currentQuery = "SELECT FOTO FROM hoteles WHERE ID = $id";
+    $currentQuery = "SELECT FOTO_URL FROM hoteles WHERE ID = $id";
     $currentResult = mysqli_query($conexion, $currentQuery);
     $currentPhoto = null;
     if ($currentResult && $row = mysqli_fetch_assoc($currentResult)) {
-        $currentPhoto = $row['FOTO'];
+        $currentPhoto = $row['FOTO_URL'];
     }
     
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
@@ -449,17 +460,17 @@ function updateHotel($id) {
     $desayuno = mysqli_real_escape_string($conexion, $_POST['desayuno'] ?? 'no');
     
     // Manejar foto
-    $foto = $currentPhoto;
+    $foto_url = $currentPhoto;
     if (isset($_FILES['foto'])) {
         try {
-            $foto = handleFileUpload($_FILES['foto'], $currentPhoto);
+            $foto_url = handleFileUploadSimple($_FILES['foto'], 'hoteles', $currentPhoto);
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
             return;
         }
     }
     
-    $fotoField = $foto ? "'$foto'" : 'NULL';
+    $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
     
     $query = "UPDATE hoteles SET 
               NOMBRE = '$nombre', 
@@ -470,15 +481,11 @@ function updateHotel($id) {
               HUESPEDES = $huespedes, 
               PILETA = '$pileta', 
               DESAYUNO = '$desayuno',
-              FOTO = $fotoField
+              FOTO_URL = $fotoField
               WHERE ID = $id";
     
     if (mysqli_query($conexion, $query)) {
-        if (mysqli_affected_rows($conexion) > 0) {
-            echo json_encode(['success' => true, 'message' => 'Hotel actualizado correctamente']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'No se realizaron cambios o el hotel no existe']);
-        }
+        echo json_encode(['success' => true, 'message' => 'Hotel actualizado correctamente']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Error al actualizar hotel: ' . mysqli_error($conexion)]);
     }
@@ -488,11 +495,11 @@ function updateAlquiler($id) {
     global $conexion;
     
     // Obtener foto actual
-    $currentQuery = "SELECT FOTO FROM alquiler WHERE ID = $id";
+    $currentQuery = "SELECT FOTO_URL FROM alquiler WHERE ID = $id";
     $currentResult = mysqli_query($conexion, $currentQuery);
     $currentPhoto = null;
     if ($currentResult && $row = mysqli_fetch_assoc($currentResult)) {
-        $currentPhoto = $row['FOTO'];
+        $currentPhoto = $row['FOTO_URL'];
     }
     
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
@@ -507,17 +514,17 @@ function updateAlquiler($id) {
     $metros = !empty($_POST['metros']) ? intval($_POST['metros']) : 0;
     
     // Manejar foto
-    $foto = $currentPhoto;
+    $foto_url = $currentPhoto;
     if (isset($_FILES['foto'])) {
         try {
-            $foto = handleFileUpload($_FILES['foto'], $currentPhoto);
+            $foto_url = handleFileUploadSimple($_FILES['foto'], 'alquiler', $currentPhoto);
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
             return;
         }
     }
     
-    $fotoField = $foto ? "'$foto'" : 'NULL';
+    $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
     
     $query = "UPDATE alquiler SET 
               NOMBRE = '$nombre', 
@@ -530,15 +537,11 @@ function updateAlquiler($id) {
               CAMAS_SIMPLES = $camas_simples, 
               METROS = $metros, 
               DESCRIPCION = '$descripcion',
-              FOTO = $fotoField
+              FOTO_URL = $fotoField
               WHERE ID = $id";
     
     if (mysqli_query($conexion, $query)) {
-        if (mysqli_affected_rows($conexion) > 0) {
-            echo json_encode(['success' => true, 'message' => 'Alquiler actualizado correctamente']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'No se realizaron cambios o el alquiler no existe']);
-        }
+        echo json_encode(['success' => true, 'message' => 'Alquiler actualizado correctamente']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Error al actualizar alquiler: ' . mysqli_error($conexion)]);
     }
@@ -547,12 +550,12 @@ function updateAlquiler($id) {
 function updatePuntoInteres($id) {
     global $conexion;
     
-    // Obtener foto actual
-    $currentQuery = "SELECT FOTO FROM `puntos de interes` WHERE ID = $id";
+    // Obtener foto actual - USAR BACKTICKS
+    $currentQuery = "SELECT FOTO_URL FROM `puntos de interes` WHERE ID = $id";
     $currentResult = mysqli_query($conexion, $currentQuery);
     $currentPhoto = null;
     if ($currentResult && $row = mysqli_fetch_assoc($currentResult)) {
-        $currentPhoto = $row['FOTO'];
+        $currentPhoto = $row['FOTO_URL'];
     }
     
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
@@ -563,18 +566,19 @@ function updatePuntoInteres($id) {
     $calificacion = !empty($_POST['calificacion']) ? floatval($_POST['calificacion']) : 'NULL';
     
     // Manejar foto
-    $foto = $currentPhoto;
+    $foto_url = $currentPhoto;
     if (isset($_FILES['foto'])) {
         try {
-            $foto = handleFileUpload($_FILES['foto'], $currentPhoto);
+            $foto_url = handleFileUploadSimple($_FILES['foto'], 'puntos_interes', $currentPhoto);
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
             return;
         }
     }
     
-    $fotoField = $foto ? "'$foto'" : 'NULL';
+    $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
     
+    // IMPORTANTE: usar backticks para la tabla
     $query = "UPDATE `puntos de interes` SET 
               NOMBRE = '$nombre', 
               UBICACION = '$ubicacion', 
@@ -582,15 +586,11 @@ function updatePuntoInteres($id) {
               ID_ACTIVIDAD = $id_actividad, 
               PRECIO = $precio, 
               CALIFICACION = $calificacion,
-              FOTO = $fotoField
+              FOTO_URL = $fotoField
               WHERE ID = $id";
     
     if (mysqli_query($conexion, $query)) {
-        if (mysqli_affected_rows($conexion) > 0) {
-            echo json_encode(['success' => true, 'message' => 'Punto de interés actualizado correctamente']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'No se realizaron cambios o el punto de interés no existe']);
-        }
+        echo json_encode(['success' => true, 'message' => 'Punto de interés actualizado correctamente']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Error al actualizar punto de interés: ' . mysqli_error($conexion)]);
     }
@@ -841,7 +841,7 @@ function createUser() {
     
     // CORREGIDO: Usar los campos correctos según la estructura de la BD
     $query = "INSERT INTO usuarios (NOMBRE, APELLIDO, EMAIL, PASSWORD, ID_CARGO, USERNAME) 
-              VALUES ('$nombre', '$apellido', '$email', '$password', $id_cargo, '$email')";
+              VALUES ('$nombre', '$apellido', '$email', '$password', $id_cargo, '$nombre')";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Usuario creado correctamente', 'id' => mysqli_insert_id($conexion)]);
@@ -896,7 +896,7 @@ function updateUser() {
               APELLIDO = '$apellido', 
               EMAIL = '$email', 
               ID_CARGO = $id_cargo,
-              USERNAME = '$email'";
+              USERNAME = '$nombre'";
     
     if (!empty($_POST['password'])) {
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -1001,6 +1001,160 @@ function handleFileUpload($file, $oldFileName = null) {
         return $fileName;
     } else {
         throw new Exception('Error al subir el archivo.');
+    }
+}
+
+function handleFileUploadSimple($file, $category, $oldFileName = null) {
+    if (!isset($file) || $file['error'] !== UPLOAD_ERR_OK) {
+        return $oldFileName; // Mantener archivo anterior si no hay uno nuevo
+    }
+    
+    // Validación de tipos MIME
+    $allowedTypes = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png', 
+        'image/gif' => 'gif',
+        'image/webp' => 'webp'
+    ];
+    
+    // Verificar tipo MIME real del archivo
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mimeType = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+    
+    if (!array_key_exists($mimeType, $allowedTypes)) {
+        throw new Exception('Tipo de archivo no permitido. Solo JPEG, PNG, GIF y WebP.');
+    }
+    
+    // Validar tamaño (máximo 5MB)
+    $maxSize = 5 * 1024 * 1024;
+    if ($file['size'] > $maxSize) {
+        throw new Exception('El archivo es demasiado grande. Máximo 5MB.');
+    }
+    
+    // Crear directorio si no existe
+    $uploadDir = '../uploads/' . $category . '/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+    
+    // Generar nombre único
+    $extension = $allowedTypes[$mimeType];
+    $fileName = uniqid($category . '_') . '.' . $extension;
+    $finalPath = $uploadDir . $fileName;
+    
+    // Procesar y redimensionar imagen a 366x200
+    try {
+        resizeImageTo366x200($file['tmp_name'], $finalPath, $mimeType);
+    } catch (Exception $e) {
+        throw new Exception('Error al procesar la imagen: ' . $e->getMessage());
+    }
+    
+    // Eliminar archivo anterior si existe
+    if ($oldFileName && $oldFileName !== $fileName) {
+        $oldPath = $uploadDir . $oldFileName;
+        if (file_exists($oldPath)) {
+            @unlink($oldPath);
+        }
+    }
+    
+    return $fileName;
+}
+
+
+function resizeImageTo366x200($sourcePath, $destPath, $mimeType) {
+    // Crear imagen desde archivo temporal
+    switch ($mimeType) {
+        case 'image/jpeg':
+            $sourceImage = imagecreatefromjpeg($sourcePath);
+            break;
+        case 'image/png':
+            $sourceImage = imagecreatefrompng($sourcePath);
+            break;
+        case 'image/gif':
+            $sourceImage = imagecreatefromgif($sourcePath);
+            break;
+        case 'image/webp':
+            $sourceImage = imagecreatefromwebp($sourcePath);
+            break;
+        default:
+            throw new Exception('Tipo de imagen no soportado');
+    }
+    
+    if (!$sourceImage) {
+        throw new Exception('No se pudo cargar la imagen');
+    }
+    
+    $sourceWidth = imagesx($sourceImage);
+    $sourceHeight = imagesy($sourceImage);
+    
+    // Calcular el área a recortar para mantener proporción 366:200 (1.83:1)
+    $targetRatio = 366 / 200; // 1.83
+    $sourceRatio = $sourceWidth / $sourceHeight;
+    
+    if ($sourceRatio > $targetRatio) {
+        // Imagen más ancha, recortar los lados
+        $newSourceWidth = $sourceHeight * $targetRatio;
+        $newSourceHeight = $sourceHeight;
+        $srcX = ($sourceWidth - $newSourceWidth) / 2;
+        $srcY = 0;
+    } else {
+        // Imagen más alta, recortar arriba y abajo
+        $newSourceWidth = $sourceWidth;
+        $newSourceHeight = $sourceWidth / $targetRatio;
+        $srcX = 0;
+        $srcY = ($sourceHeight - $newSourceHeight) / 2;
+    }
+    
+    // Crear imagen de destino 366x200
+    $destImage = imagecreatetruecolor(366, 200);
+    
+    // Preservar transparencia para PNG
+    if ($mimeType === 'image/png') {
+        imagealphablending($destImage, false);
+        imagesavealpha($destImage, true);
+        $transparent = imagecolorallocatealpha($destImage, 255, 255, 255, 127);
+        imagefilledrectangle($destImage, 0, 0, 366, 200, $transparent);
+    }
+    
+    // Redimensionar y recortar a 366x200
+    imagecopyresampled(
+        $destImage, $sourceImage, 
+        0, 0, $srcX, $srcY, 
+        366, 200, 
+        $newSourceWidth, $newSourceHeight
+    );
+    
+    // Guardar imagen
+    switch ($mimeType) {
+        case 'image/jpeg':
+            imagejpeg($destImage, $destPath, 90);
+            break;
+        case 'image/png':
+            imagepng($destImage, $destPath, 8);
+            break;
+        case 'image/gif':
+            imagegif($destImage, $destPath);
+            break;
+        case 'image/webp':
+            imagewebp($destImage, $destPath, 90);
+            break;
+    }
+    
+    // Liberar memoria
+    imagedestroy($sourceImage);
+    imagedestroy($destImage);
+}
+
+/**
+ * Eliminar imagen
+ */
+function deleteImageSimple($category, $fileName) {
+    if (!$fileName) return;
+    
+    $filePath = "../uploads/{$category}/{$fileName}";
+    if (file_exists($filePath)) {
+        @unlink($filePath);
     }
 }
 ?>

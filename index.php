@@ -133,7 +133,9 @@
           <!-- Package 1 - Hotel -->
           <div class="package-card">
             <div class="package-image">
-              <img src="imagenes/Hoteles/<?= $hoteles[0]['NOMBRE'] ?>_1.png" alt="<?= $hoteles[0]['NOMBRE'] ?>" onerror="this.src='/api/placeholder/500/300'" />
+                <img src="<?= $hoteles[0]['FOTO_URL'] ? 'uploads/hoteles/' . $hoteles[0]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                    alt="<?= $hoteles[0]['NOMBRE'] ?>" 
+                    onerror="this.src='uploads/placeholder.jpg'" />
             </div>
             <div class="package-details">
               <h3><?= $hoteles[0]['NOMBRE'] ?></h3>
@@ -161,7 +163,9 @@
           <!-- Package 2 - Restaurante -->
           <div class="package-card">
             <div class="package-image">
-              <img src="imagenes/Restaurantes/<?= $restaurantes[0]['NOMBRE'] ?>_1.png" alt="<?= $restaurantes[0]['NOMBRE'] ?>" onerror="this.src='/api/placeholder/500/300'" />
+                <img src="<?= $restaurantes[0]['FOTO_URL'] ? 'uploads/restaurantes/' . $restaurantes[0]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                    alt="<?= $restaurantes[0]['NOMBRE'] ?>" 
+                    onerror="this.src='uploads/placeholder.jpg'" />
             </div>
             <div class="package-details">
               <h3><?= $restaurantes[0]['NOMBRE'] ?></h3>
@@ -188,7 +192,9 @@
           <!-- Package 3 - Punto de Interés -->
           <div class="package-card">
             <div class="package-image">
-              <img src="imagenes/Punto de Interes/<?= $puntos_interes[0]['NOMBRE'] ?>_1.png" alt="<?= $puntos_interes[0]['NOMBRE'] ?>" onerror="this.src='/api/placeholder/500/300'" />
+                <img src="<?= $puntos_interes[0]['FOTO_URL'] ? 'uploads/puntos_interes/' . $puntos_interes[0]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                    alt="<?= $puntos_interes[0]['NOMBRE'] ?>" 
+                    onerror="this.src='uploads/placeholder.jpg'" />
             </div>
             <div class="package-details">
               <h3><?= $puntos_interes[0]['NOMBRE'] ?></h3>

@@ -282,6 +282,28 @@ body {
   font-size: 0.9rem;
 }
 
+.business-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.business-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.package-image {
+  height: 200px !important;
+}
+
+.package-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .info-item {
   display: flex;
   align-items: center;

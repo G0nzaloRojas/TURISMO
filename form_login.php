@@ -43,8 +43,8 @@
 
           <form class="register-form" action="login.php" method="POST">
             <div class="form-group">
-              <label for="username"><i class="fas fa-user"></i> Nombre de usuario</label>
-              <input type="text" id="username" name="username" required>
+              <label for="email"><i class="fas fa-user"></i> Email</label>
+              <input type="text" id="email" name="email" required>
             </div>
 
             <div class="form-group">
