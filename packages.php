@@ -185,7 +185,9 @@
             data-duration="7"
           >
             <div class="package-image">
-              <img src="imagenes/Hoteles/Faena Hotel Buenos Aires_1.png" alt="<?= $hotel[0]['NOMBRE']?>" />
+               <img src="<?= $hotel[0]['FOTO_URL'] ? 'uploads/hoteles/' . $hotel[0]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                    alt="<?= $hotel[0]['NOMBRE'] ?>" 
+                    onerror="this.src='uploads/placeholder.jpg'" />
               <span class="package-badge">Más vendido</span>
             </div>
             <div class="package-info">
@@ -255,7 +257,9 @@
             data-duration="7"
           >
             <div class="package-image">
-              <img src="imagenes\Restaurantes\Don Julio_3.png" alt="<?= $restaurantes[0]['NOMBRE']?>" />
+               <img src="<?= $restaurantes[0]['FOTO_URL'] ? 'uploads/restaurantes/' . $restaurantes[0]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                    alt="<?= $restaurantes[0]['NOMBRE'] ?>" 
+                    onerror="this.src='uploads/placeholder.jpg'" />
               <span class="package-badge">Recomendado</span>
             </div>
             <div class="package-info">
@@ -318,7 +322,9 @@
             data-duration="3"
           >
           <div class="package-image">
-              <img src="imagenes\Punto de Interes\Casa rosada_1.png" alt="<?= $punto_interes[0]['NOMBRE']?>" />
+               <img src="<?= $punto_interes[0]['FOTO_URL'] ? 'uploads/puntos_interes/' . $punto_interes[0]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                    alt="<?= $punto_interes[0]['NOMBRE'] ?>" 
+                    onerror="this.src='uploads/placeholder.jpg'" />
               <span class="package-badge">Recomendado</span>
             </div>
             <div class="package-info">
@@ -381,7 +387,9 @@
             data-duration="10"
           >
           <div class="package-image">
-              <img src="imagenes/Hoteles/Palacio Duhau - Park Hyatt_1.png" alt="<?= $hotel[1]['NOMBRE']?>" />
+               <img src="<?= $hotel[1]['FOTO_URL'] ? 'uploads/hoteles/' . $hotel[1]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                    alt="<?= $hotel[1]['NOMBRE'] ?>" 
+                    onerror="this.src='uploads/placeholder.jpg'" />
               <span class="package-badge">Más vendido</span>
             </div>
             <div class="package-info">
@@ -451,7 +459,9 @@
             data-duration="7"
           >
           <div class="package-image">
-              <img src="imagenes\Restaurantes\Puerto Cristal_1.png" alt="<?= $restaurantes[1]['NOMBRE']?>" />
+               <img src="<?= $restaurantes[1]['FOTO_URL'] ? 'uploads/restaurantes/' . $restaurantes[1]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                    alt="<?= $restaurantes[1]['NOMBRE'] ?>" 
+                    onerror="this.src='uploads/placeholder.jpg'" />
               <span class="package-badge">Recomendado</span>
             </div>
             <div class="package-info">
@@ -514,7 +524,9 @@
             data-duration="7"
           >
           <div class="package-image">
-              <img src="imagenes\Punto de Interes\Jardin Japones_2.png" alt="<?= $punto_interes[1]['NOMBRE']?>" />
+               <img src="<?= $punto_interes[1]['FOTO_URL'] ? 'uploads/puntos_interes/' . $punto_interes[1]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                    alt="<?= $punto_interes[1]['NOMBRE'] ?>" 
+                    onerror="this.src='uploads/placeholder.jpg'" />
               <span class="package-badge">Recomendado</span>
             </div>
             <div class="package-info">

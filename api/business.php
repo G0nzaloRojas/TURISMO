@@ -165,6 +165,7 @@ function createRestaurante() {
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
+    $url = mysqli_real_escape_string($conexion, $_POST['url']);
     $id_comida = !empty($_POST['id_comida']) ? intval($_POST['id_comida']) : 'NULL';
     $precio_minimo = !empty($_POST['precio_minimo']) ? intval($_POST['precio_minimo']) : 'NULL';
     $precio_maximo = !empty($_POST['precio_maximo']) ? intval($_POST['precio_maximo']) : 'NULL';
@@ -181,9 +182,10 @@ function createRestaurante() {
     }
     
     $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
+    $urlField = $url !== 'NULL' ? "'$url'" : 'NULL';
     
-    $query = "INSERT INTO restaurantes (NOMBRE, UBICACION, DESCRIPCION, ID_COMIDA, PRECIO_MINIMO, PRECIO_MAXIMO, id_usuario, FOTO_URL, CALIFICACION) 
-              VALUES ('$nombre', '$ubicacion', '$descripcion', $id_comida, $precio_minimo, $precio_maximo, $id_usuario, $fotoField, 5)";
+    $query = "INSERT INTO restaurantes (NOMBRE, UBICACION, DESCRIPCION, ID_COMIDA, PRECIO_MINIMO, PRECIO_MAXIMO, id_usuario, FOTO_URL, URL, CALIFICACION) 
+              VALUES ('$nombre', '$ubicacion', '$descripcion', $id_comida, $precio_minimo, $precio_maximo, $id_usuario, $fotoField, $urlField, 5)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Restaurante creado correctamente', 'id' => mysqli_insert_id($conexion)]);
@@ -201,6 +203,7 @@ function createHotel() {
     $id_usuario = intval($_SESSION['id']);
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
+    $url = mysqli_real_escape_string($conexion, $_POST['url']);
     $precio_minimo = !empty($_POST['precio_minimo']) ? intval($_POST['precio_minimo']) : 0;
     $precio_maximo = !empty($_POST['precio_maximo']) ? intval($_POST['precio_maximo']) : 0;
     $calificacion = !empty($_POST['calificacion']) ? floatval($_POST['calificacion']) : 0;
@@ -220,9 +223,10 @@ function createHotel() {
     }
     
     $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
+    $urlField = $url !== 'NULL' ? "'$url'" : 'NULL';
     
-    $query = "INSERT INTO hoteles (NOMBRE, UBICACION, PRECIO_MINIMO, PRECIO_MAXIMO, CALIFICACION, HUESPEDES, PILETA, DESAYUNO, id_usuario, FOTO_URL) 
-              VALUES ('$nombre', '$ubicacion', $precio_minimo, $precio_maximo, $calificacion, $huespedes, '$pileta', '$desayuno', $id_usuario, $fotoField)";
+    $query = "INSERT INTO hoteles (NOMBRE, UBICACION, PRECIO_MINIMO, PRECIO_MAXIMO, CALIFICACION, HUESPEDES, PILETA, DESAYUNO, id_usuario, FOTO_URL, URL) 
+              VALUES ('$nombre', '$ubicacion', $precio_minimo, $precio_maximo, $calificacion, $huespedes, '$pileta', '$desayuno', $id_usuario, $fotoField, $urlField)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Hotel creado correctamente', 'id' => mysqli_insert_id($conexion)]);
@@ -241,6 +245,7 @@ function createAlquiler() {
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
+    $url = mysqli_real_escape_string($conexion, $_POST['url']);
     $precio_semana = !empty($_POST['precio_semana']) ? intval($_POST['precio_semana']) : 0;
     $calificacion = !empty($_POST['calificacion']) ? intval($_POST['calificacion']) : 1;
     $banios = !empty($_POST['banios']) ? intval($_POST['banios']) : 1;
@@ -261,9 +266,10 @@ function createAlquiler() {
     }
     
     $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
+    $urlField = $url !== 'NULL' ? "'$url'" : 'NULL';
     
-    $query = "INSERT INTO alquiler (NOMBRE, UBICACION, PRECIO_SEMANA, CALIFICACION, BANIOS, DORMITORIOS, CAMAS_DOBLES, CAMAS_SIMPLES, METROS, DESCRIPCION, id_usuario, FOTO_URL) 
-              VALUES ('$nombre', '$ubicacion', $precio_semana, $calificacion, $banios, $dormitorios, $camas_dobles, $camas_simples, $metros, '$descripcion', $id_usuario, $fotoField)";
+    $query = "INSERT INTO alquiler (NOMBRE, UBICACION, PRECIO_SEMANA, CALIFICACION, BANIOS, DORMITORIOS, CAMAS_DOBLES, CAMAS_SIMPLES, METROS, DESCRIPCION, id_usuario, FOTO_URL, URL) 
+              VALUES ('$nombre', '$ubicacion', $precio_semana, $calificacion, $banios, $dormitorios, $camas_dobles, $camas_simples, $metros, '$descripcion', $id_usuario, $fotoField, $urlField)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Alquiler creado correctamente', 'id' => mysqli_insert_id($conexion)]);
@@ -282,6 +288,7 @@ function createPuntoInteres() {
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
+    $url = mysqli_real_escape_string($conexion, $_POST['url']);
     $id_actividad = !empty($_POST['id_actividad']) ? intval($_POST['id_actividad']) : 1;
     $precio = !empty($_POST['precio']) ? intval($_POST['precio']) : 0;
     $calificacion = !empty($_POST['calificacion']) ? floatval($_POST['calificacion']) : 'NULL';
@@ -290,7 +297,6 @@ function createPuntoInteres() {
     $foto_url = null;
     if (isset($_FILES['foto'])) {
         try {
-            // IMPORTANTE: usar 'puntos_interes' (con underscore) para la carpeta
             $foto_url = handleFileUploadSimple($_FILES['foto'], 'puntos_interes');
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
@@ -299,10 +305,10 @@ function createPuntoInteres() {
     }
     
     $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
+    $urlField = $url !== 'NULL' ? "'$url'" : 'NULL';
     
-    // IMPORTANTE: usar backticks para la tabla que tiene espacios
-    $query = "INSERT INTO `puntos de interes` (NOMBRE, UBICACION, DESCRIPCION, ID_ACTIVIDAD, PRECIO, CALIFICACION, id_usuario, FOTO_URL) 
-              VALUES ('$nombre', '$ubicacion', '$descripcion', $id_actividad, $precio, $calificacion, $id_usuario, $fotoField)";
+    $query = "INSERT INTO `puntos de interes` (NOMBRE, UBICACION, DESCRIPCION, ID_ACTIVIDAD, PRECIO, CALIFICACION, id_usuario, FOTO_URL, URL) 
+              VALUES ('$nombre', '$ubicacion', '$descripcion', $id_actividad, $precio, $calificacion, $id_usuario, $fotoField, $urlField)";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Punto de interés creado correctamente', 'id' => mysqli_insert_id($conexion)]);
@@ -313,8 +319,6 @@ function createPuntoInteres() {
         echo json_encode(['success' => false, 'message' => 'Error al crear punto de interés: ' . mysqli_error($conexion)]);
     }
 }
-
-
 
 function updateBusiness() {
     global $conexion;
@@ -361,10 +365,10 @@ function updateBusiness() {
     // Validar campos requeridos según la categoría
     if ($category === 'hoteles') {
         // Hoteles solo requieren nombre y ubicación (no tienen descripción)
-        $requiredFields = ['nombre', 'ubicacion'];
+        $requiredFields = ['nombre', 'ubicacion', 'url'];
     } else {
         // Otras categorías requieren nombre, ubicación y descripción
-        $requiredFields = ['nombre', 'ubicacion', 'descripcion'];
+        $requiredFields = ['nombre', 'ubicacion', 'descripcion', 'url'];
     }
     $missing = validateRequired($requiredFields, $_POST);
     
@@ -405,6 +409,7 @@ function updateRestaurante($id) {
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
+    $url = mysqli_real_escape_string($conexion, $_POST['url']);
     $id_comida = !empty($_POST['id_comida']) ? intval($_POST['id_comida']) : 'NULL';
     $precio_minimo = !empty($_POST['precio_minimo']) ? intval($_POST['precio_minimo']) : 'NULL';
     $precio_maximo = !empty($_POST['precio_maximo']) ? intval($_POST['precio_maximo']) : 'NULL';
@@ -421,11 +426,13 @@ function updateRestaurante($id) {
     }
     
     $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
+    $urlField = $url ? "'$url'" : 'NULL';
     
     $query = "UPDATE restaurantes SET 
               NOMBRE = '$nombre', 
               UBICACION = '$ubicacion', 
               DESCRIPCION = '$descripcion', 
+              URL = $urlField,
               ID_COMIDA = $id_comida, 
               PRECIO_MINIMO = $precio_minimo, 
               PRECIO_MAXIMO = $precio_maximo,
@@ -452,6 +459,7 @@ function updateHotel($id) {
     
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
+    $url = mysqli_real_escape_string($conexion, $_POST['url']);
     $precio_minimo = !empty($_POST['precio_minimo']) ? intval($_POST['precio_minimo']) : 0;
     $precio_maximo = !empty($_POST['precio_maximo']) ? intval($_POST['precio_maximo']) : 0;
     $calificacion = !empty($_POST['calificacion']) ? floatval($_POST['calificacion']) : 0;
@@ -471,10 +479,12 @@ function updateHotel($id) {
     }
     
     $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
+    $urlField = $url ? "'$url'" : 'NULL';
     
     $query = "UPDATE hoteles SET 
               NOMBRE = '$nombre', 
               UBICACION = '$ubicacion', 
+              URL = $urlField,
               PRECIO_MINIMO = $precio_minimo, 
               PRECIO_MAXIMO = $precio_maximo, 
               CALIFICACION = $calificacion, 
@@ -505,6 +515,7 @@ function updateAlquiler($id) {
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
+    $url = mysqli_real_escape_string($conexion, $_POST['url']);
     $precio_semana = !empty($_POST['precio_semana']) ? intval($_POST['precio_semana']) : 0;
     $calificacion = !empty($_POST['calificacion']) ? intval($_POST['calificacion']) : 1;
     $banios = !empty($_POST['banios']) ? intval($_POST['banios']) : 1;
@@ -525,6 +536,7 @@ function updateAlquiler($id) {
     }
     
     $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
+    $urlField = $url ? "'$url'" : 'NULL';
     
     $query = "UPDATE alquiler SET 
               NOMBRE = '$nombre', 
@@ -537,6 +549,7 @@ function updateAlquiler($id) {
               CAMAS_SIMPLES = $camas_simples, 
               METROS = $metros, 
               DESCRIPCION = '$descripcion',
+              URL = $urlField,
               FOTO_URL = $fotoField
               WHERE ID = $id";
     
@@ -561,6 +574,7 @@ function updatePuntoInteres($id) {
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $ubicacion = mysqli_real_escape_string($conexion, $_POST['ubicacion']);
     $descripcion = mysqli_real_escape_string($conexion, $_POST['descripcion']);
+    $url = mysqli_real_escape_string($conexion, $_POST['url']);
     $id_actividad = !empty($_POST['id_actividad']) ? intval($_POST['id_actividad']) : 1;
     $precio = !empty($_POST['precio']) ? intval($_POST['precio']) : 0;
     $calificacion = !empty($_POST['calificacion']) ? floatval($_POST['calificacion']) : 'NULL';
@@ -577,12 +591,14 @@ function updatePuntoInteres($id) {
     }
     
     $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
+    $urlField = $url ? "'$url'" : 'NULL';
     
     // IMPORTANTE: usar backticks para la tabla
     $query = "UPDATE `puntos de interes` SET 
               NOMBRE = '$nombre', 
               UBICACION = '$ubicacion', 
               DESCRIPCION = '$descripcion', 
+              URL = $urlField,
               ID_ACTIVIDAD = $id_actividad, 
               PRECIO = $precio, 
               CALIFICACION = $calificacion,

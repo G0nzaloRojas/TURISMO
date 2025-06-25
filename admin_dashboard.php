@@ -137,6 +137,12 @@ $user_role = $_SESSION['id_cargo'];
                 </div>
 
                 <div class="form-group">
+                    <label class="form-label" for="businessUrl">URL del Sitio Web</label>
+                    <input type="url" class="form-input" id="businessUrl" name="url" placeholder="https://ejemplo.com">
+                    <small style="color: #666; font-size: 12px;">Opcional - URL del sitio web o página oficial del negocio</small>
+                </div>
+
+                <div class="form-group">
                     <label class="form-label" for="businessPhoto">Foto del Negocio</label>
                     <input type="file" class="form-input" id="businessPhoto" accept="image/*">
                     <div id="currentPhoto" style="margin-top: 10px; display: none;">

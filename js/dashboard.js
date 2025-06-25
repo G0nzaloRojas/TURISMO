@@ -282,6 +282,11 @@ function createBusinessCard(business) {
               ? `<div class="info-item"><i class="fas fa-dollar-sign"></i> ${business.PRECIO_MINIMO} - ${business.PRECIO_MAXIMO}</div>`
               : ""
           }
+          ${
+            business.URL
+              ? `<div class="info-item"><i class="fas fa-globe"></i> <a href="${business.URL}" target="_blank" rel="noopener">Sitio Web</a></div>`
+              : ""
+          }
         </div>
       `;
       break;
@@ -308,6 +313,11 @@ function createBusinessCard(business) {
               ? '<div class="info-item"><i class="fas fa-coffee"></i> Desayuno</div>'
               : ""
           }
+          ${
+            business.URL
+              ? `<div class="info-item"><i class="fas fa-globe"></i> <a href="${business.URL}" target="_blank" rel="noopener">Sitio Web</a></div>`
+              : ""
+          }
         </div>
       `;
       break;
@@ -316,10 +326,23 @@ function createBusinessCard(business) {
       icon = "home";
       info = `
         <div class="business-info">
-          <div class="info-item"><i class="fas fa-star"></i> ${business.CALIFICACION}/10</div>
-          <div class="info-item"><i class="fas fa-bed"></i> ${business.DORMITORIOS} dorm, ${business.BANIOS} baños</div>
-          <div class="info-item"><i class="fas fa-ruler-combined"></i> ${business.METROS}m²</div>
-          <div class="info-item"><i class="fas fa-dollar-sign"></i> ${business.PRECIO_SEMANA}/semana</div>
+          <div class="info-item"><i class="fas fa-star"></i> ${
+            business.CALIFICACION
+          }/10</div>
+          <div class="info-item"><i class="fas fa-bed"></i> ${
+            business.DORMITORIOS
+          } dorm, ${business.BANIOS} baños</div>
+          <div class="info-item"><i class="fas fa-ruler-combined"></i> ${
+            business.METROS
+          }m²</div>
+          <div class="info-item"><i class="fas fa-dollar-sign"></i> ${
+            business.PRECIO_SEMANA
+          }/semana</div>
+          ${
+            business.URL
+              ? `<div class="info-item"><i class="fas fa-globe"></i> <a href="${business.URL}" target="_blank" rel="noopener">Sitio Web</a></div>`
+              : ""
+          }
         </div>
       `;
       break;
@@ -338,6 +361,11 @@ function createBusinessCard(business) {
           <div class="info-item"><i class="fas fa-dollar-sign"></i> ${
             business.PRECIO > 0 ? business.PRECIO : "Gratis"
           }</div>
+          ${
+            business.URL
+              ? `<div class="info-item"><i class="fas fa-globe"></i> <a href="${business.URL}" target="_blank" rel="noopener">Sitio Web</a></div>`
+              : ""
+          }
         </div>
       `;
       break;
@@ -398,12 +426,20 @@ function openBusinessModal(id = null) {
       fillFormWithBusiness(business);
     } else {
       title.textContent = "Agregar Nuevo Negocio";
-      form.reset();
+      form.reset(); // Esto debería resetear todos los campos incluido URL
       document.getElementById("businessCategory").value = currentCategory;
 
-      // IMPORTANTE: Limpiar vista previa de foto cuando es nuevo negocio
+      // IMPORTANTE: Limpiar específicamente estos campos para estar seguros
       document.getElementById("currentPhoto").style.display = "none";
       document.getElementById("businessPhoto").value = "";
+      document.getElementById("businessUrl").value = ""; // ASEGURAR QUE SE LIMPIE
+
+      // También limpiar otros campos comunes
+      document.getElementById("businessName").value = "";
+      document.getElementById("businessLocation").value = "";
+      if (document.getElementById("businessDescription")) {
+        document.getElementById("businessDescription").value = "";
+      }
     }
   }
 
@@ -429,6 +465,9 @@ function hideAllFields() {
   const businessDescriptionGroup = document.querySelector(
     'label[for="businessDescription"]'
   ).parentElement;
+  const businessUrlGroup = document.querySelector(
+    'label[for="businessUrl"]'
+  ).parentElement;
   const businessPhotoGroup = document.querySelector(
     'label[for="businessPhoto"]'
   ).parentElement;
@@ -437,10 +476,12 @@ function hideAllFields() {
     businessNameGroup.style.display = "none";
     businessLocationGroup.style.display = "none";
     businessDescriptionGroup.style.display = "none";
+    businessUrlGroup.style.display = "none"; // AGREGAR ESTA LÍNEA
     businessPhotoGroup.style.display = "none";
   } else {
     businessNameGroup.style.display = "block";
     businessLocationGroup.style.display = "block";
+    businessUrlGroup.style.display = "block"; // AGREGAR ESTA LÍNEA
     // Para hoteles, ocultar descripción ya que no la tienen en la BD
     businessDescriptionGroup.style.display =
       currentCategory === "hoteles" ? "none" : "block";
@@ -563,6 +604,7 @@ function fillFormWithBusiness(business) {
   document.getElementById("businessId").value = business.ID;
   document.getElementById("businessName").value = business.NOMBRE;
   document.getElementById("businessLocation").value = business.UBICACION;
+  document.getElementById("businessUrl").value = business.URL || "";
 
   // Solo llenar descripción si no es hotel
   if (currentCategory !== "hoteles") {
@@ -674,9 +716,17 @@ function fillFormWithBusiness(business) {
 function closeBusinessModal() {
   document.getElementById("businessModal").style.display = "none";
 
-  // IMPORTANTE: Limpiar el input de foto al cerrar el modal
+  // IMPORTANTE: Limpiar todos los campos al cerrar el modal
   document.getElementById("businessPhoto").value = "";
+  document.getElementById("businessUrl").value = "";
   document.getElementById("currentPhoto").style.display = "none";
+
+  // Limpiar otros campos por seguridad
+  document.getElementById("businessName").value = "";
+  document.getElementById("businessLocation").value = "";
+  if (document.getElementById("businessDescription")) {
+    document.getElementById("businessDescription").value = "";
+  }
 
   editingId = null;
   clearMessages();
@@ -725,6 +775,11 @@ document
         "ubicacion",
         document.getElementById("businessLocation").value
       );
+
+      const url = document.getElementById("businessUrl").value;
+      if (url) {
+        formData.append("url", url);
+      }
 
       // Para hoteles no enviar descripción
       if (category !== "hoteles") {
