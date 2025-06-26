@@ -43,7 +43,7 @@
           <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
         </a></li>
         <li class="user-greeting">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#618c78"><path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q53 0 100-15.5t86-44.5q-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160Zm0-360q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm0-60Zm0 360Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#618c78"><path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0-83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q53 0 100-15.5t86-44.5q-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160Zm0-360q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm0-60Zm0 360Z"/></svg>
           <span>Hola, <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
         </li>
       <?php else: ?>
@@ -56,7 +56,7 @@
     <section class="about-hero">
       <div class="hero-content">
         <h1>Sobre Nosotros</h1>
-        <p>Más de 15 años creando experiencias inolvidables</p>
+        <p>Una nueva visión del turismo porteño</p>
       </div>
     </section>
 
@@ -66,10 +66,11 @@
         <div class="about-intro">
           <h2>Nuestra Historia</h2>
           <p>
-            Buenos Aires Tour nació en 2010 con un sueño: hacer que cada viaje
-            sea una experiencia transformadora. Desde entonces, hemos ayudado a
-            más de 50,000 viajeros a descubrir los destinos más increíbles de
-            Argentina, creando recuerdos que duran toda la vida.
+            Buenos Aires Tour nació en 2024 con un sueño: revolucionar el turismo
+            en Buenos Aires ofreciendo experiencias auténticas y personalizadas. 
+            Somos un equipo de jóvenes emprendedores apasionados por mostrar los 
+            rincones más genuinos de nuestra ciudad, creando conexiones reales 
+            entre los viajeros y la verdadera esencia porteña.
           </p>
         </div>
 
@@ -77,63 +78,51 @@
         <div class="timeline">
           <div class="timeline-item">
             <div class="timeline-content">
-              <h3>El Comienzo</h3>
+              <h3>La Idea</h3>
               <p>
-                Iniciamos operaciones con un pequeño equipo de 5 personas
-                apasionadas por el turismo, ofreciendo tours por Buenos Aires.
+                Surge la visión de crear una agencia diferente, enfocada en 
+                experiencias boutique y turismo sustentable en Buenos Aires.
               </p>
             </div>
-            <div class="timeline-year">2010</div>
+            <div class="timeline-year">2024</div>
             <div style="width: 45%"></div>
           </div>
 
           <div class="timeline-item">
             <div style="width: 45%"></div>
-            <div class="timeline-year">2013</div>
-            <div class="timeline-content">
-              <h3>Expansión Nacional</h3>
-              <p>
-                Ampliamos nuestros servicios para incluir los destinos más
-                emblemáticos de Argentina: Bariloche, Mendoza y las Cataratas
-                del Iguazú.
-              </p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-content">
-              <h3>Reconocimiento Internacional</h3>
-              <p>
-                Recibimos el premio "Mejor Agencia de Turismo Regional" y
-                comenzamos a recibir viajeros de todo el mundo.
-              </p>
-            </div>
-            <div class="timeline-year">2017</div>
-            <div style="width: 45%"></div>
-          </div>
-
-          <div class="timeline-item">
-            <div style="width: 45%"></div>
-            <div class="timeline-year">2020</div>
-            <div class="timeline-content">
-              <h3>Innovación Digital</h3>
-              <p>
-                Lanzamos nuestra plataforma digital y app móvil, permitiendo a
-                nuestros clientes planificar y reservar sus viajes de forma más
-                fácil.
-              </p>
-            </div>
-          </div>
-
-          <div class="timeline-item">
-            <div class="timeline-content">
-              <h3>Liderazgo en Turismo</h3>
-              <p>
-                Hoy somos líderes en turismo receptivo, con más de 100 empleados
-                y presencia en los principales destinos turísticos del país.
-              </p>
-            </div>
             <div class="timeline-year">2025</div>
+            <div class="timeline-content">
+              <h3>Lanzamiento Oficial</h3>
+              <p>
+                Abrimos nuestras puertas con un equipo fundador de 4 especialistas 
+                y nuestros primeros tours exclusivos por barrios porteños.
+                Meta: Establecernos como referente en tours boutique y obtener 
+                las primeras certificaciones de turismo sustentable.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div style="width: 45%"></div>
+            <div class="timeline-year">2026</div>
+            <div class="timeline-content">
+              <h3>Expansión Planificada</h3>
+              <p>
+                Objetivo: Ampliar servicios a destinos clave como Bariloche, 
+                Mendoza y las Cataratas del Iguazú manteniendo nuestro enfoque boutique.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <h3>Visión de Futuro</h3>
+              <p>
+                Aspiramos a ser líderes en turismo experiencial argentino, 
+                con presencia consolidada y reconocimiento internacional.
+              </p>
+            </div>
+            <div class="timeline-year">2027</div>
             <div style="width: 45%"></div>
           </div>
         </div>
@@ -151,8 +140,8 @@
             </div>
             <h3>Pasión</h3>
             <p>
-              Amamos lo que hacemos y eso se refleja en cada detalle de nuestros
-              servicios.
+              Amamos Buenos Aires y eso se refleja en cada detalle de nuestras 
+              experiencias personalizadas.
             </p>
           </div>
 
@@ -160,10 +149,10 @@
             <div class="value-icon">
               <i class="fas fa-handshake"></i>
             </div>
-            <h3>Compromiso</h3>
+            <h3>Autenticidad</h3>
             <p>
-              Nos comprometemos a superar las expectativas de nuestros clientes
-              en cada viaje.
+              Nos comprometemos a mostrar la verdadera Buenos Aires, conectando 
+              a nuestros huéspedes con la cultura local genuina.
             </p>
           </div>
 
@@ -173,8 +162,8 @@
             </div>
             <h3>Sostenibilidad</h3>
             <p>
-              Promovemos el turismo responsable y la preservación de nuestros
-              destinos.
+              Promovemos el turismo responsable, apoyando negocios locales y 
+              preservando nuestro patrimonio cultural.
             </p>
           </div>
         </div>
@@ -186,20 +175,20 @@
       <div class="container">
         <div class="stats-grid">
           <div class="stat-item">
-            <div class="stat-number" data-count="50000">0</div>
-            <div class="stat-label">Viajeros Felices</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number" data-count="250">0</div>
-            <div class="stat-label">Destinos</div>
-          </div>
-          <div class="stat-item">
             <div class="stat-number" data-count="15">0</div>
-            <div class="stat-label">Años de Experiencia</div>
+            <div class="stat-label">Experiencias Únicas</div>
           </div>
           <div class="stat-item">
-            <div class="stat-number" data-count="98">0</div>
-            <div class="stat-label">% Satisfacción</div>
+            <div class="stat-number" data-count="24">0</div>
+            <div class="stat-label">Barrios por Descubrir</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-count="1">0</div>
+            <div class="stat-label">Año de Innovación</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-count="100">0</div>
+            <div class="stat-label">% Compromiso</div>
           </div>
         </div>
       </div>
@@ -212,10 +201,10 @@
         <div class="team-grid">
           <div class="team-member">
             <div class="member-photo">
-              <img src="/api/placeholder/200/200" alt="María González" />
+              <img src="/api/placeholder/200/200" alt="Juan Agustin Murad" />
             </div>
-            <h4 class="member-name">Jorge Argibay</h4>
-            <p class="member-position">CEO & Fundadora</p>
+            <h4 class="member-name">Juan Agustin Murad</h4>
+            <p class="member-position">CEO & Fundador</p>
             <div class="member-social">
               <a href="#"><i class="fab fa-linkedin"></i></a>
               <a href="#"><i class="fab fa-twitter"></i></a>
@@ -224,7 +213,7 @@
 
           <div class="team-member">
             <div class="member-photo">
-              <img src="/api/placeholder/200/200" alt="Carlos Rodríguez" />
+              <img src="/api/placeholder/200/200" alt="Juan Ignacio Duran" />
             </div>
             <h4 class="member-name">Juan Ignacio Duran</h4>
             <p class="member-position">Director de Operaciones</p>
@@ -236,10 +225,10 @@
 
           <div class="team-member">
             <div class="member-photo">
-              <img src="/api/placeholder/200/200" alt="Ana Martínez" />
+              <img src="/api/placeholder/200/200" alt="Gonzalo Rojas" />
             </div>
             <h4 class="member-name">Gonzalo Rojas</h4>
-            <p class="member-position">Jefa de Marketing</p>
+            <p class="member-position">Jefe de Marketing</p>
             <div class="member-social">
               <a href="#"><i class="fab fa-linkedin"></i></a>
               <a href="#"><i class="fab fa-twitter"></i></a>
@@ -248,7 +237,7 @@
 
           <div class="team-member">
             <div class="member-photo">
-              <img src="/api/placeholder/200/200" alt="Diego Silva" />
+              <img src="/api/placeholder/200/200" alt="Matias Lema" />
             </div>
             <h4 class="member-name">Matias Lema</h4>
             <p class="member-position">Coordinador de Guías</p>
@@ -259,34 +248,7 @@
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Partners Section -->
-    <section class="partners-section">
-      <div class="container">
-        <h2 class="section-title">Nuestros Aliados</h2>
-        <div class="partners-grid">
-          <div class="partner-logo">
-            <img src="/api/placeholder/150/60" alt="Jorge Argibay" />
-          </div>
-          <div class="partner-logo">
-            <img src="/api/placeholder/150/60" alt="Jorge Argibay" />
-          </div>
-          <div class="partner-logo">
-            <img src="/api/placeholder/150/60" alt="Jorge Argibay" />
-          </div>
-          <div class="partner-logo">
-            <img src="/api/placeholder/150/60" alt="Jorge Argibay" />
-          </div>
-          <div class="partner-logo">
-            <img src="/api/placeholder/150/60" alt="Jorge Argibay" />
-          </div>
-          <div class="partner-logo">
-            <img src="/api/placeholder/150/60" alt="Jorge Argibay" />
-          </div>
-        </div>
-      </div>
-    </section>
+    </section>  
 
     <!-- Footer -->
 <!-- Footer -->
@@ -318,10 +280,10 @@
           <div class="footer-social">
             <h3>Síguenos</h3>
             <div class="social-icons">
-              <a href="#"><i class="fab fa-facebook-f"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-twitter"></i></a>
-              <a href="#"><i class="fab fa-youtube"></i></a>
+              <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.x.com/" target="_blank"><i class="fab fa-twitter"></i></a>
+              <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
             </div>
           </div>
         </div>
@@ -342,4 +304,3 @@
     </script>
   </body>
 </html>
-
