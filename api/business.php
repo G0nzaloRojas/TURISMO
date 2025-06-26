@@ -1133,12 +1133,17 @@ function resizeImageTo366x200($sourcePath, $destPath, $mimeType) {
         imagefilledrectangle($destImage, 0, 0, 366, 200, $transparent);
     }
     
-    // Redimensionar y recortar a 366x200
+    // CORREGIDO: Convertir todos los valores a enteros
+    $finalSrcX = (int)round($srcX);
+    $finalSrcY = (int)round($srcY);
+    $finalSourceWidth = (int)round($newSourceWidth);
+    $finalSourceHeight = (int)round($newSourceHeight);
+
     imagecopyresampled(
         $destImage, $sourceImage, 
-        0, 0, $srcX, $srcY, 
+        0, 0, $finalSrcX, $finalSrcY, 
         366, 200, 
-        $newSourceWidth, $newSourceHeight
+        $finalSourceWidth, $finalSourceHeight
     );
     
     // Guardar imagen
