@@ -10,14 +10,13 @@
     <link rel="icon" type="image/png" href="Imagenes/Logo2.png">    
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" href="img/Logo2.ico" type="image/x-icon">
-    <link rel="stylesheet" href="armar_paquetes.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
     <link rel="stylesheet" href="css/armar_paquetes.css">
-  </head>
-  <body>
+</head>
+<body>
     
     <!-- Navbar -->
     <nav class="navbar">
@@ -60,541 +59,376 @@
     </nav>
 
     <!-- Contenido principal -->
-    <div style="margin-top: 100px;">
+<div style="margin-top: 100px;">
         <?php
                 include ("conexion.php");
 
-                $tipo_hospedaje = $_POST['accommodation-type']?? null;
+                // Obtener parámetros del formulario
+                $tipo_hospedaje = $_POST['accommodation-type'] ?? null;
+                $calificacion_hotel = $_POST['hotel-rating'] ?? null;
+                $huespedes_max = $_POST['max-guests'] ?? null;
+                $pileta = $_POST['pileta'] ?? null;
+                $desayuno = $_POST['desayuno'] ?? null;
+                $dias_hotel = $_POST['dias_hotel'] ?? null;
+                $calificacion_alquiler = $_POST['rental-rating'] ?? null;
+                $cantidad_camas_simples = $_POST['single_bed'] ?? null;
+                $cantidad_camas_dobles = $_POST['double_bed'] ?? null;
+                $cantidad_baños = $_POST['bathrooms'] ?? null;
+                $metros_cuadrados = $_POST['metros2_minimos'] ?? null;
+                $semanas_alquiler = $_POST['semanas_alquiler'] ?? null;
+                $tipo_comida = $_POST['food-type'] ?? null;
+                $calificacion_restaurante = $_POST['restaurant-rating'] ?? null;
+                $tipo_actividad = $_POST['activity-type'] ?? null;
 
-                $calificacion_hotel = $_POST['hotel-rating']?? null;
-                $huespedes_max = $_POST['max-guests']?? null;
-                $pileta = $_POST['pileta']?? null;
-                $desayuno = $_POST['desayuno']?? null;
-                $dias_hotel = $_POST['dias_hotel']?? null;
+                // Arrays para almacenar los resultados
+                $paquetes = array(
+                    'economico' => array('hoteles' => [], 'alquileres' => [], 'restaurantes' => []),
+                    'intermedio' => array('hoteles' => [], 'alquileres' => [], 'restaurantes' => []),
+                    'premium' => array('hoteles' => [], 'alquileres' => [], 'restaurantes' => [])
+                );
 
-                $calificacion_alquiler = $_POST['rental-rating']?? null;
-                $cantidad_camas_simples = $_POST['single_bed']?? null;
-                $cantidad_camas_dobles = $_POST['double_bed']?? null;
-                $cantidad_baños = $_POST['bathrooms']?? null;
-                $metros_cuadrados = $_POST['metros2_minimos']?? null;
-                $semanas_alquiler = $_POST['semanas_alquiler']?? null;
-
-                $tipo_comida = $_POST['food-type']?? null;
-                $calificacion_restaurante = $_POST['restaurant-rating']?? null;
-
-                $tipo_actividad = $_POST['activity-type']?? null;
-                
-                
-                //HOTELES BARATOS
-                if($_POST['accommodation-type'] == "hotel"){  
-                    $consulta1 = mysqli_query($conexion, ("SELECT * FROM hoteles WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) <= (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + (MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3 FROM hoteles) AND HUESPEDES >='$huespedes_max' AND CALIFICACION >= $calificacion_hotel  AND ('$pileta' = 'no' OR '$pileta' = 'si') AND ('$desayuno' = 'no' OR '$desayuno' = 'si') ORDER BY CALIFICACION DESC LIMIT 1"));
-                
-                
-                    //HOTELES INTERMEDIOS    
-                    $consulta2= mysqli_query($conexion,("SELECT * FROM hoteles
-                    WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) > (
-                        SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + 
-                               (MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3
-                        FROM hoteles
-                    )
-                    AND ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) <= (
-                        SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + 
-                               2 * (MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3
-                        FROM hoteles
-                    )
-                    AND HUESPEDES >= '$huespedes_max'
-                    AND CALIFICACION >= '$calificacion_hotel'
-                    AND ('$pileta' = 'no' OR '$pileta' = 'si')
-                    AND ('$desayuno' = 'no' OR '$desayuno' = 'si')
-                    ORDER BY CALIFICACION DESC
-                    LIMIT 1"));
-
-                
-                  //HOTELES CAROS
-                    $consulta3=mysqli_query($conexion, ("SELECT * FROM hoteles
-                    WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) > (
-                        SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + 
-                               2 * (MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3
-                        FROM hoteles
-                    )
-                    AND HUESPEDES >= '$huespedes_max'
-                    AND CALIFICACION >= '$calificacion_hotel'
-                    AND ('$pileta' = 'no' OR '$pileta' = 'si')
-                    AND ('$desayuno' = 'no' OR '$desayuno' = 'si')
-                    ORDER BY CALIFICACION DESC
-                    LIMIT 1"));
+                // CONSULTAS PARA HOTELES
+                if($tipo_hospedaje == "hotel") {
+                    // Hotel Económico
+                    $consulta_hotel_eco = mysqli_query($conexion, "SELECT * FROM hoteles WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) <= (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + (MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3 FROM hoteles) AND HUESPEDES >= '$huespedes_max' AND CALIFICACION >= $calificacion_hotel ORDER BY CALIFICACION DESC LIMIT 1");
                     
+                    // Hotel Intermedio
+                    $consulta_hotel_inter = mysqli_query($conexion, "SELECT * FROM hoteles WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) > (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + (MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3 FROM hoteles) AND ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) <= (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + 2 * (MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3 FROM hoteles) AND HUESPEDES >= '$huespedes_max' AND CALIFICACION >= '$calificacion_hotel' ORDER BY CALIFICACION DESC LIMIT 1");
+                    
+                    // Hotel Caro
+                    $consulta_hotel_caro = mysqli_query($conexion, "SELECT * FROM hoteles WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) > (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + 2 * (MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3 FROM hoteles) AND HUESPEDES >= '$huespedes_max' AND CALIFICACION >= '$calificacion_hotel' ORDER BY CALIFICACION DESC LIMIT 1");
+
+                    // Almacenar resultados
+                    while ($fila = mysqli_fetch_assoc($consulta_hotel_eco)) {
+                        $paquetes['economico']['hoteles'][] = $fila;
+                    }
+                    while ($fila = mysqli_fetch_assoc($consulta_hotel_inter)) {
+                        $paquetes['intermedio']['hoteles'][] = $fila;
+                    }
+                    while ($fila = mysqli_fetch_assoc($consulta_hotel_caro)) {
+                        $paquetes['premium']['hoteles'][] = $fila;
+                    }
                 }
 
-                
-                
-                if($_POST['accommodation-type'] == "alquiler"){
-                  //BUSQUEDA ALQUILERES BARATOS
+                // CONSULTAS PARA ALQUILERES
+                if($tipo_hospedaje == "alquiler") {
+                    // Alquiler Económico
+                    $consulta_alq_eco = mysqli_query($conexion, "SELECT * FROM alquiler WHERE PRECIO_SEMANA <= (SELECT MIN(PRECIO_SEMANA) + (MAX(PRECIO_SEMANA) - MIN(PRECIO_SEMANA)) / 3 FROM alquiler) AND CALIFICACION >= $calificacion_alquiler AND BANIOS >= $cantidad_baños AND CAMAS_DOBLES >= $cantidad_camas_dobles AND CAMAS_SIMPLES >= $cantidad_camas_simples AND METROS >= $metros_cuadrados ORDER BY CALIFICACION DESC, METROS DESC LIMIT 1");
+                    
+                    // Alquiler Intermedio
+                    $consulta_alq_inter = mysqli_query($conexion, "SELECT * FROM alquiler WHERE PRECIO_SEMANA > (SELECT MIN(PRECIO_SEMANA) + (MAX(PRECIO_SEMANA) - MIN(PRECIO_SEMANA)) / 3 FROM alquiler) AND PRECIO_SEMANA <= (SELECT MIN(PRECIO_SEMANA) + 2 * (MAX(PRECIO_SEMANA) - MIN(PRECIO_SEMANA)) / 3 FROM alquiler) AND CALIFICACION >= $calificacion_alquiler AND BANIOS >= $cantidad_baños AND CAMAS_DOBLES >= $cantidad_camas_dobles AND CAMAS_SIMPLES >= $cantidad_camas_simples AND METROS >= $metros_cuadrados ORDER BY CALIFICACION DESC, METROS DESC LIMIT 1");
+                    
+                    // Alquiler Caro
+                    $consulta_alq_caro = mysqli_query($conexion, "SELECT * FROM alquiler WHERE PRECIO_SEMANA > (SELECT MIN(PRECIO_SEMANA) + 2 * (MAX(PRECIO_SEMANA) - MIN(PRECIO_SEMANA)) / 3 FROM alquiler) AND CALIFICACION >= $calificacion_alquiler AND BANIOS >= $cantidad_baños AND CAMAS_DOBLES >= $cantidad_camas_dobles AND CAMAS_SIMPLES >= $cantidad_camas_simples AND METROS >= $metros_cuadrados ORDER BY CALIFICACION DESC, METROS DESC LIMIT 1");
 
-                  $alquiler1=mysqli_query($conexion, "SELECT * FROM alquiler
-                  WHERE PRECIO_SEMANA <= (
-                      SELECT MIN(PRECIO_SEMANA) + 
-                            (MAX(PRECIO_SEMANA) - MIN(PRECIO_SEMANA)) / 3
-                      FROM alquiler
-                  )
-                  AND CALIFICACION >= $calificacion_alquiler
-                  AND BANIOS >= $cantidad_baños
-                  AND CAMAS_DOBLES >= $cantidad_camas_dobles
-                  AND CAMAS_SIMPLES >= $cantidad_camas_simples
-                  AND METROS >= $metros_cuadrados
-                  ORDER BY CALIFICACION DESC, METROS DESC
-                  LIMIT 1
-                  ");
-                  //BUSQUEDA ALQUILERES INTERMEDIOS
-                  $alquiler2=mysqli_query($conexion,"SELECT * FROM alquiler
-                    WHERE PRECIO_SEMANA > (
-                        SELECT MIN(PRECIO_SEMANA) + 
-                              (MAX(PRECIO_SEMANA) - MIN(PRECIO_SEMANA)) / 3
-                        FROM alquiler
-                    )
-                    AND PRECIO_SEMANA <= (
-                        SELECT MIN(PRECIO_SEMANA) + 
-                              2 * (MAX(PRECIO_SEMANA) - MIN(PRECIO_SEMANA)) / 3
-                        FROM alquiler
-                    )
-                    AND CALIFICACION >= $calificacion_alquiler
-                    AND BANIOS >= $cantidad_baños
-                    AND CAMAS_DOBLES >= $cantidad_camas_dobles
-                    AND CAMAS_SIMPLES >= $cantidad_camas_simples
-                    AND METROS >= $metros_cuadrados
-                    ORDER BY CALIFICACION DESC, METROS DESC
-                    LIMIT 1
-                    ");
-                  //BUSQUEDA ALQUILERES CAROS
-                  $alquiler3=mysqli_query($conexion,"SELECT * FROM alquiler
-                  WHERE PRECIO_SEMANA > (
-                      SELECT MIN(PRECIO_SEMANA) + 
-                             2 * (MAX(PRECIO_SEMANA) - MIN(PRECIO_SEMANA)) / 3
-                      FROM alquiler
-                  )
-                  AND CALIFICACION >= $calificacion_alquiler
-                  AND BANIOS >= $cantidad_baños
-                  AND CAMAS_DOBLES >= $cantidad_camas_dobles
-                  AND CAMAS_SIMPLES >= $cantidad_camas_simples
-                  AND METROS >= $metros_cuadrados
-                  ORDER BY CALIFICACION DESC, METROS DESC
-                  LIMIT 1");
+                    // Almacenar resultados
+                    while ($fila = mysqli_fetch_assoc($consulta_alq_eco)) {
+                        $paquetes['economico']['alquileres'][] = $fila;
+                    }
+                    while ($fila = mysqli_fetch_assoc($consulta_alq_inter)) {
+                        $paquetes['intermedio']['alquileres'][] = $fila;
+                    }
+                    while ($fila = mysqli_fetch_assoc($consulta_alq_caro)) {
+                        $paquetes['premium']['alquileres'][] = $fila;
+                    }
                 }
 
-                
-                
-            ?>
-           
+                // CONSULTAS PARA RESTAURANTES
+                // Restaurantes Económicos
+                $consulta_rest_eco = mysqli_query($conexion, "SELECT * FROM restaurantes WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) <= (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3) FROM restaurantes WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)) AND ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida) ORDER BY CALIFICACION DESC LIMIT 2");
 
-            <?php if($tipo_hospedaje == "hotel"): ?>
-              <?php $hoteles1 = []; ?>
-              <?php while ($fila1 = mysqli_fetch_assoc($consulta1)) {
-                  $hoteles1[] = $fila1;
-              } ?>
-              <?php $hoteles2 = []; ?>
-              <?php while ($fila2 = mysqli_fetch_assoc($consulta2)) {
-                  $hoteles2[] = $fila2;
-              } ?>
-              <?php $hoteles3 = []; ?>
-              <?php while ($fila3 = mysqli_fetch_assoc($consulta3)) {
-                  $hoteles3[] = $fila3;
-              } ?>
-            <?php elseif($tipo_hospedaje == "alquiler"): ?>
-              <?php $alquileres1 = []; ?>
-              <?php while ($fila1 = mysqli_fetch_assoc($alquiler1)) {
-                  $alquileres1[] = $fila1;
-              } ?>
-              <?php $alquileres2 = []; ?>
-              <?php while ($fila2 = mysqli_fetch_assoc($alquiler2)) {
-                  $alquileres2[] = $fila2;
-              } ?>
+                // Restaurantes Intermedios
+                $consulta_rest_inter = mysqli_query($conexion, "SELECT * FROM restaurantes WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) > (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3) FROM restaurantes WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)) AND ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) <= (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + (2 * ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3)) FROM restaurantes WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)) AND ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida) ORDER BY CALIFICACION DESC LIMIT 2");
 
-              <?php $alquileres3 = []; ?>
-              <?php while ($fila3 = mysqli_fetch_assoc($alquiler3)) {
-                  $alquileres3[] = $fila3;
-              } ?>
-            <?php endif; ?>
+                // Restaurantes Caros
+                $consulta_rest_caro = mysqli_query($conexion, "SELECT * FROM restaurantes WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) > (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + (2 * ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3)) FROM restaurantes WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)) AND ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida) ORDER BY calificacion DESC LIMIT 2");
 
-                
-                
-        
-        <?php //BUSQUEDA DE RESTAURANTES BARATOS
-              $limite = min(1 * 2, 14);
-              $resultado = mysqli_query($conexion,"SELECT * FROM restaurantes WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) <= (
-                                SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) +
-                                      ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3)
-                                FROM restaurantes
-                                WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)
-                                )
-                                  AND ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)
-                                  ORDER BY CALIFICACION DESC LIMIT 2");
-        ?>
-        <?php  //BUSQUEDA DE RESTAURANTES INTERMEDIOS
+                // Almacenar resultados de restaurantes
+                while ($fila = mysqli_fetch_assoc($consulta_rest_eco)) {
+                    $paquetes['economico']['restaurantes'][] = $fila;
+                }
+                while ($fila = mysqli_fetch_assoc($consulta_rest_inter)) {
+                    $paquetes['intermedio']['restaurantes'][] = $fila;
+                }
+                while ($fila = mysqli_fetch_assoc($consulta_rest_caro)) {
+                    $paquetes['premium']['restaurantes'][] = $fila;
+                }
 
-            $resultado2 = mysqli_query($conexion, "SELECT * FROM restaurantes
-            WHERE ID_COMIDA = $tipo_comida
-              AND ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) > (
-                SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) +
-                       ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3)
-                FROM restaurantes
-                WHERE ID_COMIDA = $tipo_comida
-              )
-              AND ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) <= (
-                SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) +
-                       (2 * ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3))
-                FROM restaurantes
-                WHERE ID_COMIDA = $tipo_comida
-              )
-            ORDER BY CALIFICACION DESC
-            LIMIT 2
-          ");
-          ?> 
-        
-        <?php  //BUSQUEDA DE RESTAURANTES CAROS
-            $resultado3 = mysqli_query($conexion, "SELECT * FROM restaurantes
-            WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) > (
-                SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) +
-                       (2 * ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3))
-                FROM restaurantes
-                WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)
-            )
-            AND ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)
-            ORDER BY calificacion DESC
-            LIMIT 2
-          ");
-        ?> 
-        <?php
-        // Consulta de puntos de interés
-        $consulta_puntos = mysqli_query($conexion, "SELECT * FROM `puntos de interes`
-        WHERE ID_ACTIVIDAD = 1
-        ORDER BY RAND()
-        LIMIT 4");
+                // Puntos de interés (mismos para todos los paquetes)
+                $consulta_puntos = mysqli_query($conexion, "SELECT * FROM `puntos de interes` WHERE ID_ACTIVIDAD = 1 ORDER BY RAND() LIMIT 4");
+                $puntos_interes = [];
+                while ($fila = mysqli_fetch_assoc($consulta_puntos)) {
+                    $puntos_interes[] = $fila;
+                }
         ?>
 
-        
-                   
-
-  <h1>Resultados de Consulta</h1>
-
-  <div class="container">
-
-    <!-- BLOQUE -->
-    <div class="block">
-  <div class="title">Paquete Económico</div>
-
-  <!-- Hospedajes -->
-  <?php if ($tipo_hospedaje == "hotel"): ?>
-    <!-- Hotel Económico -->
-    <div class="row">
-      <h3>Hotel Económico</h3>
-      <?php if (!empty($hoteles1)): ?>
-      <div class="hotel-content">
-        <div class="image-box"></div>
-        <div class="info">
-          <div class="info-header">
-            <p class="name"><?= $hoteles1[0]['NOMBRE'] ?></p>
-            <p class="stars"><?= $hoteles1[0]['CALIFICACION'] ?> ⭐ ESTRELLAS</p>
-          </div>
-          <p class="type"><?= $hoteles1[0]['UBICACION'] ?></p>
-          <p class="description">Ubicado en el centro, excelente para turismo de ciudad.</p>
-          <p class="price">Precio Promedio Por Noche: $<?= (($hoteles1[0]['PRECIO_MAXIMO']+$hoteles1[0]['PRECIO_MINIMO'])/2)?> </p>
-          <p class="price2">Precio Promedio Total con dias: $<?= ((($hoteles1[0]['PRECIO_MAXIMO']+$hoteles1[0]['PRECIO_MINIMO'])/2)*$dias_hotel)?> </p>
-        </div>
-      </div>
-      <?php else: ?>
-          <div class="error-message">No se encontró hotel económico.</div>
-        <?php endif; ?>
-    </div>
-
-    <!-- Hotel Intermedio -->
-    <div class="row">
-      <h3>Hotel Intermedio</h3>
-      <?php if (!empty($hoteles2)): ?>
-      <div class="hotel-content">
-        <div class="image-box"></div>
-        <div class="info">
-          <div class="info-header">
-            <p class="name"><?= $hoteles2[0]['NOMBRE'] ?></p>
-            <p class="stars"><?= $hoteles2[0]['CALIFICACION'] ?> ⭐ ESTRELLAS</p>
-          </div>
-          <p class="type"><?= $hoteles2[0]['UBICACION'] ?></p>
-          <p class="description">Ubicado en el centro, excelente para turismo de ciudad.</p>
-          <p class="price">Precio Promedio Por Noche: $<?= (($hoteles2[0]['PRECIO_MAXIMO']+$hoteles2[0]['PRECIO_MINIMO'])/2)?> </p>
-          <p class="price2">Precio Promedio Total con dias: $<?= ((($hoteles2[0]['PRECIO_MAXIMO']+$hoteles2[0]['PRECIO_MINIMO'])/2)*$dias_hotel)?> </p>
-        </div>
-      </div>
-      <?php else: ?>
-          <div class="error-message">No se encontró hotel intermedio.</div>
-        <?php endif; ?>
-    </div>
-
-    <!-- Hotel Caro -->
-    <div class="row">
-      <h3>Hotel Premium</h3>
-       <?php if (!empty($hoteles3)): ?>
-      <div class="hotel-content">
-        <div class="image-box"></div>
-        <div class="info">
-          <div class="info-header">
-            <p class="name"><?= $hoteles3[0]['NOMBRE'] ?></p>
-            <p class="stars"><?= $hoteles3[0]['CALIFICACION'] ?> ⭐ ESTRELLAS</p>
-          </div>
-          <p class="type"><?= $hoteles3[0]['UBICACION'] ?></p>
-          <p class="description">Ubicado en el centro, excelente para turismo de ciudad.</p>
-          <p class="price">Precio Promedio Por Noche: $<?= $hoteles3[0]['PRECIO_MINIMO']?> - $<?= $hoteles3[0]['PRECIO_MAXIMO']?> </p>
-          <p class="price2">Precio Promedio Total con dias: $<?= ((($hoteles3[0]['PRECIO_MAXIMO']+$hoteles3[0]['PRECIO_MINIMO'])/2)*$dias_hotel)?> </p>
-        </div>
-      
-      </div>
-        <?php else: ?>
-          <div class="error-message">No se encontró hotel caro.</div>
-        <?php endif; ?>
-    </div>
-      
-  <?php elseif ($tipo_hospedaje == "alquiler"): ?>
-          
-    <!-- Alquiler Económico -->
-  <div class="row">
-    <h3>Alquiler Económico</h3>
-    <?php if (!empty($alquileres1)): ?>
-      <div class="hotel-content">
-        <div class="image-box"></div>
-        <div class="info">
-          <div class="info-header">
-            <p class="name"><?= $alquileres1[0]['NOMBRE'] ?></p>
-            <p class="stars"><?= $alquileres1[0]['CALIFICACION'] ?> ⭐ reseñas</p>
-          </div>
-          <p class="type"><?= $alquileres1[0]['UBICACION'] ?></p>
-          <p class="description"><?= $alquileres1[0]['DESCRIPCION'] ?></p>
-          <p class="price">Precio por semana: $<?= $alquileres1[0]['PRECIO_SEMANA'] ?></p>
-          <p class="price2">Precio total x cantidad de semanas: $<?= ($alquileres1[0]['PRECIO_SEMANA']*$semanas_alquiler) ?></p>
-        </div>
-      </div>
-    <?php else: ?>
-      <div class="error-message">No se encontró alquiler económico.</div>
-    <?php endif; ?>
-  </div>
-
-  <!-- Alquiler Intermedio -->
-  
-  <div class="row">
-    <h3>Alquiler intermedio</h3>
-    <?php if (!empty($alquileres2)): ?>
-      <div class="hotel-content">
-        <div class="image-box"></div>
-        <div class="info">
-          <div class="info-header">
-            <p class="name"><?= $alquileres2[0]['NOMBRE'] ?></p>
-            <p class="stars"><?= $alquileres2[0]['CALIFICACION'] ?> ⭐ reseñas</p>
-          </div>
-          <p class="type"><?= $alquileres2[0]['UBICACION'] ?></p>
-          <p class="description"><?= $alquileres2[0]['DESCRIPCION'] ?></p>
-          <p class="price">Precio por semana: $<?= $alquileres2[0]['PRECIO_SEMANA'] ?></p>
-          <p class="price2">Precio total x cantidad de semanas: $<?= ($alquileres2[0]['PRECIO_SEMANA']*$semanas_alquiler) ?></p>
-        </div>
-      </div>
-    <?php else: ?>
-      <div class="error-message">No se encontró alquiler intermedio.</div>
-    <?php endif; ?>
-  </div>
-
-  <!-- Alquiler Caro -->
-  
-  <div class="row">
-    <h3>Alquiler Premium</h3>
-    <?php if (!empty($alquileres3)): ?>
-      <div class="hotel-content">
-        <div class="image-box"></div>
-        <div class="info">
-          <div class="info-header">
-            <p class="name"><?= $alquileres3[0]['NOMBRE'] ?></p>
-            <p class="stars"><?= $alquileres3[0]['CALIFICACION'] ?> ⭐ reseñas</p>
-          </div>
-          <p class="type"><?= $alquileres3[0]['UBICACION'] ?></p>
-          <p class="description"><?= $alquileres3[0]['DESCRIPCION'] ?></p>
-          <p class="price">Precio por semana: $<?= $alquileres3[0]['PRECIO_SEMANA'] ?></p>
-          <p class="price2">Precio total x cantidad de semanas: $<?= ($alquileres3[0]['PRECIO_SEMANA']*$semanas_alquiler) ?></p>
-        </div>
-      </div>
-    <?php else: ?>
-      <div class="error-message">No se encontró alquiler intermedio.</div>
-    <?php endif; ?>
-  </div>
-      
-  <?php endif; ?>
-
-  <!-- Restaurantes Baratos -->
-  <div class="row">
-        <h3>Restaurantes Baratos</h3>
+    <div class="paquetes-main-content">
+        <h1 class="paquetes-title">Resultados de Busqueda</h1>
         
         <?php 
-          // Guardar resultados en un array
-          $restaurantes = [];
+        $nombres_paquetes = array(
+            'economico' => 'Paquete Económico',
+            'intermedio' => 'Paquete Intermedio', 
+            'premium' => 'Paquete Premium'
+        );
 
-          if (mysqli_num_rows($resultado) > 0) {
-              while ($fila = mysqli_fetch_assoc($resultado)) {
-                  $restaurantes[] = $fila;
-              }
-              
-          }else{
-              echo "<div class='error-message'>No se encontraron resultados</div>";
-          }
-          
-          
-                
+        foreach($paquetes as $tipo_paquete => $contenido_paquete): 
+        ?>
+        <div class="paquetes-container">    
+            <!-- BLOQUE DEL PAQUETE -->
+            <div class="paquete-card paquete-<?= $tipo_paquete ?>">
+                <div class="paquete-header"><?= $nombres_paquetes[$tipo_paquete] ?></div>
+                <div class="paquete-content">
                     
-                
-          // Mostrar resultados con un for
-          $total = count($restaurantes);
-          for ($i = 0; $i < $total; $i++): ?> 
-                        
-            <div class="grid">
-              <div class="grid-item">
-                <div class="image-box"></div>
-                  <div class="info">
-                    <div class="info-header">
-                      <p class="name"><?=$restaurantes[$i]['NOMBRE']?></p>
-            
-                     <p class="stars"><?=$restaurantes[$i]['CALIFICACION']?> ⭐ ESTRELLAS</p>
+                    <!-- HOSPEDAJES -->
+                    <?php if ($tipo_hospedaje == "hotel"): ?>
+                        <div class="paquete-section">
+                            <h3 class="paquete-section-title">Hotel <?= ucfirst($tipo_paquete) ?></h3>
+                            <?php if (!empty($contenido_paquete['hoteles'])): ?>
+                                <div class="hospedaje-card">
+                                    <!-- Contenido principal - imagen y datos -->
+                                    <div class="card-main-content">
+                                        <!-- Sección de imagen -->
+                                        <div class="image-section">
+                                            <img src="<?= $contenido_paquete['hoteles'][0]['FOTO_URL'] ? 'uploads/hoteles/' . $contenido_paquete['hoteles'][0]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                                                alt="<?= htmlspecialchars($contenido_paquete['hoteles'][0]['NOMBRE']) ?>" 
+                                                class="item-image"
+                                                onerror="this.src='uploads/placeholder.jpg'">
+                                        </div>
+                                        
+                                        <!-- Sección de contenido -->
+                                        <div class="content-section">
+                                            <div class="item-header">
+                                                <h4 class="item-name"><?= htmlspecialchars($contenido_paquete['hoteles'][0]['NOMBRE']) ?></h4>
+                                                <span class="item-rating"><?= $contenido_paquete['hoteles'][0]['CALIFICACION'] ?> ⭐</span>
+                                            </div>
+                                            <p class="item-location"><?= htmlspecialchars($contenido_paquete['hoteles'][0]['UBICACION']) ?></p>
+                                            <p class="item-description">Ubicado en el centro, excelente para turismo de ciudad.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Sección de precio -->
+                                    <div class="price-section">
+                                        <div class="price-content">
+                                            <p class="item-price">Precio Por Noche: $<?= number_format((($contenido_paquete['hoteles'][0]['PRECIO_MAXIMO']+$contenido_paquete['hoteles'][0]['PRECIO_MINIMO'])/2), 2) ?></p>
+                                            <p class="item-price-total">Total (<?= $dias_hotel ?> días): $<?= number_format(((($contenido_paquete['hoteles'][0]['PRECIO_MAXIMO']+$contenido_paquete['hoteles'][0]['PRECIO_MINIMO'])/2)*$dias_hotel), 2) ?></p>
+                                        </div>
+                                        
+                                        <?php if (!empty($contenido_paquete['hoteles'][0]['URL'])): ?>
+                                            <a href="<?= htmlspecialchars($contenido_paquete['hoteles'][0]['URL']) ?>" 
+                                               target="_blank" 
+                                               class="btn-consultar">
+                                                <i class="fas fa-external-link-alt"></i> Consultar
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php else: ?>
+                                <div class="error-message">No se encontró hotel <?= $tipo_paquete ?>.</div>
+                            <?php endif; ?>
+                        </div>
+
+                    <?php elseif ($tipo_hospedaje == "alquiler"): ?>
+                        <div class="paquete-section">
+                            <h3 class="paquete-section-title">Alquiler <?= ucfirst($tipo_paquete) ?></h3>
+                            <?php if (!empty($contenido_paquete['alquileres'])): ?>
+                                <div class="hospedaje-card">
+                                    <!-- Contenido principal - imagen y datos -->
+                                    <div class="card-main-content">
+                                        <!-- Sección de imagen -->
+                                        <div class="image-section">
+                                            <img src="<?= $contenido_paquete['alquileres'][0]['FOTO_URL'] ? 'uploads/alquiler/' . $contenido_paquete['alquileres'][0]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                                                alt="<?= htmlspecialchars($contenido_paquete['alquileres'][0]['NOMBRE']) ?>" 
+                                                class="item-image"
+                                                onerror="this.src='uploads/placeholder.jpg'">
+                                        </div>
+                                        
+                                        <!-- Sección de contenido -->
+                                        <div class="content-section">
+                                            <div class="item-header">
+                                                <h4 class="item-name"><?= htmlspecialchars($contenido_paquete['alquileres'][0]['NOMBRE']) ?></h4>
+                                                <span class="item-rating"><?= $contenido_paquete['alquileres'][0]['CALIFICACION'] ?> ⭐</span>
+                                            </div>
+                                            <p class="item-location"><?= htmlspecialchars($contenido_paquete['alquileres'][0]['UBICACION']) ?></p>
+                                            <p class="item-description"><?= htmlspecialchars($contenido_paquete['alquileres'][0]['DESCRIPCION']) ?></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Sección de precio -->
+                                    <div class="price-section">
+                                        <div class="price-content">
+                                            <p class="item-price">Precio por semana: $<?= number_format($contenido_paquete['alquileres'][0]['PRECIO_SEMANA'], 2) ?></p>
+                                            <p class="item-price-total">Total (<?= $semanas_alquiler ?> semanas): $<?= number_format(($contenido_paquete['alquileres'][0]['PRECIO_SEMANA']*$semanas_alquiler), 2) ?></p>
+                                        </div>
+                                        
+                                        <?php if (!empty($contenido_paquete['alquileres'][0]['URL'])): ?>
+                                            <a href="<?= htmlspecialchars($contenido_paquete['alquileres'][0]['URL']) ?>" 
+                                               target="_blank" 
+                                               class="btn-consultar">
+                                                <i class="fas fa-external-link-alt"></i> Consultar
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php else: ?>
+                                <div class="error-message">No se encontró alquiler <?= $tipo_paquete ?>.</div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- RESTAURANTES -->
+                    <div class="paquete-section">
+                        <h3 class="paquete-section-title">Restaurantes <?= ucfirst($tipo_paquete) ?></h3>
+                        <?php if (!empty($contenido_paquete['restaurantes'])): ?>
+                            <?php foreach($contenido_paquete['restaurantes'] as $restaurante): ?>
+                                <div class="restaurante-card">
+                                    <!-- Contenido principal - imagen y datos -->
+                                    <div class="card-main-content">
+                                        <!-- Sección de imagen -->
+                                        <div class="image-section">
+                                            <img src="<?= $restaurante['FOTO_URL'] ? 'uploads/restaurantes/' . $restaurante['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                                                alt="<?= htmlspecialchars($restaurante['NOMBRE']) ?>" 
+                                                class="item-image"
+                                                onerror="this.src='uploads/placeholder.jpg'">
+                                        </div>
+                                        
+                                        <!-- Sección de contenido -->
+                                        <div class="content-section">
+                                            <div class="item-header">
+                                                <h4 class="item-name"><?= htmlspecialchars($restaurante['NOMBRE']) ?></h4>
+                                                <span class="item-rating"><?= $restaurante['CALIFICACION'] ?> ⭐</span>
+                                            </div>
+                                            <p class="item-location">Tipo de comida: <?= $restaurante['ID_COMIDA'] ?></p>
+                                            <p class="item-description"><?= htmlspecialchars($restaurante['DESCRIPCION']) ?></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Sección de precio -->
+                                    <div class="price-section">
+                                        <div class="price-content">
+                                            <p class="item-price">Precio promedio: $<?= number_format((($restaurante['PRECIO_MINIMO'] + $restaurante['PRECIO_MAXIMO'])/2), 2) ?></p>
+                                        </div>
+                                        
+                                        <?php if (!empty($restaurante['URL'])): ?>
+                                            <a href="<?= htmlspecialchars($restaurante['URL']) ?>" 
+                                               target="_blank" 
+                                               class="btn-consultar">
+                                                <i class="fas fa-external-link-alt"></i> Consultar
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="error-message">No se encontraron restaurantes para este paquete.</div>
+                        <?php endif; ?>
                     </div>
-            <p class="type"><?=$restaurantes[$i]['ID_COMIDA']?></p>
-            <p class="description"><?=$restaurantes[$i]['DESCRIPCION']?></p>
-            <p class="price">Precio promedio: $<?=$restaurantes[$i]['PRECIO_MAXIMO']?></p>
-            </div>
-            </div>
-            </div>
-      
-            <?php endfor; ?>
 
-            <!-- Restaurantes INTERMEDIOS -->
-      <div class="row">
-        <h3>Restaurantes Intermedios</h3>
-        
-        <?php 
-          // Guardar resultados en un array
-          $restaurantes2 = [];
-
-          if (mysqli_num_rows($resultado2) > 0) {
-              while ($fila = mysqli_fetch_assoc($resultado2)) {
-                  $restaurantes2[] = $fila;
-              }
-              
-          }else{
-              echo "<div class='error-message'>No se encontraron resultados</div>";
-          }
-
-          // Mostrar resultados con un for
-  
-          $total2 = count($restaurantes2);
-          for ($j = 0; $j < $total2; $j++): ?>   
-            <div class="grid">
-            <div class="grid-item">
-            <div class="image-box"></div>
-            <div class="info">
-            <div class="info-header">
-            <p class="name"><?=$restaurantes2[$j]['NOMBRE']?></p>
-            <p class="stars"><?=$restaurantes2[$j]['CALIFICACION']?> ⭐ ESTRELLAS</p>
-            </div>
-            <p class="type"><?=$restaurantes2[$j]['ID_COMIDA']?></p>
-            <p class="description"><?=$restaurantes2[$j]['DESCRIPCION']?></p>
-            <p class="price">Precio promedio: $<?=$restaurantes2[$j]['PRECIO_MAXIMO']?></p>
-            </div>
-            </div>
-            </div>
-      
-            <?php endfor; ?>
-
-            <!-- Restaurantes CAROS -->
-      <div class="row">
-        <h3>Restaurantes Caros</h3>
-        
-        <?php 
-          // Guardar resultados en un array
-          $restaurantes3 = [];
-
-          if (mysqli_num_rows($resultado3) > 0) {
-              while ($fila = mysqli_fetch_assoc($resultado3)) {
-                  $restaurantes3[] = $fila;
-              }
-              
-          }else{
-              echo "<div class='error-message'>No se encontraron resultados</div>";
-          }
-
-          // Mostrar resultados con un for
-          
-          $total2 = count($restaurantes3);
-          for ($j = 0; $j < $total2; $j++): ?>   
-            <div class="grid">
-            <div class="grid-item">
-            <div class="image-box"></div>
-            <div class="info">
-            <div class="info-header">
-            <p class="name"><?=$restaurantes3[$j]['NOMBRE']?></p>
-            <p class="stars"><?=$restaurantes3[$j]['CALIFICACION']?> ⭐ ESTRELLAS</p>
-            </div>
-            <p class="type"><?=$restaurantes3[$j]['ID_COMIDA']?></p>
-            <p class="description"><?=$restaurantes3[$j]['DESCRIPCION']?></p>
-            <p class="price">Precio promedio: $<?=$restaurantes3[$j]['PRECIO_MAXIMO']?></p>
-            </div>
-            </div>
-            </div>
-      
-            <?php endfor; ?>
-
-  <!-- Puntos de Interés -->
- 
-  <div class="row">
-        <h3>Puntos de interes</h3>
-        
-        <?php 
-          // Guardar resultados en un array
-          $puntos_interes= [];
-
-          if (mysqli_num_rows($consulta_puntos) > 0) {
-              while ($fila = mysqli_fetch_assoc($consulta_puntos)) {
-                $puntos_interes[] = $fila;
-              }
-              
-          }else{
-              echo "<div class='error-message'>No se encontraron resultados</div>";
-          }   
-                
-          // Mostrar resultados con un for
-          $total = count($puntos_interes);
-          for ($i = 0; $i < $total; $i++): ?> 
-                        
-            <div class="grid">
-              <div class="grid-item">
-                <div class="image-box"></div>
-                  <div class="info">
-                    <div class="info-header">
-                      <p class="name"><?=$puntos_interes[$i]['NOMBRE']?></p>
-            
-                     <p class="stars">5 ⭐ ESTRELLAS</p>
+                    <!-- PUNTOS DE INTERÉS -->
+                    <div class="paquete-section">
+                        <h3 class="paquete-section-title">Puntos de Interés</h3>
+                        <?php if (!empty($puntos_interes)): ?>
+                            <?php foreach($puntos_interes as $punto): ?>
+                                <div class="punto-interes-card">
+                                    <!-- Contenido principal - imagen y datos -->
+                                    <div class="card-main-content">
+                                        <!-- Sección de imagen -->
+                                        <div class="image-section">
+                                            <img src="<?= $punto['FOTO_URL'] ? 'uploads/puntos_interes/' . $punto['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                                                alt="<?= htmlspecialchars($punto['NOMBRE']) ?>" 
+                                                class="item-image"
+                                                onerror="this.src='uploads/placeholder.jpg'">
+                                        </div>
+                                        
+                                        <!-- Sección de contenido -->
+                                        <div class="content-section">
+                                            <div class="item-header">
+                                                <h4 class="item-name"><?= htmlspecialchars($punto['NOMBRE']) ?></h4>
+                                                <span class="item-rating">5 ⭐</span>
+                                            </div>
+                                            <p class="item-location">Actividad: <?= $punto['ID_ACTIVIDAD'] ?></p>
+                                            <p class="item-description"><?= htmlspecialchars($punto['DESCRIPCION']) ?></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Sección de precio -->
+                                    <div class="price-section">
+                                        <div class="price-content">
+                                            <p class="item-price">Precio: $<?= number_format($punto['PRECIO'], 2) ?></p>
+                                        </div>
+                                        
+                                        <?php if (!empty($punto['URL'])): ?>
+                                            <a href="<?= htmlspecialchars($punto['URL']) ?>" 
+                                               target="_blank" 
+                                               class="btn-consultar">
+                                                <i class="fas fa-external-link-alt"></i> Consultar
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="error-message">No se encontraron puntos de interés.</div>
+                        <?php endif; ?>
                     </div>
-            <p class="type"><?=$puntos_interes[$i]['ID_ACTIVIDAD']?></p>
-            <p class="description"><?=$puntos_interes[$i]['DESCRIPCION']?></p>
-            <p class="price">$<?=$puntos_interes[$i]['PRECIO']?></p>
-            </div>
-            </div>
-            </div>
-      
-            <?php endfor; ?>
 
-  </div>
-  </div>
-  </div>
+                    <!-- PRECIO TOTAL DEL PAQUETE -->
+                    <div class="precio-total-section">
+                        <h3 class="paquete-section-title">💰 Precio Total del Paquete</h3>
+                        <div class="precio-breakdown">
+                            <?php 
+                            $precio_total = 0;
+                            
+                            // Calcular precio hospedaje
+                            if ($tipo_hospedaje == "hotel" && !empty($contenido_paquete['hoteles'])) {
+                                $precio_hospedaje = (($contenido_paquete['hoteles'][0]['PRECIO_MAXIMO']+$contenido_paquete['hoteles'][0]['PRECIO_MINIMO'])/2)*$dias_hotel;
+                                $precio_total += $precio_hospedaje;
+                                echo "<div class='precio-item'><span>🏨 Hospedaje:</span><span>$" . number_format($precio_hospedaje, 2) . "</span></div>";
+                            } elseif ($tipo_hospedaje == "alquiler" && !empty($contenido_paquete['alquileres'])) {
+                                $precio_hospedaje = $contenido_paquete['alquileres'][0]['PRECIO_SEMANA']*$semanas_alquiler;
+                                $precio_total += $precio_hospedaje;
+                                echo "<div class='precio-item'><span>🏠 Hospedaje:</span><span>$" . number_format($precio_hospedaje, 2) . "</span></div>";
+                            }
+                            
+                            // Calcular precio restaurantes (estimado por persona por día)
+                            $precio_restaurantes = 0;
+                            foreach($contenido_paquete['restaurantes'] as $restaurante) {
+                                $precio_restaurantes += ($restaurante['PRECIO_MINIMO'] + $restaurante['PRECIO_MAXIMO'])/2;
+                            }
+                            if ($tipo_hospedaje == "hotel") {
+                                $precio_restaurantes = $precio_restaurantes * $dias_hotel;
+                            } else {
+                                $precio_restaurantes = $precio_restaurantes * ($semanas_alquiler * 7);
+                            }
+                            $precio_total += $precio_restaurantes;
+                            echo "<div class='precio-item'><span>🍽️ Comidas estimadas:</span><span>$" . number_format($precio_restaurantes, 2) . "</span></div>";
+                            
+                            // Precio puntos de interés
+                            $precio_actividades = 0;
+                            foreach($puntos_interes as $punto) {
+                                $precio_actividades += $punto['PRECIO'];
+                            }
+                            $precio_total += $precio_actividades;
+                            echo "<div class='precio-item'><span>🎯 Actividades:</span><span>$" . number_format($precio_actividades, 2) . "</span></div>";
+                            ?>
+                        </div>
+                        <div class="precio-final">
+                             TOTAL: $<?= number_format($precio_total, 2) ?>
+                        </div>
+                    </div>
+                </div> <!-- Fin contenido paquete -->
+            </div> <!-- Fin card del paquete -->
+        </div> <!-- Fin del container -->
+        <?php endforeach; ?>
 
-  <!-- Botón para volver -->
-  <div style="text-align: center; margin: 2rem 0;">
-    <a href="formulario_busqueda.php" class="btn-search" style="text-decoration: none;">
-      <i class="fas fa-arrow-left"></i> Nueva Búsqueda
-    </a>
-  </div>
-
-    </div>
-
+        <!-- Botón para volver -->
+        <div style="text-align: center; margin: 2rem 0;">
+            <a href="formulario_busqueda.php" class="btn-search" style="text-decoration: none;">
+                <i class="fas fa-arrow-left"></i> Nueva Búsqueda
+            </a>
+        </div>
+    </div> <!-- Fin del contenido principal -->
+    
     <!-- Footer -->
     <footer class="footer">
       <div class="container">
@@ -640,17 +474,55 @@
     <script src="js/functions.js"></script>
     <script>
       function scrollToTop(event) {
-          event.preventDefault(); // Evita que la página salte
+          event.preventDefault();
           window.scrollTo({
               top: 0,
               behavior: 'smooth'
           });
       }
     </script>
+
+    <style>
+    .total-price {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        border-left: 4px solid #618c78;
+    }
+    
+    .total-final {
+        font-size: 1.2em;
+        color: #618c78;
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        border-top: 2px solid #618c78;
+    }
+    
+    .block {
+        margin-bottom: 3rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 2rem;
+        background-color: #fafafa;
+    }
+    
+    .block .title {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: #618c78;
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background-color: #618c78;
+        color: white;
+        border-radius: 8px;
+    }
+    </style>
+
 </body>
 </html>
 <?php } else {
-    header("Location:login.php "); // Redirige si no hay sesión
+    header("Location:login.php");
     exit();
-  } 
-?>
+} ?>
