@@ -152,7 +152,7 @@
                 <?php if (isset($_SESSION['id_cargo'])): ?>
                   <a href="formulario_busqueda.php" class="btn btn-secondary">Crear Paquete</a>
                 <?php else: ?>
-                  <a href="form_login.php" class="btn btn-primary">Iniciá sesión para crear paquetes</a>
+                  <a href="form_login.php" class="btn btn-primary">Crear Paquete</a>
                 <?php endif; ?>
               </div>
             </div>
@@ -181,7 +181,7 @@
                 <?php if (isset($_SESSION['id_cargo'])): ?>
                   <a href="formulario_busqueda.php" class="btn btn-secondary">Crear Paquete</a>
                 <?php else: ?>
-                  <a href="form_login.php" class="btn btn-primary">Iniciá sesión para crear paquetes</a>
+                  <a href="form_login.php" class="btn btn-primary">Crear Paquete</a>
                 <?php endif; ?>
               </div>
             </div>
@@ -216,7 +216,7 @@
                 <?php if (isset($_SESSION['id_cargo'])): ?>
                   <a href="formulario_busqueda.php" class="btn btn-secondary">Crear Paquete</a>
                 <?php else: ?>
-                  <a href="form_login.php" class="btn btn-primary">Iniciá sesión para crear paquetes</a>
+                  <a href="form_login.php" class="btn btn-primary">Crear Paquete</a>
                 <?php endif; ?>
               </div>
             </div>

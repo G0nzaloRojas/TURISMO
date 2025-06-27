@@ -239,6 +239,7 @@
                                                 <h4 class="item-name"><?= htmlspecialchars($contenido_paquete['hoteles'][0]['NOMBRE']) ?></h4>
                                                 <span class="item-rating"><?= $contenido_paquete['hoteles'][0]['CALIFICACION'] ?> ⭐</span>
                                             </div>
+                                            
                                             <p class="item-description">🏊‍♀️ Pileta: <?= ucfirst($contenido_paquete['hoteles'][0]['PILETA']) ?></p>
                                             <p class="item-description">🍳 Desayuno: <?= ucfirst($contenido_paquete['hoteles'][0]['DESAYUNO']) ?></p>
                                             <p class="item-location"><?= htmlspecialchars($contenido_paquete['hoteles'][0]['UBICACION']) ?></p>

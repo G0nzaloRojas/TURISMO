@@ -27,7 +27,7 @@
         </div>
         <ul class="nav-menu">
           <li><a href="index.php">Inicio</a></li>
-          <li><a href="packages.php">Paquetes</a></li>
+          <li><a href="packages.php">Afiliados</a></li>
           <li><a href="about.php">Nosotros</a></li>
           <li><a href="contact.php">Contacto</a></li>
           <li><a href="form_register.php" class="active">Registrarse</a></li>
@@ -115,7 +115,7 @@
             <h3>Enlaces rápidos</h3>
             <ul>
               <li><a href="index.php">Inicio</a></li>
-              <li><a href="packages.php">Paquetes</a></li>
+              <li><a href="packages.php">Afiliados</a></li>
               <li><a href="about.html">Nosotros</a></li>
               <li><a href="contact.html">Contacto</a></li>
               <li><a href="form_register.php">Registrarse</a></li>
