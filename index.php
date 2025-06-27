@@ -243,7 +243,7 @@
           <div class="about-text">
             <h2 class="section-title">Sobre Nosotros</h2>
             <p>
-              En <strong>TurViajes</strong> nos dedicamos a crear experiencias
+              En <strong>BA Tour</strong> nos dedicamos a crear experiencias
               de viaje inolvidables desde hace más de 15 años. Nuestro equipo de
               expertos selecciona cuidadosamente cada destino y alojamiento para
               garantizar la mejor experiencia.
@@ -259,12 +259,12 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="contact">
+   <section id="contact" class="contact">
       <div class="container">
         <div class="about-content">
           <div class="about-text">
         <h2 class="section-title">Contacto</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis optio, enim tempora eum magni perspiciatis. Veritatis consequuntur totam provident impedit, repudiandae labore culpa soluta at, nulla eaque iusto praesentium sint.</p>
+        <p>¿Tenés alguna consulta o necesitás más información? Escribinos y te respondemos lo antes posible.<br/> Ya sea para aclarar dudas, solicitar presupuestos o simplemente para conocer más sobre nuestros servicios.</p>
         <a href="contact.php" class="btn btn-primary">Contactar</a>
       </div>
         </div>
@@ -284,9 +284,9 @@
             <ul>
               <li><a href="index.php" class="active" onclick="scrollToTop(event)">Inicio</a></li>
               <?php if (isset($_SESSION['id_cargo'])): ?>
-                <li><a href="packages.php">Paquetes</a></li>
+                <li><a href="packages.php">Afiliados</a></li>
               <?php else: ?>
-                <li><a href="form_login.php">Paquetes</a></li>
+                <li><a href="form_login.php">Afiliados</a></li>
               <?php endif; ?>
               <li><a href="about.php">Nosotros</a></li>
               <li><a href="contact.php">Contacto</a></li>

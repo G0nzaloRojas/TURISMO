@@ -136,9 +136,9 @@
           <li><a href="index.php">Inicio</a></li>
           
           <?php if (isset($_SESSION['id_cargo'])): ?>
-            <li><a href="packages.php">Paquetes</a></li>
+            <li><a href="packages.php">Afiliados</a></li>
           <?php else: ?>
-            <li><a href="form_login.php">Paquetes</a></li>
+            <li><a href="form_login.php">Afiliados</a></li>
           <?php endif; ?>
           
           <li><a href="about.php">Nosotros</a></li>
@@ -333,7 +333,6 @@
                 <option value= 4 >Pastas</option>
                 <option value= 5 >Vegetariana</option>
                 <option value= 6 >Vegana</option>
-                <option value= 7 >Todos</option>
               </select>
             </div>
             <div class="form-group">
@@ -393,9 +392,9 @@
             <ul>
               <li><a href="index.php" onclick="scrollToTop(event)">Inicio</a></li>
               <?php if (isset($_SESSION['id_cargo'])): ?>
-                <li><a href="packages.php">Paquetes</a></li>
+                <li><a href="packages.php">Afiliados</a></li>
               <?php else: ?>
-                <li><a href="form_login.php">Paquetes</a></li>
+                <li><a href="form_login.php">Afiliados</a></li>
               <?php endif; ?>
               <li><a href="about.php">Nosotros</a></li>
               <li><a href="contact.php">Contacto</a></li>

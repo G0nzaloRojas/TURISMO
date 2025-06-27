@@ -33,9 +33,9 @@
           <li><a href="index.php">Inicio</a></li>
           
           <?php if (isset($_SESSION['id_cargo'])): ?>
-            <li><a href="packages.php">Paquetes</a></li>
+            <li><a href="packages.php">Afiliados</a></li>
           <?php else: ?>
-            <li><a href="form_login.php">Paquetes</a></li>
+            <li><a href="form_login.php">Afiliados</a></li>
           <?php endif; ?>
           
           <li><a href="about.php">Nosotros</a></li>
@@ -135,14 +135,45 @@
 
                 // CONSULTAS PARA RESTAURANTES
                 // Restaurantes Económicos
-                $consulta_rest_eco = mysqli_query($conexion, "SELECT * FROM restaurantes WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) <= (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3) FROM restaurantes WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)) AND ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida) ORDER BY CALIFICACION DESC LIMIT 2");
-
-                // Restaurantes Intermedios
-                $consulta_rest_inter = mysqli_query($conexion, "SELECT * FROM restaurantes WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) > (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3) FROM restaurantes WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)) AND ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) <= (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + (2 * ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3)) FROM restaurantes WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)) AND ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida) ORDER BY CALIFICACION DESC LIMIT 2");
+                $consulta_rest_eco = mysqli_query($conexion, "
+                                                                SELECT r.*, tc.DESCRIPCION as TIPO_COMIDA_DESC 
+                                                                FROM restaurantes r 
+                                                                INNER JOIN `tipo de comida` tc ON r.ID_COMIDA = tc.ID 
+                                                                WHERE ((r.PRECIO_MINIMO + r.PRECIO_MAXIMO) / 2) <= 
+                                                                (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + 
+                                                                ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3) 
+                                                                FROM restaurantes WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)) 
+                                                                AND ($tipo_comida = 7 OR r.ID_COMIDA = $tipo_comida) 
+                                                                ORDER BY r.CALIFICACION DESC LIMIT 2
+                                                            ");
+                $consulta_rest_inter = mysqli_query($conexion, "
+                                                                    SELECT r.*, tc.DESCRIPCION as TIPO_COMIDA_DESC 
+                                                                    FROM restaurantes r 
+                                                                    INNER JOIN `tipo de comida` tc ON r.ID_COMIDA = tc.ID 
+                                                                    WHERE ((r.PRECIO_MINIMO + r.PRECIO_MAXIMO) / 2) > 
+                                                                    (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + 
+                                                                    ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3) 
+                                                                    FROM restaurantes WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)) 
+                                                                    AND ((r.PRECIO_MINIMO + r.PRECIO_MAXIMO) / 2) <= 
+                                                                    (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + 
+                                                                    (2 * ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3)) 
+                                                                    FROM restaurantes WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)) 
+                                                                    AND ($tipo_comida = 7 OR r.ID_COMIDA = $tipo_comida) 
+                                                                    ORDER BY r.CALIFICACION DESC LIMIT 2
+                                                                ");
 
                 // Restaurantes Caros
-                $consulta_rest_caro = mysqli_query($conexion, "SELECT * FROM restaurantes WHERE ((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) > (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + (2 * ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3)) FROM restaurantes WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)) AND ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida) ORDER BY calificacion DESC LIMIT 2");
-
+                $consulta_rest_caro = mysqli_query($conexion, "
+                                                                SELECT r.*, tc.DESCRIPCION as TIPO_COMIDA_DESC 
+                                                                FROM restaurantes r 
+                                                                INNER JOIN `tipo de comida` tc ON r.ID_COMIDA = tc.ID 
+                                                                WHERE ((r.PRECIO_MINIMO + r.PRECIO_MAXIMO) / 2) > 
+                                                                (SELECT MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) + 
+                                                                (2 * ((MAX((PRECIO_MINIMO + PRECIO_MAXIMO) / 2) - MIN((PRECIO_MINIMO + PRECIO_MAXIMO) / 2)) / 3)) 
+                                                                FROM restaurantes WHERE ($tipo_comida = 7 OR ID_COMIDA = $tipo_comida)) 
+                                                                AND ($tipo_comida = 7 OR r.ID_COMIDA = $tipo_comida) 
+                                                                ORDER BY r.CALIFICACION DESC LIMIT 2
+                                                            ");
                 // Almacenar resultados de restaurantes
                 while ($fila = mysqli_fetch_assoc($consulta_rest_eco)) {
                     $paquetes['economico']['restaurantes'][] = $fila;
@@ -155,7 +186,13 @@
                 }
 
                 // Puntos de interés (mismos para todos los paquetes)
-                $consulta_puntos = mysqli_query($conexion, "SELECT * FROM `puntos de interes` WHERE ID_ACTIVIDAD = 1 ORDER BY RAND() LIMIT 4");
+                $consulta_puntos = mysqli_query($conexion, "
+                                                                SELECT pi.*, a.DESCRIPCION as ACTIVIDAD_DESC 
+                                                                FROM `puntos de interes` pi 
+                                                                INNER JOIN actividad a ON pi.ID_ACTIVIDAD = a.ID 
+                                                                WHERE pi.ID_ACTIVIDAD = $tipo_actividad 
+                                                                ORDER BY RAND() LIMIT 4
+                                                            ");
                 $puntos_interes = [];
                 while ($fila = mysqli_fetch_assoc($consulta_puntos)) {
                     $puntos_interes[] = $fila;
@@ -202,8 +239,9 @@
                                                 <h4 class="item-name"><?= htmlspecialchars($contenido_paquete['hoteles'][0]['NOMBRE']) ?></h4>
                                                 <span class="item-rating"><?= $contenido_paquete['hoteles'][0]['CALIFICACION'] ?> ⭐</span>
                                             </div>
+                                            <p class="item-description">🏊‍♀️ Pileta: <?= ucfirst($contenido_paquete['hoteles'][0]['PILETA']) ?></p>
+                                            <p class="item-description">🍳 Desayuno: <?= ucfirst($contenido_paquete['hoteles'][0]['DESAYUNO']) ?></p>
                                             <p class="item-location"><?= htmlspecialchars($contenido_paquete['hoteles'][0]['UBICACION']) ?></p>
-                                            <p class="item-description">Ubicado en el centro, excelente para turismo de ciudad.</p>
                                         </div>
                                     </div>
                                     
@@ -249,6 +287,9 @@
                                                 <h4 class="item-name"><?= htmlspecialchars($contenido_paquete['alquileres'][0]['NOMBRE']) ?></h4>
                                                 <span class="item-rating"><?= $contenido_paquete['alquileres'][0]['CALIFICACION'] ?> ⭐</span>
                                             </div>
+                                            <p class="item-description">Habitaciones: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['DORMITORIOS']) ?></p>
+                                            <p class="item-description">Baños: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['BANIOS']) ?></p>
+                                            <p class="item-description">Metros: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['METROS']) ?> m2</p>
                                             <p class="item-location"><?= htmlspecialchars($contenido_paquete['alquileres'][0]['UBICACION']) ?></p>
                                             <p class="item-description"><?= htmlspecialchars($contenido_paquete['alquileres'][0]['DESCRIPCION']) ?></p>
                                         </div>
@@ -262,7 +303,7 @@
                                         </div>
                                         
                                         <?php if (!empty($contenido_paquete['alquileres'][0]['URL'])): ?>
-                                            <a href="<?= htmlspecialchars($contenido_paquete['alquileres'][0]['URL']) ?>" 
+                                            <a href="mailto:<?= htmlspecialchars($contenido_paquete['alquileres'][0]['URL']) ?>"
                                                target="_blank" 
                                                class="btn-consultar">
                                                 <i class="fas fa-external-link-alt"></i> Consultar
@@ -298,7 +339,7 @@
                                                 <h4 class="item-name"><?= htmlspecialchars($restaurante['NOMBRE']) ?></h4>
                                                 <span class="item-rating"><?= $restaurante['CALIFICACION'] ?> ⭐</span>
                                             </div>
-                                            <p class="item-location">Tipo de comida: <?= $restaurante['ID_COMIDA'] ?></p>
+                                            <p class="item-location"> <?= htmlspecialchars($restaurante['TIPO_COMIDA_DESC']) ?></p>
                                             <p class="item-description"><?= htmlspecialchars($restaurante['DESCRIPCION']) ?></p>
                                         </div>
                                     </div>
@@ -346,7 +387,7 @@
                                                 <h4 class="item-name"><?= htmlspecialchars($punto['NOMBRE']) ?></h4>
                                                 <span class="item-rating">5 ⭐</span>
                                             </div>
-                                            <p class="item-location">Actividad: <?= $punto['ID_ACTIVIDAD'] ?></p>
+                                            <p class="item-location"> <?= htmlspecialchars($punto['ACTIVIDAD_DESC']) ?></p>
                                             <p class="item-description"><?= htmlspecialchars($punto['DESCRIPCION']) ?></p>
                                         </div>
                                     </div>
@@ -442,9 +483,9 @@
             <ul>
               <li><a href="index.php" onclick="scrollToTop(event)">Inicio</a></li>
               <?php if (isset($_SESSION['id_cargo'])): ?>
-                <li><a href="packages.php">Paquetes</a></li>
+                <li><a href="packages.php">Afiliados</a></li>
               <?php else: ?>
-                <li><a href="form_login.php">Paquetes</a></li>
+                <li><a href="form_login.php">Afiliados</a></li>
               <?php endif; ?>
               <li><a href="about.php">Nosotros</a></li>
               <li><a href="contact.php">Contacto</a></li>

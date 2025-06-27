@@ -58,7 +58,7 @@
     <!-- Hero Section -->
     <section class="packages-hero">
       <div class="hero-content">
-        <h1>Nuestros Paquetes Turísticos</h1>
+        <h1>Nuestros mejores afiliados</h1>
         <p>Encuentra la aventura perfecta para tus próximas vacaciones</p>
       </div>
     </section>
@@ -163,15 +163,8 @@
       <div class="container">
         <div class="results-info">
           <p class="results-count">
-            Mostrando <span id="results-count">12</span> paquetes
+            Mostrando <span id="results-count">12</span> afiliados
           </p>
-          <select class="sort-select" id="sort-by" onchange="sortPackages()">
-            <option value="featured">Destacados</option>
-            <option value="price-low">Precio: menor a mayor</option>
-            <option value="price-high">Precio: mayor a menor</option>
-            <option value="rating">Mejor valorados</option>
-            <option value="duration">Duración</option>
-          </select>
         </div>
 
         <div class="packages-grid" id="packages-grid">
@@ -605,9 +598,9 @@
             <ul>
               <li><a href="index.php">Inicio</a></li>
               <?php if (isset($_SESSION['id_cargo'])): ?>
-                <li><a href="packages.php" class="active" onclick="scrollToTop(event)">Paquetes</a></li>
+                <li><a href="packages.php" class="active" onclick="scrollToTop(event)">Afiliados</a></li>
               <?php else: ?>
-                <li><a href="form_login.php">Paquetes</a></li>
+                <li><a href="form_login.php">Afiliados</a></li>
               <?php endif; ?>
               <li><a href="about.php">Nosotros</a></li>
               <li><a href="contact.php">Contacto</a></li>
