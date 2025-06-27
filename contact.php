@@ -77,7 +77,6 @@
                 <h4>Teléfonos</h4>
                 <p>+54 11 4567-8900</p>
                 <p>+54 11 4567-8901</p>
-                <p>WhatsApp: +54 9 11 3456-7890</p>
               </div>
             </div>
 
@@ -88,7 +87,6 @@
               <div class="contact-text">
                 <h4>Email</h4>
                 <p><a href="mailto:info@batour.com">info@batour.com</a></p>
-                <p><a href="mailto:ventas@batour.com">ventas@batour.com</a></p>
               </div>
             </div>
 
@@ -113,16 +111,6 @@
                 <p>Lunes a Viernes: 9:00 - 18:00</p>
                 <p>Sábados: 10:00 - 14:00</p>
                 <p>Domingos: Cerrado</p>
-              </div>
-            </div>
-
-            <div class="social-links">
-              <h4>Síguenos en redes sociales</h4>
-              <div class="social-buttons">
-                <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
-              <a href="https://www.x.com/" target="_blank"><i class="fab fa-twitter"></i></a>
-              <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
               </div>
             </div>
           </div>
@@ -168,20 +156,6 @@
                   <label for="phone">Teléfono</label>
                   <input type="tel" id="phone" name="phone" />
                 </div>
-              </div>
-
-              <div class="form-group full-width">
-                <label for="destination">Destino de interés</label>
-                <select id="destination" name="destination">
-                  <option value="">Selecciona un destino</option>
-                  <option value="buenos-aires">Buenos Aires</option>
-                  <option value="bariloche">Bariloche</option>
-                  <option value="mendoza">Mendoza</option>
-                  <option value="iguazu">Cataratas del Iguazú</option>
-                  <option value="calafate">El Calafate</option>
-                  <option value="ushuaia">Ushuaia</option>
-                  <option value="otros">Otros destinos</option>
-                </select>
               </div>
 
               <div class="form-row">

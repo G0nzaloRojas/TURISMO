@@ -201,7 +201,7 @@
         <div class="team-grid">
           <div class="team-member">
             <div class="member-photo">
-              <img src="/api/placeholder/200/200" alt="Juan Agustin Murad" />
+              <img src="uploads/user-default.jpg" alt="Juan Agustin Murad" />
             </div>
             <h4 class="member-name">Juan Agustin Murad</h4>
             <p class="member-position">CEO & Fundador</p>
@@ -213,7 +213,7 @@
 
           <div class="team-member">
             <div class="member-photo">
-              <img src="/api/placeholder/200/200" alt="Juan Ignacio Duran" />
+              <img src="uploads/user-default.jpg" alt="Juan Ignacio Duran" />
             </div>
             <h4 class="member-name">Juan Ignacio Duran</h4>
             <p class="member-position">Director de Operaciones</p>
@@ -225,7 +225,7 @@
 
           <div class="team-member">
             <div class="member-photo">
-              <img src="/api/placeholder/200/200" alt="Gonzalo Rojas" />
+              <img src="uploads/user-default.jpg" alt="Gonzalo Rojas" />
             </div>
             <h4 class="member-name">Gonzalo Rojas</h4>
             <p class="member-position">Jefe de Marketing</p>
@@ -237,7 +237,7 @@
 
           <div class="team-member">
             <div class="member-photo">
-              <img src="/api/placeholder/200/200" alt="Matias Lema" />
+              <img src="uploads/user-default.jpg" alt="Matias Lema" />
             </div>
             <h4 class="member-name">Matias Lema</h4>
             <p class="member-position">Coordinador de Guías</p>
@@ -264,9 +264,9 @@
             <ul>
               <li><a href="index.php">Inicio</a></li>
               <?php if (isset($_SESSION['id_cargo'])): ?>
-                <li><a href="packages.php">Paquetes</a></li>
+                <li><a href="packages.php">Afiliados</a></li>
               <?php else: ?>
-                <li><a href="form_login.php">Paquetes</a></li>
+                <li><a href="form_login.php">Afiliados</a></li>
               <?php endif; ?>
               <li><a href="about.php" class="active" onclick="scrollToTop(event)">Nosotros</a></li>
               <li><a href="contact.php">Contacto</a></li>

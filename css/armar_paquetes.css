@@ -237,11 +237,15 @@
 }
 
 /* Descripción */
+.text-description {
+  display: flex;
+  flex-direction: row;
+}
 .item-description {
   color: #5a6c7d;
   line-height: 1.6;
-  margin: 1rem 0;
   flex: 1;
+  margin: -1rem;
 }
 
 /* Sección de precio - fila inferior */

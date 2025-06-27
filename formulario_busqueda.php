@@ -191,7 +191,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="hotel-rating">Calificación</label>
-              <select id="hotel-rating" name="hotel-rating" >
+              <select id="hotel-rating" name="hotel-rating" required>
                 <option value="">Seleccionar calificación</option>
                 <option value="3">3 estrellas</option>
                 <option value="4">4 estrellas</option>
@@ -208,6 +208,7 @@
                 min="1"
                 max="6"
                 placeholder="Número de huéspedes"
+                required
               />
             </div>
             <div class="form-group">
@@ -219,12 +220,13 @@
                 min="1"
                 max="30"
                 placeholder="Cantidad de días"
+                required
               />
             </div>
 
             <div class="form-group">
               <label for="pileta">Incluye Pileta</label>
-              <select id="pileta" name="pileta" >
+              <select id="pileta" name="pileta" required>
                 <option value="">Seleccionar pileta</option>
                 <option value="si">Sí</option>
                 <option value="no">No</option>
@@ -233,7 +235,7 @@
 
             <div class="form-group">
               <label for="desayuno">Incluye Desayuno</label>
-              <select id="desayuno" name="desayuno" >
+              <select id="desayuno" name="desayuno" required>
                 <option value="">Seleccionar Desayuno</option>
                 <option value="si">Sí</option>
                 <option value="no">No</option>
@@ -248,7 +250,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="rental-rating">Calificacion</label>
-              <select id="rental-rating" name="rental-rating" >
+              <select id="rental-rating" name="rental-rating" required>
                 <option value="">Seleccionar Calificacion (puntaje)</option>
                 <option value="7">7 o más</option>
                 <option value="8">8 o más</option>
@@ -267,6 +269,7 @@
                 min="1"
                 max="4"
                 placeholder="Número de camas dobles"
+                required
               />
             </div>
           </div>
@@ -279,6 +282,7 @@
                 min="1"
                 max="5"
                 placeholder="Cantidad de Semanas"
+                required
               />
             </div>
           <div class="form-row">
@@ -291,6 +295,7 @@
                 min="1"
                 max="6"
                 placeholder="Número de camas simples"
+                required
               />
             </div>
             <div class="form-group">
@@ -302,13 +307,14 @@
                 min="1"
                 max="3"
                 placeholder="Número de baños"
+                required
               />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="metros2_minimos">Metros Cuadrados Mínimos</label>
-              <select id="metros2_minimos" name="metros2_minimos" >
+              <select id="metros2_minimos" name="metros2_minimos" required>
                 <option value="">Seleccionar Metros Cuadrados Mínimos</option>
                 <option value="20">20 m2 o más</option>
                 <option value="40">40 m2 o más</option>
@@ -325,7 +331,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="food-type">Tipo de comida</label>
-              <select id="food-type" name="food-type" >
+              <select id="food-type" name="food-type" required>
                 <option value="">Seleccione un tipo de Comida</option>
                 <option value= 1 >Parrilla</option>
                 <option value= 2 >Asiatica</option>
@@ -337,7 +343,7 @@
             </div>
             <div class="form-group">
               <label for="restaurant-rating">Calificación</label>
-              <select id="restaurant-rating" name="restaurant-rating" >
+              <select id="restaurant-rating" name="restaurant-rating" required>
                 <option value="">Seleccionar calificación</option>
                 <option value="3">3 estrellas</option>
                 <option value="4">4 estrellas</option>
@@ -353,7 +359,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="activity-type">Tipo de actividad</label>
-              <select id="activity-type" name="activity-type" >
+              <select id="activity-type" name="activity-type" required>
                 <option value="">Seleccionar tipo de actividad</option>
                 <option value=1>Cultural</option>
                 <option value=2>Entretenimiento</option>
@@ -424,30 +430,43 @@
     <script src="js/functions.js"></script>
     <script>
       function toggleAccommodationForm() {
-        const accommodationType =
-          document.getElementById("accommodation-type").value;
+        const accommodationType = document.getElementById("accommodation-type").value;
         const hotelForm = document.getElementById("hotel-form");
         const rentalForm = document.getElementById("rental-form");
 
-        // Ocultar ambos formularios primero
+        // Obtener todos los elementos de entrada/selección dentro de cada sección del formulario
+        const hotelInputs = hotelForm.querySelectorAll('input, select');
+        const rentalInputs = rentalForm.querySelectorAll('input, select');
+
+        // Función para establecer o eliminar el atributo 'required'
+        function setRequired(elements, isRequired) {
+          elements.forEach(element => {
+            if (isRequired) {
+              element.setAttribute('required', 'required');
+            } else {
+              element.removeAttribute('required');
+            }
+          });
+        }
+
+        // Ocultar ambos formularios primero y remover 'required' de todos sus campos
         hotelForm.style.display = "none";
         rentalForm.style.display = "none";
+        setRequired(hotelInputs, false);
+        setRequired(rentalInputs, false);
 
-        // Mostrar el formulario correspondiente
+        // Mostrar el formulario correspondiente y agregar 'required' a sus campos
         if (accommodationType === "hotel") {
           hotelForm.style.display = "block";
+          setRequired(hotelInputs, true);
         } else if (accommodationType === "alquiler") {
           rentalForm.style.display = "block";
+          setRequired(rentalInputs, true);
         }
       }
 
-      function scrollToTop(event) {
-          event.preventDefault(); // Evita que la página salte
-          window.scrollTo({
-              top: 0,
-              behavior: 'smooth'
-          });
-      }
+      // Llamar a la función al cargar la página para asegurar el estado inicial correcto
+      document.addEventListener('DOMContentLoaded', toggleAccommodationForm);
     </script>
   </body>
 </html>

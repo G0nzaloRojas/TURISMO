@@ -32,13 +32,13 @@ $user_role = $_SESSION['id_cargo'];
                 </a>
             </div>
 
-            <button class="new-business-btn" onclick="openBusinessModal()">
+            <button class="new-business-btn" onclick="openBusinessModal()" style="display: none;">
                 <i class="fas fa-plus"></i>
                 <span id="addButtonText">Nuevo Negocio</span>
             </button>
 
             <div class="projects-section">
-                <h2>Categorías</h2>
+                <h2 style="padding: 2rem 1rem 0 0; text-align: left;">Categorías</h2>
                 <ul class="project-list" id="projectList">
                     <li class="project-item active" data-project="restaurantes">
                         <div class="project-icon"></div>
@@ -88,7 +88,7 @@ $user_role = $_SESSION['id_cargo'];
                 <input type="text" class="task-input" placeholder="Buscar..." id="searchInput">
                 <br>
                 <button class="add-task-btn" onclick="openBusinessModal()">
-                    <i class="fas fa-plus"></i> <span id="addButtonText2">Agregar Negocio</span>
+                    <i class="fas fa-plus"></i> <span id="addButtonText2">Agregar</span>
                 </button>
             </section>
 

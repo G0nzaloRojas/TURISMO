@@ -287,11 +287,13 @@
                                                 <h4 class="item-name"><?= htmlspecialchars($contenido_paquete['alquileres'][0]['NOMBRE']) ?></h4>
                                                 <span class="item-rating"><?= $contenido_paquete['alquileres'][0]['CALIFICACION'] ?> ⭐</span>
                                             </div>
-                                            <p class="item-description">Habitaciones: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['DORMITORIOS']) ?></p>
-                                            <p class="item-description">Baños: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['BANIOS']) ?></p>
-                                            <p class="item-description">Metros: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['METROS']) ?> m2</p>
+                                            <div class="text-description">
+                                                <p class="item-description">Habitaciones: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['DORMITORIOS']) ?></p>
+                                                <p class="item-description">Baños: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['BANIOS']) ?></p>
+                                                <p class="item-description">Metros: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['METROS']) ?> m2</p>
                                             <p class="item-location"><?= htmlspecialchars($contenido_paquete['alquileres'][0]['UBICACION']) ?></p>
-                                            <p class="item-description"><?= htmlspecialchars($contenido_paquete['alquileres'][0]['DESCRIPCION']) ?></p>
+                                            </div>
+                                            
                                         </div>
                                     </div>
                                     
