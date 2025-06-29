@@ -1616,16 +1616,22 @@ a {
   .timeline-item {
     flex-direction: column !important;
     margin-left: 60px;
+    gap: 15px;
   }
 
   .timeline-content {
     width: 100%;
+    font-size: 14px;
   }
 
   .timeline-year {
     left: 30px;
     transform: translateX(0);
-    margin: 15px 0;
+
+    font-size: 12px;
+    padding: 4px 8px;
+    min-width: 50px;
+    flex-shrink: 0;
   }
 
   .about-intro h2 {

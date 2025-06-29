@@ -27,16 +27,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     
    require_once __DIR__ . '/../conexion.php';
 
-try {
-    $consulta = mysqli_query($conexion, "INSERT INTO mail(CORREO, MENSAJE) VALUES ('$email','$message')");
-    
-    if (!$consulta) {
-        error_log("Error al insertar: " . mysqli_error($conexion));
+    try {
+        $consulta = mysqli_query($conexion, "INSERT INTO mail(CORREO, MENSAJE) VALUES ('$email','$message')");
+        
+        if (!$consulta) {
+            error_log("Error al insertar: " . mysqli_error($conexion));
+        }
+        
+    } catch (Exception $e) {
+        error_log("Error en base de datos: " . $e->getMessage());
     }
-    
-} catch (Exception $e) {
-    error_log("Error en base de datos: " . $e->getMessage());
-}
 
     $mail = new PHPMailer();
 

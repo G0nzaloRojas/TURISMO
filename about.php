@@ -77,6 +77,8 @@
         <!-- Timeline -->
         <div class="timeline">
           <div class="timeline-item">
+            <div style="width: 45%"></div>
+            <div class="timeline-year">2024</div>
             <div class="timeline-content">
               <h3>La Idea</h3>
               <p>
@@ -84,8 +86,7 @@
                 experiencias boutique y turismo sustentable en Buenos Aires.
               </p>
             </div>
-            <div class="timeline-year">2024</div>
-            <div style="width: 45%"></div>
+            
           </div>
 
           <div class="timeline-item">
@@ -115,6 +116,8 @@
           </div>
 
           <div class="timeline-item">
+            <div style="width: 45%"></div>
+            <div class="timeline-year">2027</div>
             <div class="timeline-content">
               <h3>Visión de Futuro</h3>
               <p>
@@ -122,8 +125,8 @@
                 con presencia consolidada y reconocimiento internacional.
               </p>
             </div>
-            <div class="timeline-year">2027</div>
-            <div style="width: 45%"></div>
+            
+            
           </div>
         </div>
       </div>
