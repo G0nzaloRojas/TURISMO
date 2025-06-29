@@ -163,7 +163,7 @@
       <div class="container">
         <div class="results-info">
           <p class="results-count">
-            Mostrando <span id="results-count">12</span> afiliados
+            Mostrando <span id="results-count">6</span> afiliados
           </p>
         </div>
 

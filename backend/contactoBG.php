@@ -24,6 +24,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $newsletter = isset($_POST["newsletter"]) ? "Sí" : "No";
     
     $fullName = $firstName . " " . $lastName;
+    
+   require_once __DIR__ . '/../conexion.php';
+
+try {
+    $consulta = mysqli_query($conexion, "INSERT INTO mail(CORREO, MENSAJE) VALUES ('$email','$message')");
+    
+    if (!$consulta) {
+        error_log("Error al insertar: " . mysqli_error($conexion));
+    }
+    
+} catch (Exception $e) {
+    error_log("Error en base de datos: " . $e->getMessage());
+}
 
     $mail = new PHPMailer();
 
@@ -32,14 +45,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'paskito00@gmail.com'; 
-        $mail->Password = 'sewgyyhpofdlunyk'; 
+        $mail->Username = 'batouroficial@gmail.com'; 
+        $mail->Password = 'kzrnilhzjyfeaggi'; 
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
         // Remitente y destinatario
-        $mail->setFrom('paskito00@gmail.com', 'BA Tour - Formulario de Contacto');
-        $mail->addAddress('paskito00@gmail.com', 'Equipo BA Tour');
+        $mail->setFrom('batouroficial@gmail.com', 'BA Tour - Formulario de Contacto');
+        $mail->addAddress('batouroficial@gmail.com', 'Equipo BA Tour');
         $mail->addReplyTo($email, $fullName);
 
         // Contenido del email

@@ -261,6 +261,20 @@
           
           <div class="form-row">
             <div class="form-group">
+                <label for="semanas_alquiler">Semanas de estadía</label>
+                <input
+                  type="number"
+                  id="semanas_alquiler"
+                  name="semanas_alquiler" 
+                  min="1"
+                  max="5"
+                  placeholder="Cantidad de Semanas"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-row">
+            <div class="form-group">
               <label for="double_bed">Cantidad de camas dobles</label>
               <input
                 type="number"
@@ -273,18 +287,6 @@
               />
             </div>
           </div>
-          <div class="form-group">
-              <label for="semanas_alquiler">Semanas de estadía</label>
-              <input
-                type="number"
-                id="semanas_alquiler"
-                name="semanas_alquiler" 
-                min="1"
-                max="5"
-                placeholder="Cantidad de Semanas"
-                required
-              />
-            </div>
           <div class="form-row">
             <div class="form-group">
               <label for="single_bed">Cantidad de camas simples</label>

@@ -201,7 +201,7 @@
         <div class="team-grid">
           <div class="team-member">
             <div class="member-photo">
-              <img src="uploads/user-default.jpg" alt="Juan Agustin Murad" />
+              <img src="uploads/user-default.jpg" alt="Juan Agustin Murad" style="width: 100%;" />
             </div>
             <h4 class="member-name">Juan Agustin Murad</h4>
             <p class="member-position">CEO & Fundador</p>
@@ -213,7 +213,7 @@
 
           <div class="team-member">
             <div class="member-photo">
-              <img src="uploads/user-default.jpg" alt="Juan Ignacio Duran" />
+              <img src="uploads/user-default.jpg" alt="Juan Ignacio Duran" style="width: 100%;"/>
             </div>
             <h4 class="member-name">Juan Ignacio Duran</h4>
             <p class="member-position">Director de Operaciones</p>
@@ -225,7 +225,7 @@
 
           <div class="team-member">
             <div class="member-photo">
-              <img src="uploads/user-default.jpg" alt="Gonzalo Rojas" />
+              <img src="uploads/user-default.jpg" alt="Gonzalo Rojas" style="width: 100%;"/>
             </div>
             <h4 class="member-name">Gonzalo Rojas</h4>
             <p class="member-position">Jefe de Marketing</p>
@@ -237,7 +237,7 @@
 
           <div class="team-member">
             <div class="member-photo">
-              <img src="uploads/user-default.jpg" alt="Matias Lema" />
+              <img src="uploads/user-default.jpg" alt="Matias Lema" style="width: 100%;"/>
             </div>
             <h4 class="member-name">Matias Lema</h4>
             <p class="member-position">Coordinador de Guías</p>

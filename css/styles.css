@@ -992,8 +992,6 @@ a {
 }
 
 .member-photo img {
-  width: auto;
-  height: auto;
   object-fit: cover;
 }
 
@@ -1627,6 +1625,7 @@ a {
   .timeline-year {
     left: 30px;
     transform: translateX(0);
+    margin: 15px 0;
   }
 
   .about-intro h2 {

@@ -23,6 +23,7 @@ $user_role = $_SESSION['id_cargo'];
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
+    <div class="sidebar-overlay"></div>
     <div class="container">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
@@ -74,14 +75,14 @@ $user_role = $_SESSION['id_cargo'];
         <main class="main-content">
             <!-- Header -->
             <header class="header">
-                <button class="mobile-menu-btn" onclick="toggleSidebar()">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="user-greeting">Hola, <?php echo htmlspecialchars($user_name); ?></div>
-                <a href="logout.php" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                </a>
-            </header>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="user-greeting">Hola, <?php echo htmlspecialchars($user_name); ?></div>
+    <a href="logout.php" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+    </a>
+</header>
 
             <!-- Task Input Section -->
             <section class="task-input-section">

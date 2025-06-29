@@ -4,11 +4,102 @@ let editingId = null;
 let businesses = [];
 let users = [];
 
-// Inicializar la aplicación
+// ÚNICA inicialización cuando carga la página
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("Dashboard inicializado"); // Para debugging
   loadComboData();
   loadBusinesses();
+  initMobileMenu(); // Agregar funcionalidad mobile
 });
+
+// Función para inicializar el menú mobile
+function initMobileMenu() {
+  console.log("Inicializando menú mobile"); // Para debugging
+
+  // Crear overlay si no existe
+  if (!document.querySelector(".sidebar-overlay")) {
+    const overlay = document.createElement("div");
+    overlay.className = "sidebar-overlay";
+    overlay.addEventListener("click", closeSidebar);
+    document.body.appendChild(overlay);
+    console.log("Overlay creado");
+  }
+
+  // Verificar que el botón hamburguesa existe
+  const mobileBtn = document.querySelector(".mobile-menu-btn");
+  if (mobileBtn) {
+    console.log("Botón hamburguesa encontrado");
+  } else {
+    console.log("ERROR: Botón hamburguesa NO encontrado");
+  }
+
+  // Cerrar sidebar al redimensionar ventana
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 768) {
+      closeSidebar();
+    }
+  });
+
+  // Cerrar al hacer click en items del menú (solo mobile)
+  const projectItems = document.querySelectorAll(".project-item");
+  projectItems.forEach((item) => {
+    item.addEventListener("click", function () {
+      if (window.innerWidth <= 768) {
+        setTimeout(() => closeSidebar(), 200);
+      }
+    });
+  });
+}
+
+// Función global para el botón (se llama desde onclick en HTML)
+function toggleSidebar() {
+  console.log("toggleSidebar llamado"); // Para debugging
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.querySelector(".sidebar-overlay");
+
+  if (!sidebar) {
+    console.log("ERROR: Sidebar no encontrado");
+    return;
+  }
+
+  if (sidebar.classList.contains("open")) {
+    closeSidebar();
+  } else {
+    openSidebar();
+  }
+}
+
+// Función para abrir sidebar
+function openSidebar() {
+  console.log("Abriendo sidebar"); // Para debugging
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.querySelector(".sidebar-overlay");
+
+  if (sidebar) {
+    sidebar.classList.add("open");
+    console.log("Clase 'open' agregada al sidebar");
+  }
+  if (overlay) {
+    overlay.classList.add("active");
+    console.log("Overlay activado");
+  }
+  document.body.style.overflow = "hidden";
+}
+
+// Función para cerrar sidebar
+function closeSidebar() {
+  console.log("Cerrando sidebar"); // Para debugging
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.querySelector(".sidebar-overlay");
+
+  if (sidebar) {
+    sidebar.classList.remove("open");
+  }
+  if (overlay) {
+    overlay.classList.remove("active");
+  }
+  document.body.style.overflow = "";
+}
 
 // Funciones de mensajes
 function showError(message) {
@@ -125,12 +216,6 @@ function showLoading(show) {
     : "grid";
 }
 
-// Alternar sidebar en móvil
-function toggleSidebar() {
-  const sidebar = document.getElementById("sidebar");
-  sidebar.classList.toggle("open");
-}
-
 // Cambiar categoría
 document.getElementById("projectList").addEventListener("click", function (e) {
   const item = e.target.closest(".project-item");
@@ -163,6 +248,11 @@ document.getElementById("projectList").addEventListener("click", function (e) {
     updateSearchPlaceholder();
 
     loadBusinesses();
+
+    // Cerrar sidebar en mobile después de seleccionar
+    if (window.innerWidth <= 768) {
+      setTimeout(() => closeSidebar(), 200);
+    }
   }
 });
 
@@ -426,13 +516,13 @@ function openBusinessModal(id = null) {
       fillFormWithBusiness(business);
     } else {
       title.textContent = "Agregar Nuevo Negocio";
-      form.reset(); // Esto debería resetear todos los campos incluido URL
+      form.reset();
       document.getElementById("businessCategory").value = currentCategory;
 
       // IMPORTANTE: Limpiar específicamente estos campos para estar seguros
       document.getElementById("currentPhoto").style.display = "none";
       document.getElementById("businessPhoto").value = "";
-      document.getElementById("businessUrl").value = ""; // ASEGURAR QUE SE LIMPIE
+      document.getElementById("businessUrl").value = "";
 
       // También limpiar otros campos comunes
       document.getElementById("businessName").value = "";
