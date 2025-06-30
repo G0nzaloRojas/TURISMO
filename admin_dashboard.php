@@ -1,7 +1,7 @@
 <?php 
 session_start();
 
-// Verificar si el usuario está logueado y es admin o dueño de negocio
+// Verificar el usuario
 if (!isset($_SESSION['id_cargo']) || ($_SESSION['id_cargo'] != 1 && $_SESSION['id_cargo'] != 3)) {
     header("Location: form_login.php");
     exit();
@@ -57,7 +57,7 @@ $user_role = $_SESSION['id_cargo'];
                         <div class="project-icon"></div>
                         Puntos de Interés
                     </li>
-                    <?php if ($user_role == 1): // Solo mostrar para administradores ?>
+                    <?php if ($user_role == 1):?>
                     <li class="project-item" data-project="usuarios">
                         <div class="project-icon"></div>
                         Usuarios
@@ -104,13 +104,13 @@ $user_role = $_SESSION['id_cargo'];
                 </div>
 
                 <div class="business-grid" id="businessGrid">
-                    <!-- Las tarjetas de negocios se generarán aquí dinámicamente -->
+                    <!--Cards de negocios-->
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- Modal para agregar/editar negocio -->
+
     <div id="businessModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -152,7 +152,7 @@ $user_role = $_SESSION['id_cargo'];
                     </div>
                 </div>
 
-                <!-- Campos específicos por categoría -->
+                
                 <div id="restauranteFields" style="display: none;">
                     <div class="form-group">
                         <label class="form-label" for="tipoComida">Tipo de Comida</label>
@@ -280,7 +280,7 @@ $user_role = $_SESSION['id_cargo'];
                     </div>
                 </div>
 
-                <!-- Campos para usuarios -->
+                
                 <div id="usuarioFields" style="display: none;">
                     <div class="form-group">
                         <label class="form-label" for="usuarioNombre">Nombre *</label>
@@ -316,7 +316,6 @@ $user_role = $_SESSION['id_cargo'];
         </div>
     </div>
     <script>
-        // Pasar datos de PHP a JavaScript
         window.userRole = <?php echo $user_role; ?>;
     </script>
     <script src="js/dashboard.js"></script>

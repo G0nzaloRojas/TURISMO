@@ -74,7 +74,7 @@ function getBusinesses() {
     // Determinar si aplicar filtro por usuario
     $whereClause = '';
     if ($_SESSION['id_cargo'] == 3) {
-        // Usuario regular: solo sus propios negocios
+        // Usuario regular
         $id_usuario = intval($_SESSION['id']);
         $whereClause = " WHERE id_usuario = $id_usuario";
     }
@@ -126,7 +126,7 @@ function createBusiness() {
     
     // Validar campos requeridos según la categoría
     if ($category === 'hoteles') {
-        // Hoteles solo requieren nombre y ubicación (no tienen descripción)
+        // Hoteles solo requieren nombre y ubicación
         $requiredFields = ['nombre', 'ubicacion'];
     } else {
         // Otras categorías requieren nombre, ubicación y descripción
@@ -331,7 +331,7 @@ function updateBusiness() {
         return;
     }
     
-    // Verificar permisos: usuarios regulares solo pueden editar sus propios negocios
+    // Verificar permisos
     if ($_SESSION['id_cargo'] == 3) {
         $table = '';
         switch($category) {
@@ -364,7 +364,7 @@ function updateBusiness() {
     
     // Validar campos requeridos según la categoría
     if ($category === 'hoteles') {
-        // Hoteles solo requieren nombre y ubicación (no tienen descripción)
+        // Hoteles solo requieren nombre y ubicación 
         $requiredFields = ['nombre', 'ubicacion', 'url'];
     } else {
         // Otras categorías requieren nombre, ubicación y descripción
@@ -563,7 +563,7 @@ function updateAlquiler($id) {
 function updatePuntoInteres($id) {
     global $conexion;
     
-    // Obtener foto actual - USAR BACKTICKS
+    // Obtener foto actual
     $currentQuery = "SELECT FOTO_URL FROM `puntos de interes` WHERE ID = $id";
     $currentResult = mysqli_query($conexion, $currentQuery);
     $currentPhoto = null;
@@ -593,7 +593,7 @@ function updatePuntoInteres($id) {
     $fotoField = $foto_url ? "'$foto_url'" : 'NULL';
     $urlField = $url ? "'$url'" : 'NULL';
     
-    // IMPORTANTE: usar backticks para la tabla
+    
     $query = "UPDATE `puntos de interes` SET 
               NOMBRE = '$nombre', 
               UBICACION = '$ubicacion', 
@@ -642,7 +642,7 @@ function deleteBusiness() {
             return;
     }
     
-    // Verificar permisos: usuarios regulares solo pueden eliminar sus propios negocios
+    // Verificar permisos
     if ($_SESSION['id_cargo'] == 3) {
         $id_usuario = intval($_SESSION['id']);
         $checkQuery = "SELECT ID FROM $table WHERE ID = $id AND id_usuario = $id_usuario";
@@ -839,7 +839,7 @@ function createUser() {
     $nombre = mysqli_real_escape_string($conexion, $_POST['nombre']);
     $apellido = mysqli_real_escape_string($conexion, $_POST['apellido']);
     $email = mysqli_real_escape_string($conexion, $_POST['email']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $password=md5($_POST['password']);
     $id_cargo = intval($_POST['id_cargo']);
     
     $checkQuery = "SELECT ID FROM usuarios WHERE EMAIL = '$email'";

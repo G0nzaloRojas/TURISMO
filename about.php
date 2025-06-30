@@ -253,7 +253,6 @@
       </div>
     </section>  
 
-    <!-- Footer -->
 <!-- Footer -->
     <footer class="footer">
       <div class="container">
@@ -298,7 +297,7 @@
     <script src="js/functions.js"></script>
     <script>
       function scrollToTop(event) {
-          event.preventDefault(); // Evita que la página salte
+          event.preventDefault();
           window.scrollTo({
               top: 0,
               behavior: 'smooth'

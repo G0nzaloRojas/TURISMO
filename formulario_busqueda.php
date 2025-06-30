@@ -435,8 +435,6 @@
         const accommodationType = document.getElementById("accommodation-type").value;
         const hotelForm = document.getElementById("hotel-form");
         const rentalForm = document.getElementById("rental-form");
-
-        // Obtener todos los elementos de entrada/selección dentro de cada sección del formulario
         const hotelInputs = hotelForm.querySelectorAll('input, select');
         const rentalInputs = rentalForm.querySelectorAll('input, select');
 
@@ -467,12 +465,11 @@
         }
       }
 
-      // Llamar a la función al cargar la página para asegurar el estado inicial correcto
       document.addEventListener('DOMContentLoaded', toggleAccommodationForm);
     </script>
   </body>
 </html>
 <?php }else{
-  header("Location:login.php "); // Redirige de vuelta a la página de registro
+  header("Location:login.php ");
   exit();
 }

@@ -40,7 +40,7 @@ if($resultado!=0){
 	$_SESSION['id_cargo']=$respuesta['id_cargo'];
 	$_SESSION['id']=$respuesta['id'];
 	header("Location: index.php");
-	exit(); // Importante: detener la ejecución
+	exit(); //detener la ejecución
 
 }else{
 	echo "<div class='error-message'>Debes Iniciar Sesión</div>";

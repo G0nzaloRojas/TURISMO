@@ -10,9 +10,7 @@ require_once __DIR__ . '/../includes/PHPMailer-6.10.0/src/Exception.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Verifica si el formulario fue enviado
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Sanitizar datos del formulario
     $firstName = htmlspecialchars($_POST["first-name"]);
     $lastName = htmlspecialchars($_POST["last-name"]);
     $email = htmlspecialchars($_POST["email"]);
@@ -41,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $mail = new PHPMailer();
 
     try {
-        // Configuración del servidor SMTP
+        
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
@@ -50,12 +48,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
-        // Remitente y destinatario
+        
         $mail->setFrom('batouroficial@gmail.com', 'BA Tour - Formulario de Contacto');
         $mail->addAddress('batouroficial@gmail.com', 'Equipo BA Tour');
         $mail->addReplyTo($email, $fullName);
 
-        // Contenido del email
+        
         $mail->isHTML(true);
         $mail->Subject = "Nueva consulta de $fullName - BA Tour";
         
@@ -80,17 +78,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $mail->send();
         
-        // Redirige con mensaje de éxito
+        
         header("Location: ../contact.php?exito=1#contact-form");
         exit;
         
     } catch (Exception $e) {
-        // Redirige con mensaje de error
+        
         header("Location: ../contact.php?error=1#contact-form");
         exit;
     }
 } else {
-    // Si no es POST, redirige al formulario
+    
     header("Location: ../contact.php");
     exit;
 }

@@ -1,22 +1,19 @@
-// Variables globales
 let currentCategory = "restaurantes";
 let editingId = null;
 let businesses = [];
 let users = [];
 
-// ÚNICA inicialización cuando carga la página
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("Dashboard inicializado"); // Para debugging
+  console.log("Dashboard inicializado");
   loadComboData();
   loadBusinesses();
-  initMobileMenu(); // Agregar funcionalidad mobile
+  initMobileMenu();
 });
 
 // Función para inicializar el menú mobile
 function initMobileMenu() {
-  console.log("Inicializando menú mobile"); // Para debugging
+  console.log("Inicializando menú mobile");
 
-  // Crear overlay si no existe
   if (!document.querySelector(".sidebar-overlay")) {
     const overlay = document.createElement("div");
     overlay.className = "sidebar-overlay";
@@ -25,7 +22,6 @@ function initMobileMenu() {
     console.log("Overlay creado");
   }
 
-  // Verificar que el botón hamburguesa existe
   const mobileBtn = document.querySelector(".mobile-menu-btn");
   if (mobileBtn) {
     console.log("Botón hamburguesa encontrado");
@@ -33,14 +29,12 @@ function initMobileMenu() {
     console.log("ERROR: Botón hamburguesa NO encontrado");
   }
 
-  // Cerrar sidebar al redimensionar ventana
   window.addEventListener("resize", function () {
     if (window.innerWidth > 768) {
       closeSidebar();
     }
   });
 
-  // Cerrar al hacer click en items del menú (solo mobile)
   const projectItems = document.querySelectorAll(".project-item");
   projectItems.forEach((item) => {
     item.addEventListener("click", function () {
@@ -51,9 +45,9 @@ function initMobileMenu() {
   });
 }
 
-// Función global para el botón (se llama desde onclick en HTML)
+// Función global para el botón
 function toggleSidebar() {
-  console.log("toggleSidebar llamado"); // Para debugging
+  console.log("toggleSidebar llamado");
   const sidebar = document.getElementById("sidebar");
   const overlay = document.querySelector(".sidebar-overlay");
 
@@ -71,7 +65,7 @@ function toggleSidebar() {
 
 // Función para abrir sidebar
 function openSidebar() {
-  console.log("Abriendo sidebar"); // Para debugging
+  console.log("Abriendo sidebar");
   const sidebar = document.getElementById("sidebar");
   const overlay = document.querySelector(".sidebar-overlay");
 
@@ -88,7 +82,7 @@ function openSidebar() {
 
 // Función para cerrar sidebar
 function closeSidebar() {
-  console.log("Cerrando sidebar"); // Para debugging
+  console.log("Cerrando sidebar");
   const sidebar = document.getElementById("sidebar");
   const overlay = document.querySelector(".sidebar-overlay");
 
@@ -116,10 +110,9 @@ function clearMessages() {
   document.getElementById("modalMessage").innerHTML = "";
 }
 
-// Cargar datos para combos
+// Cargar datos de combos
 async function loadComboData() {
   try {
-    // Cargar tipos de comida
     const responseTipos = await fetch("api/business.php?action=getTiposComida");
     const dataTipos = await responseTipos.json();
 
@@ -131,7 +124,6 @@ async function loadComboData() {
       });
     }
 
-    // Cargar actividades
     const responseActividades = await fetch(
       "api/business.php?action=getActividades"
     );
@@ -160,7 +152,6 @@ function updateUserCount() {
   document.getElementById("countLabel").textContent = "Usuarios Registrados";
 }
 
-// Cargar negocios o usuarios
 async function loadBusinesses() {
   try {
     showLoading(true);
@@ -189,7 +180,6 @@ async function loadBusinesses() {
   }
 }
 
-// Cargar usuarios
 async function loadUsers() {
   try {
     const response = await fetch("api/business.php?action=getUsers");
@@ -208,7 +198,6 @@ async function loadUsers() {
   }
 }
 
-// Mostrar/ocultar loading
 function showLoading(show) {
   document.getElementById("loading").style.display = show ? "block" : "none";
   document.getElementById("businessGrid").style.display = show
@@ -220,11 +209,9 @@ function showLoading(show) {
 document.getElementById("projectList").addEventListener("click", function (e) {
   const item = e.target.closest(".project-item");
   if (item) {
-    // Remover active de todos los items
     document
       .querySelectorAll(".project-item")
       .forEach((i) => i.classList.remove("active"));
-    // Agregar active al item clickeado
     item.classList.add("active");
 
     currentCategory = item.dataset.project;
@@ -241,15 +228,12 @@ document.getElementById("projectList").addEventListener("click", function (e) {
         ? `Gestión de: ${categoryNames[currentCategory]}`
         : `Categoría: ${categoryNames[currentCategory]}`;
 
-    // Actualizar textos de botones
     updateButtonTexts();
 
-    // Actualizar placeholder de búsqueda
     updateSearchPlaceholder();
 
     loadBusinesses();
 
-    // Cerrar sidebar en mobile después de seleccionar
     if (window.innerWidth <= 768) {
       setTimeout(() => closeSidebar(), 200);
     }
@@ -461,7 +445,6 @@ function createBusinessCard(business) {
       break;
   }
 
-  // Para hoteles, no mostrar descripción ya que no la tienen
   const description =
     currentCategory === "hoteles"
       ? ""
@@ -519,12 +502,10 @@ function openBusinessModal(id = null) {
       form.reset();
       document.getElementById("businessCategory").value = currentCategory;
 
-      // IMPORTANTE: Limpiar específicamente estos campos para estar seguros
       document.getElementById("currentPhoto").style.display = "none";
       document.getElementById("businessPhoto").value = "";
       document.getElementById("businessUrl").value = "";
 
-      // También limpiar otros campos comunes
       document.getElementById("businessName").value = "";
       document.getElementById("businessLocation").value = "";
       if (document.getElementById("businessDescription")) {
@@ -545,7 +526,6 @@ function hideAllFields() {
   document.getElementById("puntosInteresFields").style.display = "none";
   document.getElementById("usuarioFields").style.display = "none";
 
-  // Obtener elementos de campos comunes
   const businessNameGroup = document.querySelector(
     'label[for="businessName"]'
   ).parentElement;
@@ -566,13 +546,12 @@ function hideAllFields() {
     businessNameGroup.style.display = "none";
     businessLocationGroup.style.display = "none";
     businessDescriptionGroup.style.display = "none";
-    businessUrlGroup.style.display = "none"; // AGREGAR ESTA LÍNEA
+    businessUrlGroup.style.display = "none";
     businessPhotoGroup.style.display = "none";
   } else {
     businessNameGroup.style.display = "block";
     businessLocationGroup.style.display = "block";
-    businessUrlGroup.style.display = "block"; // AGREGAR ESTA LÍNEA
-    // Para hoteles, ocultar descripción ya que no la tienen en la BD
+    businessUrlGroup.style.display = "block";
     businessDescriptionGroup.style.display =
       currentCategory === "hoteles" ? "none" : "block";
     businessPhotoGroup.style.display = "block";
@@ -602,7 +581,6 @@ function fillFormWithUser(user) {
   document.getElementById("usuarioCargo").value = user.ID_CARGO;
   document.getElementById("businessCategory").value = currentCategory;
 
-  // No mostrar la contraseña por seguridad
   document.getElementById("usuarioPassword").value = "";
   document.getElementById("usuarioPassword").placeholder =
     "Dejar vacío para mantener la actual";
@@ -639,7 +617,7 @@ async function deleteUser(id) {
 
     if (result.success) {
       alert("Usuario eliminado correctamente");
-      loadBusinesses(); // Esto va a recargar los usuarios porque currentCategory será 'usuarios'
+      loadBusinesses();
     } else {
       alert("Error al eliminar: " + result.message);
     }
@@ -696,14 +674,12 @@ function fillFormWithBusiness(business) {
   document.getElementById("businessLocation").value = business.UBICACION;
   document.getElementById("businessUrl").value = business.URL || "";
 
-  // Solo llenar descripción si no es hotel
   if (currentCategory !== "hoteles") {
     document.getElementById("businessDescription").value = business.DESCRIPCION;
   }
 
   document.getElementById("businessCategory").value = currentCategory;
 
-  // IMPORTANTE: Limpiar siempre el input de foto
   document.getElementById("businessPhoto").value = "";
 
   switch (currentCategory) {
@@ -715,7 +691,6 @@ function fillFormWithBusiness(business) {
       if (business.PRECIO_MAXIMO)
         document.getElementById("precioMaximo").value = business.PRECIO_MAXIMO;
 
-      // Manejar foto actual
       if (business.FOTO_URL) {
         document.getElementById("currentPhoto").style.display = "block";
         document.getElementById(
@@ -770,7 +745,6 @@ function fillFormWithBusiness(business) {
       if (business.METROS)
         document.getElementById("metros").value = business.METROS;
 
-      // Manejar foto actual - AGREGADO PARA ALQUILERES
       if (business.FOTO_URL) {
         document.getElementById("currentPhoto").style.display = "block";
         document.getElementById(
@@ -790,7 +764,6 @@ function fillFormWithBusiness(business) {
         document.getElementById("calificacionPunto").value =
           business.CALIFICACION;
 
-      // Manejar foto actual
       if (business.FOTO_URL) {
         document.getElementById("currentPhoto").style.display = "block";
         document.getElementById(
@@ -806,12 +779,10 @@ function fillFormWithBusiness(business) {
 function closeBusinessModal() {
   document.getElementById("businessModal").style.display = "none";
 
-  // IMPORTANTE: Limpiar todos los campos al cerrar el modal
   document.getElementById("businessPhoto").value = "";
   document.getElementById("businessUrl").value = "";
   document.getElementById("currentPhoto").style.display = "none";
 
-  // Limpiar otros campos por seguridad
   document.getElementById("businessName").value = "";
   document.getElementById("businessLocation").value = "";
   if (document.getElementById("businessDescription")) {
@@ -832,7 +803,6 @@ document
     const category =
       currentCategory === "usuarios" ? "usuarios" : currentCategory;
 
-    // Determinar si es crear o actualizar
     const isEdit = editingId !== null;
     formData.append("action", isEdit ? "update" : "create");
     formData.append("category", category);
@@ -842,7 +812,6 @@ document
     }
 
     if (category === "usuarios") {
-      // Campos de usuario
       formData.append("nombre", document.getElementById("usuarioNombre").value);
       formData.append(
         "apellido",
@@ -859,7 +828,6 @@ document
         formData.append("password", password);
       }
     } else {
-      // Campos comunes de negocio
       formData.append("nombre", document.getElementById("businessName").value);
       formData.append(
         "ubicacion",
@@ -871,7 +839,6 @@ document
         formData.append("url", url);
       }
 
-      // Para hoteles no enviar descripción
       if (category !== "hoteles") {
         formData.append(
           "descripcion",
@@ -879,13 +846,11 @@ document
         );
       }
 
-      // Foto
       const photo = document.getElementById("businessPhoto").files[0];
       if (photo) {
         formData.append("foto", photo);
       }
 
-      // Campos específicos por categoría
       switch (category) {
         case "restaurantes":
           const tipoComida = document.getElementById("tipoComida").value;
@@ -988,9 +953,7 @@ document.getElementById("searchInput").addEventListener("input", function (e) {
   const searchTerm = e.target.value.toLowerCase().trim();
 
   if (currentCategory === "usuarios") {
-    // Búsqueda para usuarios
     if (searchTerm === "") {
-      // Si no hay término de búsqueda, mostrar todos los usuarios
       renderUsers();
     } else {
       const filteredUsers = users.filter(
@@ -1018,9 +981,7 @@ document.getElementById("searchInput").addEventListener("input", function (e) {
       }
     }
   } else {
-    // Búsqueda para negocios
     if (searchTerm === "") {
-      // Si no hay término de búsqueda, mostrar todos los negocios
       renderBusinesses();
     } else {
       const filteredBusinesses = businesses.filter((business) => {

@@ -1,114 +1,181 @@
-/* Reset y base para el contenido principal */
-.paquetes-main-content {
-  margin-top: 100px;
-  padding: 0 20px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Arial", sans-serif;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   min-height: 100vh;
+}
+
+.paquetes-main-content {
+  padding: 2rem 20px 4rem 20px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .paquetes-title {
   text-align: center;
   font-size: 2.5rem;
   color: #2c3e50;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   font-weight: 700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.paquetes-container {
+.slider-container {
   max-width: 1200px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  padding-bottom: 3rem;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  height: auto;
+  min-height: auto;
 }
 
-/* Estilos para cada tipo de paquete */
+.slider-wrapper {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  width: 300%;
+  height: auto;
+  align-items: flex-start;
+}
+
+.slide {
+  width: 33.333%;
+  flex-shrink: 0;
+  height: auto;
+  align-self: flex-start;
+}
+
+.nav-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #2c3e50;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  animation: fadeInSlide 0.5s ease-out;
+}
+
+.nav-arrow:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.nav-arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.nav-arrow.prev {
+  left: 30px;
+}
+
+.nav-arrow.next {
+  right: 30px;
+}
+
+.package-indicators {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px;
+  border-radius: 30px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.indicator {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(108, 117, 125, 0.6);
+  border: 2px solid rgba(108, 117, 125, 0.8);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.indicator:hover {
+  transform: scale(1.2);
+  background: rgba(108, 117, 125, 0.8);
+  border-color: #6c757d;
+}
+
+.indicator.active {
+  background: #2c3e50;
+  border-color: #2c3e50;
+  transform: scale(1.3);
+  box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.2);
+}
+
 .paquete-card {
   background: white;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  min-height: auto;
+  height: auto;
   position: relative;
-  border: 3px solid transparent;
-  width: 100%;
-  max-width: none;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
 }
 
-.paquete-card:hover {
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-}
-
-/* Headers coloridos para cada tipo */
 .paquete-header {
-  padding: 1.5rem;
+  padding: 2rem;
   text-align: center;
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
   position: relative;
   overflow: hidden;
-}
-
-.paquete-header::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
-  transition: left 0.5s;
-}
-
-.paquete-card:hover .paquete-header::before {
-  left: 100%;
-}
-
-.paquete-economico {
-  border-color: #27ae60;
 }
 
 .paquete-economico .paquete-header {
   background: linear-gradient(135deg, #27ae60, #2ecc71);
 }
 
-.paquete-intermedio {
-  border-color: #f39c12;
-}
-
 .paquete-intermedio .paquete-header {
   background: linear-gradient(135deg, #f39c12, #e67e22);
-}
-
-.paquete-premium {
-  border-color: #8e44ad;
 }
 
 .paquete-premium .paquete-header {
   background: linear-gradient(135deg, #8e44ad, #9b59b6);
 }
 
-/* Contenido del paquete */
 .paquete-content {
   padding: 2rem;
+  height: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .paquete-section {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   padding: 1.5rem;
   background: #f8f9fa;
   border-radius: 15px;
   border-left: 4px solid #ddd;
-  transition: all 0.3s ease;
 }
 
 .paquete-section:hover {
@@ -128,23 +195,19 @@
 }
 
 .paquete-section-title::before {
-  content: "✨";
   font-size: 1.2rem;
 }
 
-/* === NUEVO LAYOUT HORIZONTAL PARA LAS CARDS === */
-
-/* Cards principales con layout horizontal */
 .hospedaje-card,
 .restaurante-card,
 .punto-interes-card {
   background: white;
   border-radius: 12px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-  border: 1px solid #e9ecef;
   overflow: hidden;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
 }
 
 .hospedaje-card:hover,
@@ -155,17 +218,15 @@
   border-color: #618c78;
 }
 
-/* Contenedor principal de la card - fila superior */
 .card-main-content {
   display: flex;
-  min-height: 200px;
+  min-height: 150px;
 }
 
-/* Sección de la imagen - lado izquierdo */
 .image-section {
-  width: 366px;
-  min-width: 366px;
-  height: 200px;
+  width: 200px;
+  min-width: 200px;
+  height: 150px;
   background-color: #f0f0f0;
   display: flex;
   align-items: center;
@@ -177,7 +238,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
   transition: transform 0.3s ease;
 }
 
@@ -185,141 +245,114 @@
   transform: scale(1.05);
 }
 
-/* Sección de contenido - lado derecho */
 .content-section {
   flex: 1;
-  padding: 1.5rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  position: relative;
 }
 
-/* Header con título y estrellas */
 .item-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .item-name {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #2c3e50;
   margin: 0;
   flex: 1;
-  margin-right: 15px;
+  margin-right: 10px;
 }
 
 .item-rating {
   background: linear-gradient(135deg, #ffd700, #ffed4e);
   color: #8b4513;
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
   font-weight: 600;
   white-space: nowrap;
 }
 
-/* Ubicación */
+.item-description {
+  color: #5a6c7d;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0.3rem 0;
+}
+
 .item-location {
   color: #7f8c8d;
-  font-size: 1rem;
-  margin: 0.5rem 0;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
+  font-size: 0.9rem;
+  margin: 0.3rem 0;
 }
 
 .item-location::before {
   content: "📍";
+  margin-right: 0.3rem;
 }
 
-/* Descripción */
 .text-description {
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
 }
-.item-description {
-  color: #5a6c7d;
-  line-height: 1.6;
-  flex: 1;
-  margin: 0 0.5rem;
-}
 
-/* Sección de precio - fila inferior */
 .price-section {
   border-top: 1px solid #e9ecef;
-  padding: 1rem 1.5rem;
+  padding: 1rem;
   background-color: #f8f9fa;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.price-content {
-  flex: 1;
-}
-
 .item-price {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #27ae60;
   margin: 0;
 }
 
 .item-price-total {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #2c3e50;
-  margin: 0.5rem 0 0 0;
+  margin: 0.3rem 0 0 0;
 }
 
-/* Botón consultar */
 .btn-consultar {
-  display: inline-block;
   background: linear-gradient(135deg, #618c78, #4a6b5a);
   color: white !important;
-  padding: 10px 20px;
-  border-radius: 25px;
+  padding: 8px 16px;
+  border-radius: 20px;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 3px 10px rgba(97, 140, 120, 0.3);
   border: none;
   cursor: pointer;
+  box-shadow: 0 3px 10px rgba(97, 140, 120, 0.3);
 }
 
 .btn-consultar:hover {
   background: linear-gradient(135deg, #4a6b5a, #618c78);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: 0 5px 15px rgba(97, 140, 120, 0.4);
   color: white !important;
   text-decoration: none;
 }
 
-.btn-consultar i {
-  margin-right: 8px;
-  font-size: 0.8rem;
-}
-
-/* === FIN DEL NUEVO LAYOUT === */
-
-/* Grid para restaurantes y puntos de interés */
-.items-grid {
-  display: grid;
-  gap: 1rem;
-}
-
-/* Precio total del paquete */
 .precio-total-section {
   background: linear-gradient(135deg, #f8f9fa, #fff);
   border-radius: 15px;
-  padding: 2rem;
-  margin-top: 2rem;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
   border: 2px solid #e9ecef;
   position: relative;
   overflow: hidden;
@@ -338,32 +371,32 @@
 .precio-breakdown {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.5rem;
 }
 
 .precio-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
+  padding: 0.3rem 0;
   border-bottom: 1px solid #eee;
 }
 
 .precio-item span:first-child {
   font-weight: 500;
   color: #555;
+  font-size: 0.9rem;
 }
 
 .precio-item span:last-child {
   font-weight: 600;
   color: #618c78;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .precio-final {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  color: #2c3e50;
   background: linear-gradient(135deg, #27ae60, #2ecc71);
   color: white;
   padding: 1rem;
@@ -375,33 +408,34 @@
 }
 
 .precio-final::before {
-  content: "💰";
   margin-right: 0.5rem;
 }
 
-/* Mensaje de error */
-.error-message {
-  background: linear-gradient(135deg, #ffe6e6, #ffcccc);
-  color: #c0392b;
-  padding: 1rem;
-  border-radius: 10px;
-  text-align: center;
-  border-left: 4px solid #e74c3c;
-  font-weight: 500;
+.package-info {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: 600;
+  color: #2c3e50;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: none;
 }
 
-/* Botón de nueva búsqueda */
-.nueva-busqueda-container {
+.controls-container {
   text-align: center;
-  margin: 3rem 0;
-  padding: 2rem;
+  margin: 2rem 0;
 }
 
-.btn-nueva-busqueda {
+.btn-search {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #618c78, #4a6c5a);
+  background: linear-gradient(135deg, #618c78, #4a6b5a);
   color: white;
   padding: 1rem 2rem;
   border-radius: 50px;
@@ -412,58 +446,89 @@
   box-shadow: 0 4px 15px rgba(97, 140, 120, 0.3);
 }
 
-.btn-nueva-busqueda:hover {
+.btn-search:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(97, 140, 120, 0.4);
-  background: linear-gradient(135deg, #4a6c5a, #618c78);
+  background: linear-gradient(135deg, #4a6b5a, #618c78);
 }
 
-/* Estilos existentes que mantenemos */
-.total-price {
-  background-color: #f8f9fa;
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+.nav-arrow.hide-on-scroll {
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+.slider-container:hover .nav-arrow {
+  opacity: 1;
+}
+
+.nav-arrow {
+  opacity: 0.7;
+  transition: all 0.3s ease, transform 0.1s ease;
+}
+
+.error-message {
+  background: linear-gradient(135deg, #ffe6e6, #ffcccc);
+  color: #c0392b;
   padding: 1rem;
-  border-radius: 8px;
-  margin-top: 1rem;
-  border-left: 4px solid #618c78;
-}
-
-.total-final {
-  font-size: 1.2em;
-  color: #618c78;
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  border-top: 2px solid #618c78;
-}
-
-.block {
-  margin-bottom: 3rem;
-  border: 2px solid #e0e0e0;
   border-radius: 10px;
-  padding: 2rem;
-  background-color: #fafafa;
-}
-
-.block .title {
-  font-size: 1.8em;
-  font-weight: bold;
-  color: #618c78;
   text-align: center;
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background-color: #618c78;
-  color: white;
-  border-radius: 8px;
+  border-left: 4px solid #e74c3c;
+  font-weight: 500;
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
   .image-section {
-    width: 300px;
-    min-width: 300px;
+    width: 180px;
+    min-width: 180px;
   }
 }
 
 @media (max-width: 768px) {
+  .slider-container {
+    margin: 0 10px;
+  }
+
+  .nav-arrow {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
+  .nav-arrow.prev {
+    left: 15px;
+  }
+
+  .nav-arrow.next {
+    right: 15px;
+  }
+
+  .package-indicators {
+    bottom: 20px;
+    padding: 8px 16px;
+  }
+
+  .package-info {
+    top: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  .paquete-card {
+    min-height: auto;
+  }
+
   .paquetes-container {
     gap: 2rem;
     padding: 0 1rem;
@@ -484,7 +549,7 @@
   .image-section {
     width: 100%;
     min-width: 100%;
-    height: 200px;
+    height: 150px;
   }
 
   .content-section {
@@ -494,7 +559,7 @@
   .item-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 5px;
   }
 
   .item-name {
@@ -503,7 +568,7 @@
 
   .price-section {
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     text-align: center;
   }
 
@@ -514,41 +579,39 @@
   }
 }
 
-/* Animaciones adicionales */
-@keyframes pulse {
-  0% {
-    transform: scale(1);
+@media (max-width: 480px) {
+  .nav-arrow {
+    width: 45px;
+    height: 45px;
+    font-size: 1rem;
   }
-  50% {
-    transform: scale(1.05);
+
+  .nav-arrow.prev {
+    left: 10px;
   }
-  100% {
-    transform: scale(1);
+
+  .nav-arrow.next {
+    right: 10px;
   }
-}
 
-.paquete-card:hover .precio-final {
-  animation: pulse 1s ease-in-out;
-}
+  .package-indicators {
+    bottom: 15px;
+    padding: 6px 12px;
+  }
 
-/* Efectos de brillo */
-.paquete-card::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
-  transition: left 0.5s;
-  pointer-events: none;
-}
+  .indicator {
+    width: 10px;
+    height: 10px;
+  }
 
-.paquete-card:hover::after {
-  left: 100%;
+  .package-info {
+    top: 15px;
+    right: 15px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .paquetes-title {
+    font-size: 1.8rem;
+  }
 }

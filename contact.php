@@ -399,7 +399,6 @@
     </footer>
 
     <script>
-      // Toggle mobile menu
       const menuToggle = document.querySelector(".menu-toggle");
       const navMenu = document.querySelector(".nav-menu");
 
@@ -407,16 +406,14 @@
         navMenu.classList.toggle("active");
       });
 
-      // FAQ Accordion
       const faqQuestions = document.querySelectorAll(".faq-question");
-
+      // Acordeon FAQ
       faqQuestions.forEach((question) => {
         question.addEventListener("click", () => {
           const faqItem = question.parentElement;
           const answer = faqItem.querySelector(".faq-answer");
           const isActive = question.classList.contains("active");
 
-          // Close all other FAQs
           faqQuestions.forEach((q) => {
             q.classList.remove("active");
             q.parentElement
@@ -424,7 +421,6 @@
               .classList.remove("active");
           });
 
-          // Toggle current FAQ
           if (!isActive) {
             question.classList.add("active");
             answer.classList.add("active");
@@ -432,7 +428,6 @@
         });
       });
 
-      // Set minimum date to today for travel date input
       const travelDateInput = document.getElementById("travel-date");
       const today = new Date().toISOString().split("T")[0];
       travelDateInput.setAttribute("min", today);
@@ -445,7 +440,6 @@
           });
       }
 
-      // Auto-hide success/error messages after 5 seconds
       setTimeout(() => {
         const successMessage = document.getElementById("success-message");
         const errorMessage = document.getElementById("error-message");
@@ -460,7 +454,6 @@
     </script>
 
     <style>
-      /* Estilos para los mensajes de éxito y error */
       .success-message, .error-message {
         padding: 15px;
         margin-bottom: 20px;

@@ -65,7 +65,6 @@
     </section>
 
     <?php
-    // Consultas para obtener contenido dinámico
     include ("conexion.php");
     
     $consulta_hoteles = mysqli_query($conexion, "SELECT * FROM hoteles ORDER BY RAND() LIMIT 2");
@@ -264,7 +263,8 @@
         <div class="about-content">
           <div class="about-text">
         <h2 class="section-title">Contacto</h2>
-        <p>¿Tenés alguna consulta o necesitás más información? Escribinos y te respondemos lo antes posible.<br/> Ya sea para aclarar dudas, solicitar presupuestos o simplemente para conocer más sobre nuestros servicios.</p>
+        <p>¿Tenés alguna consulta o necesitás más información? Escribinos y te respondemos lo antes posible.<br/> 
+        Ya sea para aclarar dudas, solicitar presupuestos o simplemente para conocer más sobre nuestros servicios.</p>
         <a href="contact.php" class="btn btn-primary">Contactar</a>
       </div>
         </div>
@@ -315,7 +315,7 @@
     <script src="js/functions.js"></script>
     <script>
       function scrollToTop(event) {
-          event.preventDefault(); // Evita que la página salte
+          event.preventDefault();
           window.scrollTo({
               top: 0,
               behavior: 'smooth'

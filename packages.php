@@ -77,10 +77,6 @@
                 ORDER BY (RAND())
                 LIMIT 3;");
 
-                //$hotel = mysqli_fetch_assoc($consulta1);
-                //$res mysqli_fetch_assoc($consulta2);
-                //$punto_interes = mysqli_fetch_assoc($consulta3);
-
                 // Guardar resultados en un array
                 $hotel = [];
 
@@ -135,28 +131,7 @@
                   }else{
                     $tipo_Comida="Vegana";
                   }
-                }
-                  /*if($punto_interes['PRECIO']==0)
-                    $precio ="Gratuito";
-
-                    if($punto_interes['ID_ACTIVIDAD']==1){
-                      $actividad="Cultural";
-                    }elseif($punto_interes['ID_ACTIVIDAD']==2){
-                      $actividad="Entretenimiento";
-                    }elseif($punto_interes['ID_ACTIVIDAD']==3){
-                      $actividad="Naturaleza";
-                    }elseif($punto_interes['ID_ACTIVIDAD']==4){
-                      $actividad="Vida Nocturna";
-                    }elseif($punto_interes['ID_ACTIVIDAD']==5){
-                      $actividad="Shopping";
-                    }elseif($punto_interes['ID_ACTIVIDAD']==6){
-                      $actividad="Monumento";
-                    }else{
-                      $actividad="Religioso";
-                    }*/
-                
-                
-             
+                }    
     ?>
     <!-- Packages Main Section -->
     <section class="packages-main">
@@ -571,11 +546,7 @@
               </div>
             </div>
           </div>
-
-         
         </div>
-
-        <!-- No results message (hidden by default) -->
         <div class="no-results" id="no-results" style="display: none">
           <i class="fas fa-search"></i>
           <h3>No encontramos paquetes con esos criterios</h3>
@@ -629,7 +600,7 @@
     <script src="js/functions.js"></script>
     <script>
       function scrollToTop(event) {
-          event.preventDefault(); // Evita que la página salte
+          event.preventDefault();
           window.scrollTo({
               top: 0,
               behavior: 'smooth'
@@ -640,6 +611,6 @@
 </html>
 
 <?php }else{
-  header("Location:login.php "); // Redirige de vuelta a la página de registro
+  header("Location:login.php ");
   exit();
 }

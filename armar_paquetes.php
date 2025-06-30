@@ -63,7 +63,6 @@
         <?php
                 include ("conexion.php");
 
-                // Obtener parámetros del formulario
                 $tipo_hospedaje = $_POST['accommodation-type'] ?? null;
                 $calificacion_hotel = $_POST['hotel-rating'] ?? null;
                 $huespedes_max = $_POST['max-guests'] ?? null;
@@ -80,7 +79,6 @@
                 $calificacion_restaurante = $_POST['restaurant-rating'] ?? null;
                 $tipo_actividad = $_POST['activity-type'] ?? null;
 
-                // Arrays para almacenar los resultados
                 $paquetes = array(
                     'economico' => array('hoteles' => [], 'alquileres' => [], 'restaurantes' => []),
                     'intermedio' => array('hoteles' => [], 'alquileres' => [], 'restaurantes' => []),
@@ -174,7 +172,7 @@
                                                                 AND ($tipo_comida = 7 OR r.ID_COMIDA = $tipo_comida) 
                                                                 ORDER BY r.CALIFICACION DESC LIMIT 2
                                                             ");
-                // Almacenar resultados de restaurantes
+                // Almacenar resultados
                 while ($fila = mysqli_fetch_assoc($consulta_rest_eco)) {
                     $paquetes['economico']['restaurantes'][] = $fila;
                 }
@@ -185,7 +183,7 @@
                     $paquetes['premium']['restaurantes'][] = $fila;
                 }
 
-                // Puntos de interés (mismos para todos los paquetes)
+
                 $consulta_puntos = mysqli_query($conexion, "
                                                                 SELECT pi.*, a.DESCRIPCION as ACTIVIDAD_DESC 
                                                                 FROM `puntos de interes` pi 
@@ -201,7 +199,7 @@
 
     <div class="paquetes-main-content">
         <h1 class="paquetes-title">Resultados de Busqueda</h1>
-        
+        <div class="package-indicators"> 
         <?php 
         $nombres_paquetes = array(
             'economico' => 'Paquete Económico',
@@ -209,269 +207,299 @@
             'premium' => 'Paquete Premium'
         );
 
-        foreach($paquetes as $tipo_paquete => $contenido_paquete): 
-        ?>
-        <div class="paquetes-container">    
-            <!-- BLOQUE DEL PAQUETE -->
-            <div class="paquete-card paquete-<?= $tipo_paquete ?>">
-                <div class="paquete-header"><?= $nombres_paquetes[$tipo_paquete] ?></div>
-                <div class="paquete-content">
-                    
-                    <!-- HOSPEDAJES -->
-                    <?php if ($tipo_hospedaje == "hotel"): ?>
-                        <div class="paquete-section">
-                            <h3 class="paquete-section-title">Hotel <?= ucfirst($tipo_paquete) ?></h3>
-                            <?php if (!empty($contenido_paquete['hoteles'])): ?>
-                                <div class="hospedaje-card">
-                                    <!-- Contenido principal - imagen y datos -->
-                                    <div class="card-main-content">
-                                        <!-- Sección de imagen -->
-                                        <div class="image-section">
-                                            <img src="<?= $contenido_paquete['hoteles'][0]['FOTO_URL'] ? 'uploads/hoteles/' . $contenido_paquete['hoteles'][0]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
-                                                alt="<?= htmlspecialchars($contenido_paquete['hoteles'][0]['NOMBRE']) ?>" 
-                                                class="item-image"
-                                                onerror="this.src='uploads/placeholder.jpg'">
-                                        </div>
-                                        
-                                        <!-- Sección de contenido -->
-                                        <div class="content-section">
-                                            <div class="item-header">
-                                                <h4 class="item-name"><?= htmlspecialchars($contenido_paquete['hoteles'][0]['NOMBRE']) ?></h4>
-                                                <span class="item-rating"><?= $contenido_paquete['hoteles'][0]['CALIFICACION'] ?> ⭐</span>
-                                            </div>
-                                            
-                                            <p class="item-description">🏊‍♀️ Pileta: <?= ucfirst($contenido_paquete['hoteles'][0]['PILETA']) ?></p>
-                                            <p class="item-description">🍳 Desayuno: <?= ucfirst($contenido_paquete['hoteles'][0]['DESAYUNO']) ?></p>
-                                            <p class="item-location"><?= htmlspecialchars($contenido_paquete['hoteles'][0]['UBICACION']) ?></p>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Sección de precio -->
-                                    <div class="price-section">
-                                        <div class="price-content">
-                                            <p class="item-price">Precio Por Noche: $<?= number_format((($contenido_paquete['hoteles'][0]['PRECIO_MAXIMO']+$contenido_paquete['hoteles'][0]['PRECIO_MINIMO'])/2), 2) ?></p>
-                                            <p class="item-price-total">Total (<?= $dias_hotel ?> días): $<?= number_format(((($contenido_paquete['hoteles'][0]['PRECIO_MAXIMO']+$contenido_paquete['hoteles'][0]['PRECIO_MINIMO'])/2)*$dias_hotel), 2) ?></p>
-                                        </div>
-                                        
-                                        <?php if (!empty($contenido_paquete['hoteles'][0]['URL'])): ?>
-                                            <a href="<?= htmlspecialchars($contenido_paquete['hoteles'][0]['URL']) ?>" 
-                                               target="_blank" 
-                                               class="btn-consultar">
-                                                <i class="fas fa-external-link-alt"></i> Consultar
-                                            </a>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            <?php else: ?>
-                                <div class="error-message">No se encontró hotel <?= $tipo_paquete ?>.</div>
-                            <?php endif; ?>
-                        </div>
-
-                    <?php elseif ($tipo_hospedaje == "alquiler"): ?>
-                        <div class="paquete-section">
-                            <h3 class="paquete-section-title">Alquiler <?= ucfirst($tipo_paquete) ?></h3>
-                            <?php if (!empty($contenido_paquete['alquileres'])): ?>
-                                <div class="hospedaje-card">
-                                    <!-- Contenido principal - imagen y datos -->
-                                    <div class="card-main-content">
-                                        <!-- Sección de imagen -->
-                                        <div class="image-section">
-                                            <img src="<?= $contenido_paquete['alquileres'][0]['FOTO_URL'] ? 'uploads/alquiler/' . $contenido_paquete['alquileres'][0]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
-                                                alt="<?= htmlspecialchars($contenido_paquete['alquileres'][0]['NOMBRE']) ?>" 
-                                                class="item-image"
-                                                onerror="this.src='uploads/placeholder.jpg'">
-                                        </div>
-                                        
-                                        <!-- Sección de contenido -->
-                                        <div class="content-section">
-                                            <div class="item-header">
-                                                <h4 class="item-name"><?= htmlspecialchars($contenido_paquete['alquileres'][0]['NOMBRE']) ?></h4>
-                                                <span class="item-rating"><?= $contenido_paquete['alquileres'][0]['CALIFICACION'] ?> ⭐</span>
-                                            </div>
-                                            <div class="text-description">
-                                                <p class="item-description">Habitaciones: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['DORMITORIOS']) ?></p>
-                                                <p class="item-description">Baños: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['BANIOS']) ?></p>
-                                                <p class="item-description">Metros: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['METROS']) ?> m2</p>
-                                            <p class="item-location"><?= htmlspecialchars($contenido_paquete['alquileres'][0]['UBICACION']) ?></p>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Sección de precio -->
-                                    <div class="price-section">
-                                        <div class="price-content">
-                                            <p class="item-price">Precio por semana: $<?= number_format($contenido_paquete['alquileres'][0]['PRECIO_SEMANA'], 2) ?></p>
-                                            <p class="item-price-total">Total (<?= $semanas_alquiler ?> semanas): $<?= number_format(($contenido_paquete['alquileres'][0]['PRECIO_SEMANA']*$semanas_alquiler), 2) ?></p>
-                                        </div>
-                                        
-                                        <?php if (!empty($contenido_paquete['alquileres'][0]['URL'])): ?>
-                                            <a href="mailto:<?= htmlspecialchars($contenido_paquete['alquileres'][0]['URL']) ?>"
-                                               target="_blank" 
-                                               class="btn-consultar">
-                                                <i class="fas fa-external-link-alt"></i> Consultar
-                                            </a>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            <?php else: ?>
-                                <div class="error-message">No se encontró alquiler <?= $tipo_paquete ?>.</div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endif; ?>
-
-                    <!-- RESTAURANTES -->
-                    <div class="paquete-section">
-                        <h3 class="paquete-section-title">Restaurantes <?= ucfirst($tipo_paquete) ?></h3>
-                        <?php if (!empty($contenido_paquete['restaurantes'])): ?>
-                            <?php foreach($contenido_paquete['restaurantes'] as $restaurante): ?>
-                                <div class="restaurante-card">
-                                    <!-- Contenido principal - imagen y datos -->
-                                    <div class="card-main-content">
-                                        <!-- Sección de imagen -->
-                                        <div class="image-section">
-                                            <img src="<?= $restaurante['FOTO_URL'] ? 'uploads/restaurantes/' . $restaurante['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
-                                                alt="<?= htmlspecialchars($restaurante['NOMBRE']) ?>" 
-                                                class="item-image"
-                                                onerror="this.src='uploads/placeholder.jpg'">
-                                        </div>
-                                        
-                                        <!-- Sección de contenido -->
-                                        <div class="content-section">
-                                            <div class="item-header">
-                                                <h4 class="item-name"><?= htmlspecialchars($restaurante['NOMBRE']) ?></h4>
-                                                <span class="item-rating"><?= $restaurante['CALIFICACION'] ?> ⭐</span>
-                                            </div>
-                                            <p class="item-location"> <?= htmlspecialchars($restaurante['TIPO_COMIDA_DESC']) ?></p>
-                                            <p class="item-description"><?= htmlspecialchars($restaurante['DESCRIPCION']) ?></p>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Sección de precio -->
-                                    <div class="price-section">
-                                        <div class="price-content">
-                                            <p class="item-price">Precio promedio: $<?= number_format((($restaurante['PRECIO_MINIMO'] + $restaurante['PRECIO_MAXIMO'])/2), 2) ?></p>
-                                        </div>
-                                        
-                                        <?php if (!empty($restaurante['URL'])): ?>
-                                            <a href="<?= htmlspecialchars($restaurante['URL']) ?>" 
-                                               target="_blank" 
-                                               class="btn-consultar">
-                                                <i class="fas fa-external-link-alt"></i> Consultar
-                                            </a>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="error-message">No se encontraron restaurantes para este paquete.</div>
-                        <?php endif; ?>
-                    </div>
-
-                    <!-- PUNTOS DE INTERÉS -->
-                    <div class="paquete-section">
-                        <h3 class="paquete-section-title">Puntos de Interés</h3>
-                        <?php if (!empty($puntos_interes)): ?>
-                            <?php foreach($puntos_interes as $punto): ?>
-                                <div class="punto-interes-card">
-                                    <!-- Contenido principal - imagen y datos -->
-                                    <div class="card-main-content">
-                                        <!-- Sección de imagen -->
-                                        <div class="image-section">
-                                            <img src="<?= $punto['FOTO_URL'] ? 'uploads/puntos_interes/' . $punto['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
-                                                alt="<?= htmlspecialchars($punto['NOMBRE']) ?>" 
-                                                class="item-image"
-                                                onerror="this.src='uploads/placeholder.jpg'">
-                                        </div>
-                                        
-                                        <!-- Sección de contenido -->
-                                        <div class="content-section">
-                                            <div class="item-header">
-                                                <h4 class="item-name"><?= htmlspecialchars($punto['NOMBRE']) ?></h4>
-                                                <span class="item-rating">5 ⭐</span>
-                                            </div>
-                                            <p class="item-location"> <?= htmlspecialchars($punto['ACTIVIDAD_DESC']) ?></p>
-                                            <p class="item-description"><?= htmlspecialchars($punto['DESCRIPCION']) ?></p>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Sección de precio -->
-                                    <div class="price-section">
-                                        <div class="price-content">
-                                            <p class="item-price">Precio: $<?= number_format($punto['PRECIO'], 2) ?></p>
-                                        </div>
-                                        
-                                        <?php if (!empty($punto['URL'])): ?>
-                                            <a href="<?= htmlspecialchars($punto['URL']) ?>" 
-                                               target="_blank" 
-                                               class="btn-consultar">
-                                                <i class="fas fa-external-link-alt"></i> Consultar
-                                            </a>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="error-message">No se encontraron puntos de interés.</div>
-                        <?php endif; ?>
-                    </div>
-
-                    <!-- PRECIO TOTAL DEL PAQUETE -->
-                    <div class="precio-total-section">
-                        <h3 class="paquete-section-title">💰 Precio Total del Paquete</h3>
-                        <div class="precio-breakdown">
-                            <?php 
-                            $precio_total = 0;
-                            
-                            // Calcular precio hospedaje
-                            if ($tipo_hospedaje == "hotel" && !empty($contenido_paquete['hoteles'])) {
-                                $precio_hospedaje = (($contenido_paquete['hoteles'][0]['PRECIO_MAXIMO']+$contenido_paquete['hoteles'][0]['PRECIO_MINIMO'])/2)*$dias_hotel;
-                                $precio_total += $precio_hospedaje;
-                                echo "<div class='precio-item'><span>🏨 Hospedaje:</span><span>$" . number_format($precio_hospedaje, 2) . "</span></div>";
-                            } elseif ($tipo_hospedaje == "alquiler" && !empty($contenido_paquete['alquileres'])) {
-                                $precio_hospedaje = $contenido_paquete['alquileres'][0]['PRECIO_SEMANA']*$semanas_alquiler;
-                                $precio_total += $precio_hospedaje;
-                                echo "<div class='precio-item'><span>🏠 Hospedaje:</span><span>$" . number_format($precio_hospedaje, 2) . "</span></div>";
-                            }
-                            
-                            // Calcular precio restaurantes (estimado por persona por día)
-                            $precio_restaurantes = 0;
-                            foreach($contenido_paquete['restaurantes'] as $restaurante) {
-                                $precio_restaurantes += ($restaurante['PRECIO_MINIMO'] + $restaurante['PRECIO_MAXIMO'])/2;
-                            }
-                            if ($tipo_hospedaje == "hotel") {
-                                $precio_restaurantes = $precio_restaurantes * $dias_hotel;
-                            } else {
-                                $precio_restaurantes = $precio_restaurantes * ($semanas_alquiler * 7);
-                            }
-                            $precio_total += $precio_restaurantes;
-                            echo "<div class='precio-item'><span>🍽️ Comidas estimadas:</span><span>$" . number_format($precio_restaurantes, 2) . "</span></div>";
-                            
-                            // Precio puntos de interés
-                            $precio_actividades = 0;
-                            foreach($puntos_interes as $punto) {
-                                $precio_actividades += $punto['PRECIO'];
-                            }
-                            $precio_total += $precio_actividades;
-                            echo "<div class='precio-item'><span>🎯 Actividades:</span><span>$" . number_format($precio_actividades, 2) . "</span></div>";
-                            ?>
-                        </div>
-                        <div class="precio-final">
-                             TOTAL: $<?= number_format($precio_total, 2) ?>
-                        </div>
-                    </div>
-                </div> <!-- Fin contenido paquete -->
-            </div> <!-- Fin card del paquete -->
-        </div> <!-- Fin del container -->
-        <?php endforeach; ?>
-
-        <!-- Botón para volver -->
-        <div style="text-align: center; margin: 2rem 0;">
-            <a href="formulario_busqueda.php" class="btn-search" style="text-decoration: none;">
-                <i class="fas fa-arrow-left"></i> Nueva Búsqueda
-            </a>
+        
+            $slide_index = 0;
+            foreach($paquetes as $tipo_paquete => $contenido_paquete): 
+            ?>
+                <div class="indicator <?= $slide_index === 0 ? 'active' : '' ?>" data-slide="<?= $slide_index ?>"></div>
+            <?php 
+                $slide_index++;
+            endforeach; 
+            ?>
         </div>
-    </div> <!-- Fin del contenido principal -->
+        <div class="slider-container">
+        <div class="package-info">
+            <span id="current-package">1</span> / 3
+        </div>
+
+        <button class="nav-arrow prev" id="prevBtn">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="nav-arrow next" id="nextBtn">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Slider wrapper -->
+        <div class="slider-wrapper" id="sliderWrapper">
+            
+            <?php 
+            $slide_index = 0;
+            foreach($paquetes as $tipo_paquete => $contenido_paquete): 
+            ?>
+                <!-- SLIDE <?= $slide_index + 1 ?>: PAQUETE <?= strtoupper($tipo_paquete) ?> -->
+                <div class="slide">
+                    <div class="paquete-card paquete-<?= $tipo_paquete ?>">
+                        <div class="paquete-header"><?= $nombres_paquetes[$tipo_paquete] ?></div>
+                        <div class="paquete-content">
+                            
+                            <!-- HOSPEDAJES -->
+                            <?php if ($tipo_hospedaje == "hotel"): ?>
+                                <div class="paquete-section">
+                                    <h3 class="paquete-section-title">Hotel <?= ucfirst($tipo_paquete) ?></h3>
+                                    <?php if (!empty($contenido_paquete['hoteles'])): ?>
+                                        <div class="hospedaje-card">
+                                            <!-- Contenido principal - imagen y datos -->
+                                            <div class="card-main-content">
+                                                <!-- Sección de imagen -->
+                                                <div class="image-section">
+                                                    <img src="<?= $contenido_paquete['hoteles'][0]['FOTO_URL'] ? 'uploads/hoteles/' . $contenido_paquete['hoteles'][0]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                                                        alt="<?= htmlspecialchars($contenido_paquete['hoteles'][0]['NOMBRE']) ?>" 
+                                                        class="item-image"
+                                                        onerror="this.src='uploads/placeholder.jpg'">
+                                                </div>
+                                                
+                                                <!-- Sección de contenido -->
+                                                <div class="content-section">
+                                                    <div class="item-header">
+                                                        <h4 class="item-name"><?= htmlspecialchars($contenido_paquete['hoteles'][0]['NOMBRE']) ?></h4>
+                                                        <span class="item-rating"><?= $contenido_paquete['hoteles'][0]['CALIFICACION'] ?> ⭐</span>
+                                                    </div>
+                                                    
+                                                    <p class="item-description">🏊‍♀️ Pileta: <?= ucfirst($contenido_paquete['hoteles'][0]['PILETA']) ?></p>
+                                                    <p class="item-description">🍳 Desayuno: <?= ucfirst($contenido_paquete['hoteles'][0]['DESAYUNO']) ?></p>
+                                                    <p class="item-location"><?= htmlspecialchars($contenido_paquete['hoteles'][0]['UBICACION']) ?></p>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Sección de precio -->
+                                            <div class="price-section">
+                                                <div class="price-content">
+                                                    <p class="item-price">Precio Por Noche: $<?= number_format((($contenido_paquete['hoteles'][0]['PRECIO_MAXIMO']+$contenido_paquete['hoteles'][0]['PRECIO_MINIMO'])/2), 2) ?></p>
+                                                    <p class="item-price-total">Total (<?= $dias_hotel ?> días): $<?= number_format(((($contenido_paquete['hoteles'][0]['PRECIO_MAXIMO']+$contenido_paquete['hoteles'][0]['PRECIO_MINIMO'])/2)*$dias_hotel), 2) ?></p>
+                                                </div>
+                                                
+                                                <?php if (!empty($contenido_paquete['hoteles'][0]['URL'])): ?>
+                                                    <a href="<?= htmlspecialchars($contenido_paquete['hoteles'][0]['URL']) ?>" 
+                                                       target="_blank" 
+                                                       class="btn-consultar">
+                                                        <i class="fas fa-external-link-alt"></i> Consultar
+                                                    </a>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="error-message">No se encontró hotel <?= $tipo_paquete ?>.</div>
+                                    <?php endif; ?>
+                                </div>
+
+                            <?php elseif ($tipo_hospedaje == "alquiler"): ?>
+                                <div class="paquete-section">
+                                    <h3 class="paquete-section-title">Alquiler <?= ucfirst($tipo_paquete) ?></h3>
+                                    <?php if (!empty($contenido_paquete['alquileres'])): ?>
+                                        <div class="hospedaje-card">
+                                            <!-- Contenido principal - imagen y datos -->
+                                            <div class="card-main-content">
+                                                <!-- Sección de imagen -->
+                                                <div class="image-section">
+                                                    <img src="<?= $contenido_paquete['alquileres'][0]['FOTO_URL'] ? 'uploads/alquiler/' . $contenido_paquete['alquileres'][0]['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                                                        alt="<?= htmlspecialchars($contenido_paquete['alquileres'][0]['NOMBRE']) ?>" 
+                                                        class="item-image"
+                                                        onerror="this.src='uploads/placeholder.jpg'">
+                                                </div>
+                                                
+                                                <!-- Sección de contenido -->
+                                                <div class="content-section">
+                                                    <div class="item-header">
+                                                        <h4 class="item-name"><?= htmlspecialchars($contenido_paquete['alquileres'][0]['NOMBRE']) ?></h4>
+                                                        <span class="item-rating"><?= $contenido_paquete['alquileres'][0]['CALIFICACION'] ?> ⭐</span>
+                                                    </div>
+                                                    <div class="text-description">
+                                                        <p class="item-description">Habitaciones: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['DORMITORIOS']) ?></p>
+                                                        <p class="item-description">Baños: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['BANIOS']) ?></p>
+                                                        <p class="item-description">Metros: <?= htmlspecialchars($contenido_paquete['alquileres'][0]['METROS']) ?> m2</p>
+                                                    <p class="item-location"><?= htmlspecialchars($contenido_paquete['alquileres'][0]['UBICACION']) ?></p>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Sección de precio -->
+                                            <div class="price-section">
+                                                <div class="price-content">
+                                                    <p class="item-price">Precio por semana: $<?= number_format($contenido_paquete['alquileres'][0]['PRECIO_SEMANA'], 2) ?></p>
+                                                    <p class="item-price-total">Total (<?= $semanas_alquiler ?> semanas): $<?= number_format(($contenido_paquete['alquileres'][0]['PRECIO_SEMANA']*$semanas_alquiler), 2) ?></p>
+                                                </div>
+                                                
+                                                <?php if (!empty($contenido_paquete['alquileres'][0]['URL'])): ?>
+                                                    <a href="mailto:<?= htmlspecialchars($contenido_paquete['alquileres'][0]['URL']) ?>"
+                                                       target="_blank" 
+                                                       class="btn-consultar">
+                                                        <i class="fas fa-external-link-alt"></i> Consultar
+                                                    </a>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="error-message">No se encontró alquiler <?= $tipo_paquete ?>.</div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- RESTAURANTES -->
+                            <div class="paquete-section">
+                                <h3 class="paquete-section-title">Restaurantes <?= ucfirst($tipo_paquete) ?></h3>
+                                <?php if (!empty($contenido_paquete['restaurantes'])): ?>
+                                    <?php foreach($contenido_paquete['restaurantes'] as $restaurante): ?>
+                                        <div class="restaurante-card">
+                                            <!-- Contenido principal - imagen y datos -->
+                                            <div class="card-main-content">
+                                                <!-- Sección de imagen -->
+                                                <div class="image-section">
+                                                    <img src="<?= $restaurante['FOTO_URL'] ? 'uploads/restaurantes/' . $restaurante['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                                                        alt="<?= htmlspecialchars($restaurante['NOMBRE']) ?>" 
+                                                        class="item-image"
+                                                        onerror="this.src='uploads/placeholder.jpg'">
+                                                </div>
+                                                
+                                                <!-- Sección de contenido -->
+                                                <div class="content-section">
+                                                    <div class="item-header">
+                                                        <h4 class="item-name"><?= htmlspecialchars($restaurante['NOMBRE']) ?></h4>
+                                                        <span class="item-rating"><?= $restaurante['CALIFICACION'] ?> ⭐</span>
+                                                    </div>
+                                                    <p class="item-location"> <?= htmlspecialchars($restaurante['TIPO_COMIDA_DESC']) ?></p>
+                                                    <p class="item-description"><?= htmlspecialchars($restaurante['DESCRIPCION']) ?></p>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Sección de precio -->
+                                            <div class="price-section">
+                                                <div class="price-content">
+                                                    <p class="item-price">Precio promedio: $<?= number_format((($restaurante['PRECIO_MINIMO'] + $restaurante['PRECIO_MAXIMO'])/2), 2) ?></p>
+                                                </div>
+                                                
+                                                <?php if (!empty($restaurante['URL'])): ?>
+                                                    <a href="<?= htmlspecialchars($restaurante['URL']) ?>" 
+                                                       target="_blank" 
+                                                       class="btn-consultar">
+                                                        <i class="fas fa-external-link-alt"></i> Consultar
+                                                    </a>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="error-message">No se encontraron restaurantes para este paquete.</div>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- PUNTOS DE INTERÉS -->
+                            <div class="paquete-section">
+                                <h3 class="paquete-section-title">Puntos de Interés</h3>
+                                <?php if (!empty($puntos_interes)): ?>
+                                    <?php foreach($puntos_interes as $punto): ?>
+                                        <div class="punto-interes-card">
+                                            <!-- Contenido principal - imagen y datos -->
+                                            <div class="card-main-content">
+                                                <!-- Sección de imagen -->
+                                                <div class="image-section">
+                                                    <img src="<?= $punto['FOTO_URL'] ? 'uploads/puntos_interes/' . $punto['FOTO_URL'] : 'uploads/placeholder.jpg' ?>" 
+                                                        alt="<?= htmlspecialchars($punto['NOMBRE']) ?>" 
+                                                        class="item-image"
+                                                        onerror="this.src='uploads/placeholder.jpg'">
+                                                </div>
+                                                
+                                                <!-- Sección de contenido -->
+                                                <div class="content-section">
+                                                    <div class="item-header">
+                                                        <h4 class="item-name"><?= htmlspecialchars($punto['NOMBRE']) ?></h4>
+                                                        <span class="item-rating">5 ⭐</span>
+                                                    </div>
+                                                    <p class="item-location"> <?= htmlspecialchars($punto['ACTIVIDAD_DESC']) ?></p>
+                                                    <p class="item-description"><?= htmlspecialchars($punto['DESCRIPCION']) ?></p>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Sección de precio -->
+                                            <div class="price-section">
+                                                <div class="price-content">
+                                                    <p class="item-price">Precio: $<?= number_format($punto['PRECIO'], 2) ?></p>
+                                                </div>
+                                                
+                                                <?php if (!empty($punto['URL'])): ?>
+                                                    <a href="<?= htmlspecialchars($punto['URL']) ?>" 
+                                                       target="_blank" 
+                                                       class="btn-consultar">
+                                                        <i class="fas fa-external-link-alt"></i> Consultar
+                                                    </a>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="error-message">No se encontraron puntos de interés.</div>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- PRECIO TOTAL DEL PAQUETE -->
+                            <div class="precio-total-section">
+                                <h3 class="paquete-section-title">💰 Precio Total del Paquete</h3>
+                                <div class="precio-breakdown">
+                                    <?php 
+                                    $precio_total = 0;
+                                    
+                                    if ($tipo_hospedaje == "hotel" && !empty($contenido_paquete['hoteles'])) {
+                                        $precio_hospedaje = (($contenido_paquete['hoteles'][0]['PRECIO_MAXIMO']+$contenido_paquete['hoteles'][0]['PRECIO_MINIMO'])/2)*$dias_hotel;
+                                        $precio_total += $precio_hospedaje;
+                                        echo "<div class='precio-item'><span>🏨 Hospedaje:</span><span>$" . number_format($precio_hospedaje, 2) . "</span></div>";
+                                    } elseif ($tipo_hospedaje == "alquiler" && !empty($contenido_paquete['alquileres'])) {
+                                        $precio_hospedaje = $contenido_paquete['alquileres'][0]['PRECIO_SEMANA']*$semanas_alquiler;
+                                        $precio_total += $precio_hospedaje;
+                                        echo "<div class='precio-item'><span>🏠 Hospedaje:</span><span>$" . number_format($precio_hospedaje, 2) . "</span></div>";
+                                    }
+
+                                    $precio_restaurantes = 0;
+                                    foreach($contenido_paquete['restaurantes'] as $restaurante) {
+                                        $precio_restaurantes += ($restaurante['PRECIO_MINIMO'] + $restaurante['PRECIO_MAXIMO'])/2;
+                                    }
+                                    if ($tipo_hospedaje == "hotel") {
+                                        $precio_restaurantes = $precio_restaurantes * $dias_hotel;
+                                    } else {
+                                        $precio_restaurantes = $precio_restaurantes * ($semanas_alquiler * 7);
+                                    }
+                                    $precio_total += $precio_restaurantes;
+                                    echo "<div class='precio-item'><span>🍽️ Comidas estimadas:</span><span>$" . number_format($precio_restaurantes, 2) . "</span></div>";
+
+                                    $precio_actividades = 0;
+                                    foreach($puntos_interes as $punto) {
+                                        $precio_actividades += $punto['PRECIO'];
+                                    }
+                                    $precio_total += $precio_actividades;
+                                    echo "<div class='precio-item'><span>🎯 Actividades:</span><span>$" . number_format($precio_actividades, 2) . "</span></div>";
+                                    ?>
+                                </div>
+                                <div class="precio-final">
+                                     TOTAL: $<?= number_format($precio_total, 2) ?>
+                                </div>
+                            </div>
+                        </div> <!-- Fin contenido paquete -->
+                    </div> <!-- Fin card del paquete -->
+                </div> <!-- Fin slide -->
+            <?php 
+                $slide_index++;
+            endforeach; 
+            ?>
+
+        </div> <!-- Fin slider-wrapper -->
+    </div> <!-- Fin slider-container -->
+
+    <!-- Controls -->
+    <div class="controls-container">
+        <a href="formulario_busqueda.php" class="btn-search">
+            <i class="fas fa-arrow-left"></i> Nueva Búsqueda
+        </a>
+    </div>
+</div> <!-- Fin paquetes-main-content -->
     
     <!-- Footer -->
     <footer class="footer">
@@ -516,53 +544,7 @@
     </footer>
 
     <script src="js/functions.js"></script>
-    <script>
-      function scrollToTop(event) {
-          event.preventDefault();
-          window.scrollTo({
-              top: 0,
-              behavior: 'smooth'
-          });
-      }
-    </script>
-
-    <style>
-    .total-price {
-        background-color: #f8f9fa;
-        padding: 1rem;
-        border-radius: 8px;
-        margin-top: 1rem;
-        border-left: 4px solid #618c78;
-    }
-    
-    .total-final {
-        font-size: 1.2em;
-        color: #618c78;
-        margin-top: 0.5rem;
-        padding-top: 0.5rem;
-        border-top: 2px solid #618c78;
-    }
-    
-    .block {
-        margin-bottom: 3rem;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        padding: 2rem;
-        background-color: #fafafa;
-    }
-    
-    .block .title {
-        font-size: 1.8em;
-        font-weight: bold;
-        color: #618c78;
-        text-align: center;
-        margin-bottom: 2rem;
-        padding: 1rem;
-        background-color: #618c78;
-        color: white;
-        border-radius: 8px;
-    }
-    </style>
+    <script src="js/armar_paquetes.js"></script>
 
 </body>
 </html>

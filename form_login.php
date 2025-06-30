@@ -52,18 +52,8 @@
               <input type="password" id="password" name="password" required>
             </div>
 
-            <!--<div class="form-group">
-              <label class="checkbox-container">
-                <input type="checkbox" name="remember">
-                Recordarme
-              </label>
-            </div>-->
-
             <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
           </form>
-          <!--<p class="login-link">
-            ¿Olvidaste tu contraseña? <a href="#">Recuperar contraseña</a>
-          </p>-->
           <p class="login-link">
             ¿No tienes una cuenta? <a href="form_register.php">Registrarse</a>
           </p>

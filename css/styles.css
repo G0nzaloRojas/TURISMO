@@ -1,4 +1,3 @@
-/* Estilos generales */
 :root {
   --primary-color: #618c78;
   --primary-color-hover: #4a6b5c;
@@ -70,7 +69,6 @@ a {
   background-color: var(--accent-color);
 }
 
-/* Botones */
 .btn {
   display: inline-block;
   padding: 12px;
@@ -124,7 +122,6 @@ a {
   font-size: 1.1em;
 }
 
-/* Navbar */
 .navbar {
   position: fixed;
   top: 0;
@@ -209,7 +206,6 @@ a {
   cursor: pointer;
 }
 
-/* Hero Section */
 .hero {
   height: 100vh;
   background-image: linear-gradient(
@@ -264,7 +260,6 @@ a {
   }
 }
 
-/* Packages Section */
 .packages {
   padding: 100px 0;
   background-color: var(--light-bg);
@@ -358,7 +353,6 @@ a {
   text-align: center;
 }
 
-/* About Section */
 .about {
   padding: 100px 0;
 }
@@ -381,7 +375,6 @@ a {
   box-shadow: var(--shadow);
 }
 
-/* Contact Section */
 .contact {
   padding: 100px 0;
   background-color: var(--light-bg);
@@ -447,7 +440,6 @@ a {
   border-color: var(--primary-color);
 }
 
-/* Footer */
 .footer {
   background-color: var(--dark-bg);
   color: var(--light-text);
@@ -563,11 +555,6 @@ a {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* ========================================
-   ESTILOS PARA PÁGINA DE PAQUETES
-   ======================================== */
-
-/* Hero de Paquetes */
 .packages-hero {
   height: 40vh;
   min-height: 300px;
@@ -581,7 +568,6 @@ a {
   padding-top: 70px;
 }
 
-/* Sección de Filtros */
 .filters-section {
   background-color: #fff;
   padding: 30px 0;
@@ -671,7 +657,6 @@ a {
   background-color: #e0e0e0;
 }
 
-/* Sección Principal de Paquetes */
 .packages-main {
   padding: 60px 0 100px;
   background-color: var(--light-bg);
@@ -834,11 +819,6 @@ a {
   color: #999;
 }
 
-/* ========================================
-   ESTILOS PARA PÁGINA NOSOTROS
-   ======================================== */
-
-/* Hero de Nosotros */
 .about-hero {
   height: 40vh;
   min-height: 300px;
@@ -852,7 +832,6 @@ a {
   padding-top: 70px;
 }
 
-/* Contenido Principal Nosotros */
 .about-main {
   padding: 80px 0;
 }
@@ -875,7 +854,6 @@ a {
   color: #666;
 }
 
-/* Timeline */
 .timeline {
   position: relative;
   padding: 40px 0;
@@ -929,7 +907,6 @@ a {
   margin-bottom: 15px;
 }
 
-/* Sección de Valores */
 .values-section {
   background-color: var(--light-bg);
   padding: 80px 0;
@@ -966,7 +943,6 @@ a {
   margin-bottom: 15px;
 }
 
-/* Sección del Equipo */
 .team-section {
   padding: 80px 0;
 }
@@ -1023,7 +999,6 @@ a {
   color: var(--primary-color);
 }
 
-/* Sección de Estadísticas */
 .stats-section {
   background-color: var(--primary-color);
   color: white;
@@ -1052,7 +1027,6 @@ a {
   opacity: 0.9;
 }
 
-/* Sección de Partners */
 .partners-section {
   background-color: var(--light-bg);
   padding: 80px 0;
@@ -1095,11 +1069,6 @@ a {
   opacity: 1;
 }
 
-/* ========================================
-   ESTILOS PARA PÁGINA DE CONTACTO
-   ======================================== */
-
-/* Hero de Contacto */
 .contact-hero {
   height: 40vh;
   min-height: 300px;
@@ -1113,7 +1082,6 @@ a {
   padding-top: 70px;
 }
 
-/* Contenido Principal de Contacto */
 .contact-main {
   padding: 80px 0;
   background-color: var(--light-bg);
@@ -1213,7 +1181,6 @@ a {
   transform: translateY(-3px);
 }
 
-/* Formulario de Contacto */
 .contact-form-wrapper {
   background-color: #fff;
   padding: 50px;
@@ -1302,7 +1269,6 @@ a {
   color: var(--primary-color);
 }
 
-/* Sección del Mapa */
 .map-section {
   margin-top: 80px;
 }
@@ -1339,7 +1305,6 @@ a {
   color: #999;
 }
 
-/* Sección de Oficinas */
 .offices-section {
   padding: 80px 0;
 }
@@ -1390,7 +1355,6 @@ a {
   margin-right: 8px;
 }
 
-/* Sección FAQ */
 .faq-section {
   background-color: var(--light-bg);
   padding: 80px 0;
@@ -1456,7 +1420,6 @@ a {
   line-height: 1.8;
 }
 
-/* Mensaje de Éxito */
 .success-message {
   display: none;
   background-color: #d4edda;
@@ -1470,10 +1433,6 @@ a {
 .success-message.show {
   display: block;
 }
-
-/* ========================================
-   MEDIA QUERIES PARA RESPONSIVE DESIGN
-   ======================================== */
 
 @media (max-width: 1024px) {
   .package-container {
@@ -1576,7 +1535,6 @@ a {
     text-align: center;
   }
 
-  /* Responsive para página de paquetes */
   .filters-section {
     position: relative;
     top: 0;
@@ -1608,7 +1566,6 @@ a {
     width: 100%;
   }
 
-  /* Responsive para página Nosotros */
   .timeline::before {
     left: 30px;
   }
@@ -1673,7 +1630,6 @@ a {
     width: auto;
   }
 
-  /* Responsive adicional para contacto */
   .contact-sidebar,
   .contact-form-wrapper {
     padding: 30px 20px;

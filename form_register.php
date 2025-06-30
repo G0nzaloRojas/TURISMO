@@ -72,20 +72,10 @@
               </select>
             </div>
 
-            <!--<div class="form-group">
-              <label for="telefono"><i class="fas fa-phone"></i> Teléfono</label>
-              <input type="tel" id="telefono" name="telefono" required>
-            </div>-->
-
             <div class="form-group">
               <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
               <input type="password" id="password" name="password" required>
             </div>
-
-            <!--<div class="form-group">
-              <label for="confirm-password"><i class="fas fa-lock"></i> Confirmar contraseña</label>
-              <input type="password" id="confirm-password" name="confirm-password" required>
-            </div>-->
 
             <div class="form-group">
               <label class="checkbox-container">

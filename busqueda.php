@@ -345,11 +345,9 @@
             const hotelForm = document.getElementById('hotel-form');
             const rentalForm = document.getElementById('rental-form');
 
-            // Ocultar ambos formularios primero
             hotelForm.style.display = 'none';
             rentalForm.style.display = 'none';
 
-            // Mostrar el formulario correspondiente
             if (accommodationType === 'hotel') {
                 hotelForm.style.display = 'block';
             } else if (accommodationType === 'rental') {

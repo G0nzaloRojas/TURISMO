@@ -12,9 +12,8 @@
 
 $huespedes=2;
 $calificacion_minima=3;
-$pileta="si"; // "si" o "no"
-$desayuno_incluido="si"; // "si" o "no"
-
+$pileta="si"; 
+$desayuno_incluido="si"; 
 
 include("conexion.php");
 
@@ -74,31 +73,15 @@ $consulta_hotel=mysqli_query($conexion,
 $resultado=mysqli_num_rows($consulta);
 
 if($resultado!=0){
-
-	//$respuesta=mysqli_fetch_assoc($consulta);
-	
-	//echo $respuesta[];
     while ($fila = mysqli_fetch_assoc($consulta)) {
         echo "<pre>";
         print_r($fila);
         echo "</pre>";
     }
-    
-    
-
 }else{
 	echo "error";
 	
 }
-
-
-
-
-
-
-
-
 ?>
-
 </body>
 </html>
