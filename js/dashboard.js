@@ -309,7 +309,14 @@ function renderUsers() {
 
 // Crear tarjeta de usuario
 function createUserCard(user) {
-  const cargoText = user.ID_CARGO == 1 ? "Administrador" : "Dueño de Negocio";
+  let cargoText = "";
+  if (user.ID_CARGO == 1) {
+    cargoText = "Administrador";
+  } else if (user.ID_CARGO == 3) {
+    cargoText = "Dueño de Negocio";
+  } else {
+    cargoText = "Usuario";
+  }
   const cargoIcon = user.ID_CARGO == 1 ? "user-shield" : "user-tie";
 
   return `

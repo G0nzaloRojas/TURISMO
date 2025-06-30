@@ -209,7 +209,7 @@
             <h4 class="member-name">Juan Agustin Murad</h4>
             <p class="member-position">CEO & Fundador</p>
             <div class="member-social">
-              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="https://www.linkedin.com/in/juan-agustin-murad-06368a238/"><i class="fab fa-linkedin"></i></a>
               <a href="#"><i class="fab fa-twitter"></i></a>
             </div>
           </div>
@@ -221,7 +221,7 @@
             <h4 class="member-name">Juan Ignacio Duran</h4>
             <p class="member-position">Director de Operaciones</p>
             <div class="member-social">
-              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="https://www.linkedin.com/in/juan-ignacio-duran-903634321/"><i class="fab fa-linkedin"></i></a>
               <a href="#"><i class="fab fa-twitter"></i></a>
             </div>
           </div>
@@ -233,7 +233,7 @@
             <h4 class="member-name">Gonzalo Rojas</h4>
             <p class="member-position">Jefe de Marketing</p>
             <div class="member-social">
-              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="https://www.linkedin.com/in/gonzalo-rojas-2690b3224/"><i class="fab fa-linkedin"></i></a>
               <a href="#"><i class="fab fa-twitter"></i></a>
             </div>
           </div>
@@ -251,7 +251,7 @@
           </div>
         </div>
       </div>
-    </section>  
+    </section>
 
 <!-- Footer -->
     <footer class="footer">

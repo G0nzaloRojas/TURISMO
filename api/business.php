@@ -855,7 +855,7 @@ function createUser() {
         return;
     }
     
-    // CORREGIDO: Usar los campos correctos según la estructura de la BD
+    //Usar los campos correctos según la estructura de la BD
     $query = "INSERT INTO usuarios (NOMBRE, APELLIDO, EMAIL, PASSWORD, ID_CARGO, USERNAME) 
               VALUES ('$nombre', '$apellido', '$email', '$password', $id_cargo, '$nombre')";
     
