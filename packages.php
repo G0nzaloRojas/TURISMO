@@ -182,7 +182,7 @@
                 </div>
               </div>
               <p class="description">
-              <i class="fas fa-map-marker-alt"></i> <?= $hotel[0]['UBICACION']?>
+              Desde aquí, los huéspedes tienen fácil acceso a los principales atractivos turísticos, comerciales, gastronómicos y culturales que hacen de Buenos Aires una metrópolis única.
               </p>
               <div class="package-features">
                 <div class="feature">
@@ -197,10 +197,7 @@
                   <i class="fas fa-utensils"></i>
                   <span>Desayuno: <?= $hotel[0]['DESAYUNO']?></span>
                 </div>
-                <div class="feature">
-                  <i class="fas fa-plane"></i>
-                  <span>Vuelos incluidos</span>
-                </div>
+                
               </div>
               <div class="package-price-section">
                 <div class="price-details">
@@ -384,7 +381,7 @@
                 </div>
               </div>
               <p class="description">
-              <i class="fas fa-map-marker-alt"></i> <?= $hotel[1]['UBICACION']?>
+              Ubicado estratégicamente en el corazón de la ciudad, ofrece una experiencia cómoda y conveniente para todo tipo de viajeros. Sus habitaciones están diseñadas para brindar confort y descanso.
               </p>
               <div class="package-features">
                 <div class="feature">
@@ -399,10 +396,7 @@
                   <i class="fas fa-utensils"></i>
                   <span>Desayuno: <?= $hotel[1]['DESAYUNO']?></span>
                 </div>
-                <div class="feature">
-                  <i class="fas fa-plane"></i>
-                  <span>Vuelos incluidos</span>
-                </div>
+                
               </div>
               <div class="package-price-section">
                 <div class="price-details">
